@@ -2,7 +2,9 @@ Requirements:
 
 Ability to login, register if not logged in, and log out
 
-Adi:
+Adi: 
+	- As a regular user of messaging platforms throughout my day and week, I want to be able to get to my messages very quickly after the first
+	  registration process. 
 
 Shoan:
 
@@ -14,6 +16,8 @@ Liam:
 Ability to reset password if forgotten it
 
 Adi:
+	- As a regular user of online messaging, and many software apps, I would need the process of restoring passwords in the case where I forget my password
+	  for the app. Something that is easy, but more importantly secure. 
 
 Shoan:
 
@@ -24,6 +28,7 @@ Liam:
 Ability to see a list of channels
 
 Adi:
+	- As a regular user of messaging, I want to have a clear view of all my connections and groups where I talk with people, for quick access. 
 
 Shoan:
 
@@ -34,6 +39,8 @@ Liam:
 Ability to create a channel, join a channel, invite someone else to a channel, and leave a channel
 
 Adi:
+	- As a regular user of messaging, I want to be able to easily create different groups, and invite my friends so we can talk together, or work
+	  on projects. Also, I want to be able to leave any outdated or unused groups. 
 
 Shoan:
 
@@ -43,6 +50,9 @@ Liam:
 Within a channel, ability to view all messages, view the members of the channel, and the details of the channel
 
 Adi:
+	- As a member of groups, and messaging groups, I would like to be able to see all the messages that are sent by each member, especially those
+	  that are sent when I am offline. Also, the members of the group should preferably be visible so I can have a clear view of who is in the group, as well as
+	  maybe the group name or other details of the group. 
 
 Shoan:
 
@@ -53,6 +63,8 @@ Liam:
 Within a channel, ability to send a message now, or to send a message at a specified time in the future
 
 Adi:
+	- As a constant user of group messaging, it is very important that I can send messages in real time and they are easily received by my peers in real time,
+	  but also, if I could schedule messages like reminders while I am offline, that would be helpful as well. 
 
 Shoan:
 
@@ -63,6 +75,8 @@ Liam:
 Within a channel, ability to edit, remove, pin, unpin, react, or unreact to a message
 
 Adi:
+	- As a constant user of group messaging, I want to be able to access all the features of making changes to messages, such as editing any messages I sent and 
+	  contain a typo in it. 
 
 Shoan:
 
@@ -73,6 +87,8 @@ Liam:
 Ability to view user anyone's user profile, and modify a user's own profile (name, email, handle, and profile photo)
 
 Adi:
+	- As a constant user of social media, I want to be able to construct my own profile with my picture, name, email and handle, and also be able to choose
+	  how much personal information I want to provide the app. 
 
 Shoan:
 
@@ -83,6 +99,7 @@ Liam:
 Ability to search for messages based on a search string
 
 Adi:
+	- As a constant user in group messaging, scrolling up long threads of messages can be tiresome and so being able to search for messages would be ideal and helpful. 
 
 Shoan:
 
@@ -93,6 +110,8 @@ Liam:
 Ability to modify a user's admin privileges: (MEMBER, ADMIN, OWNER)
 
 Adi:
+	- As a constant user of group messaging, it would be ideal to be able to control the privileges of each member in a channel so that it is easier to control the 
+	  logistics and flow of the channel, such as who can be added into the group, or moderation of messages. 
 
 Shoan:
 
@@ -103,6 +122,8 @@ Liam:
 Ability to begin a "standup", which is a 15 minute period where users can send messages that at the end of the period will automatically be collated and summarised to all users
 
 Adi:
+	- As a constant user of group messaging and virtual meetings, summarisation of a long period of talking with all members, such as a virtual meeting or discussion, and the 
+	  ability to review this discussion would be ideal for people attending the session, and for people who could not make it. 
 
 Shoan:
 
