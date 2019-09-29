@@ -8,6 +8,20 @@ Adi:
 
 Shoan:
 
+    - As a user, I want to be able to register on slackr with email, as an email is easier to remember than an
+      alternate form of username.
+    - As a user, I want to be able to register on slackr with a strong password, so that my account will be more
+      secure.
+    - As a user, I want to able to register on slackr with my first and last name, so that my account can be easily
+      identified by other users whom I would want to message or recieve messages from.
+      
+    - As a slackr user, I want to be able to login with my email and password, as they are easy to remember.
+    - As a slackr user, I want an error message to be displayed if incorret login details are provided, so I know
+      that I am aware that I have entered wrong details.
+    
+    - As a slackr user, I want to be able to logout, so that no one else can access my account while I am away from
+      my device.
+    
 Harry:
 
 Liam:
@@ -20,6 +34,12 @@ Adi:
 	  for the app. Something that is easy, but more importantly secure. 
 
 Shoan:
+    
+    - As a slackr user, I want to be able to reset my password using my email, as my email is secure and easy to 
+      access for a password reset.
+    - As a slackr user who entered an email for a password resest, I want to be prompted with a message stating  
+      that password reset instructions have been sent out to my email, so that I am clear with validation of the 
+      steps required to reset the password.
 
 Harry:
 
