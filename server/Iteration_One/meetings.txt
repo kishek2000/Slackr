@@ -1,0 +1,22 @@
+Meeting 1  (3:50pm - 5:00pm 29/09/2019):
+- Discussions about scheduling - in time sheet
+- Tests discussions
+        Comment out tests we could do 
+        Some cases in the table - return type, values, use this information 
+        Categories:
+            Author - 5 - Shoan
+            Channel - 10 - Adi
+            Message - 8 - Liam
+            User Profiles 5 - Harry
+            Standup - 2
+            Search - 1
+            Admin - 1
+    We can allocate each category to one person, and once finished, then they can help in larger test amounts
+- Example tests: auth_login
+        How do we understand email is valid?
+- Timelines (Days required for each):
+        Check sheets
+
+Things to remember: 
+- Piazza is a good place for finding common questions
+
