@@ -1,0 +1,117 @@
+Requirements:
+
+Ability to login, register if not logged in, and log out
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+
+Ability to reset password if forgotten it
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Ability to see a list of channels
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Ability to create a channel, join a channel, invite someone else to a channel, and leave a channel
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+Within a channel, ability to view all messages, view the members of the channel, and the details of the channel
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Within a channel, ability to send a message now, or to send a message at a specified time in the future
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Within a channel, ability to edit, remove, pin, unpin, react, or unreact to a message
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Ability to view user anyone's user profile, and modify a user's own profile (name, email, handle, and profile photo)
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Ability to search for messages based on a search string
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Ability to modify a user's admin privileges: (MEMBER, ADMIN, OWNER)
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+Ability to begin a "standup", which is a 15 minute period where users can send messages that at the end of the period will automatically be collated and summarised to all users
+
+Adi:
+
+Shoan:
+
+Harry:
+
+Liam:
+
+
+Requirements from video
+Extra requirements here ...
+
+
