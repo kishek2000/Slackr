@@ -95,6 +95,9 @@ Adi:
 Shoan:
 
 Harry:
+    - As a user, I want to be able to view all messages in a channel, so that I can know what other members have posted.
+    - As a user, I want to be able to view the members in a channel, so that I can know who has posted what and to see who is participating.
+    - As a user, I want to be able to view the details of the current channel, so that I understand the context of the discussion.
 
 Liam:
 
@@ -107,6 +110,7 @@ Adi:
 Shoan:
 
 Harry:
+    - As a user, I want to be able to 
 
 Liam:
 
