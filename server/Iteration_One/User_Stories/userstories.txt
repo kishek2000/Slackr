@@ -5,6 +5,7 @@ Ability to login, register if not logged in, and log out
 Adi: 
 	- As a regular user of messaging platforms throughout my day and week, I want to be able to get to my messages very quickly after the first
 	  registration process. 
+	- 
 
 Shoan:
 
@@ -43,7 +44,8 @@ Ability to reset password if forgotten it
 
 Adi:
 	- As a regular user of online messaging, and many software apps, I would need the process of restoring passwords in the case where I forget my password
-	  for the app. Something that is easy, but more importantly secure. 
+	  for the app. 
+	- As a slackr user, I want to be able to restore my password in a safe and secure way so that if I forget it I do not need another account. 
 
 Shoan:
     
@@ -65,7 +67,8 @@ Liam:
 Ability to see a list of channels
 
 Adi:
-	- As a regular user of messaging, I want to have a clear view of all my connections and groups where I talk with people, for quick access. 
+	- As a regular user of messaging, I want to have a clear view of all my connections and groups where I talk with people, for quick access.
+	- As a slackr user, I want to be able to categorise my priority channels and my less used channels so that I can have quicker access to more frequently used channels that I have.
 
 Shoan:
 
@@ -86,7 +89,10 @@ Ability to create a channel, join a channel, invite someone else to a channel, a
 
 Adi:
 	- As a regular user of messaging, I want to be able to easily create different groups, and invite my friends so we can talk together, or work
-	  on projects. Also, I want to be able to leave any outdated or unused groups. 
+	  on projects. 
+	- As a slackr user, I want to be able to leave any outdated or unused groups so that I do not have unnecessary clutter in my account. 
+	- As a slackr user, I want to be able to accept invites to groups that my friends make so that I can stay connected with others and either collaborate or just communicate 
+	  together. 
 
 Shoan:
 
@@ -114,8 +120,11 @@ Within a channel, ability to view all messages, view the members of the channel,
 
 Adi:
 	- As a member of groups, and messaging groups, I would like to be able to see all the messages that are sent by each member, especially those
-	  that are sent when I am offline. Also, the members of the group should preferably be visible so I can have a clear view of who is in the group, as well as
-	  maybe the group name or other details of the group. 
+	  that are sent when I am offline so I do not miss any information. 
+	- As a slackr user, I would prefer the visibility of all members with their photo and name so I can have a clear view of who is in the group and who 
+	  has sent what message.
+	- As a user, I want to have access to the details of the group such as when it was made, and the ability to name the group, so that 
+	  I can better organise my channels.
 
 Shoan:
 
@@ -143,8 +152,10 @@ Liam:
 Within a channel, ability to send a message now, or to send a message at a specified time in the future
 
 Adi:
-	- As a constant user of group messaging, it is very important that I can send messages in real time and they are easily received by my peers in real time,
-	  but also, if I could schedule messages like reminders while I am offline, that would be helpful as well. 
+	- As a constant user of group messaging, I want my messages to be sent in real time, so others in the channel can communicate with me
+	  immediately. 
+	- As a user, I want to be able to schedule a message, so I could setup reminders for entities such as deadlines or milestone completions
+	  without sending the message manually. 
 
 Shoan:
     
@@ -167,8 +178,13 @@ Liam:
 Within a channel, ability to edit, remove, pin, unpin, react, or unreact to a message
 
 Adi:
-	- As a constant user of group messaging, I want to be able to access all the features of making changes to messages, such as editing any messages I sent and 
-	  contain a typo in it. 
+	- As a user, I want to edit my message in case I require correcting any typos or incorrect information that it contains.
+	- As a user, I want to be able to remove any messages which I believe are inappropriate, or accidentally sent multiple times, 
+	  so the channel can be moderated and kept clean.
+	- As a user, I want to be able to pin or unpin any messages so that I can easily reference important messages or links that
+	  the group can use for particular information. 
+	- As a user, I want to be able to react or unreact to messages so I can share my understanding and emotions about messages
+	  that are sent. 
 
 Shoan:
 
