@@ -118,6 +118,9 @@ Shoan:
       authority to change channel settings.
 
 Harry:
+    - As a user, I want to be able to view all messages in a channel, so that I can know what other members have posted.
+    - As a user, I want to be able to view the members in a channel, so that I can know who has posted what and to see who is participating.
+    - As a user, I want to be able to view the details of the current channel, so that I understand the context of the discussion.
 
 Liam:
 
@@ -136,6 +139,9 @@ Shoan:
       and myself. 
     
 Harry:
+    - As a user, I want to be able to instantly send a message, so that I can interact with other online users without a buffer.
+    - As a user, I want to be able to schedule a time to have a message automatically send, so that I can send a message 
+      when I know the time it needs to be sent.
 
 Liam:
 
@@ -162,6 +168,13 @@ Shoan:
       it or if the reaction was unintentional.
 
 Harry:
+    - As a user, I want to be able to edit a message, so that I can correct myself, add more detail as to what was meant.
+    - As a user, I want to be able to remove a message, so that I can avoid misleading, confusing or offending 
+      others if the post was inappropriate.
+    - As a user, I want to be able to pin a message, so that I can show others important or relevant posts they should see.
+    - As a user, I want to be able to unpin a message, so that I can reduce the chance others are mislead by an obsolete post.
+    - As a user, I want to be able to react to messages, so that others can easily gain a sense of my emotion in response to a post.
+    - As a user, I want to be able to unreact to a message, so that I could change the react or it may be inappropriate for the post.
 
 Liam:
 
@@ -180,6 +193,11 @@ Shoan:
       users can easilty identify and then contanct me if required.
 
 Harry:
+    - As a user, I want to be able to view other people's user profiles, so that I can have an increased understanding
+      about the people I am interacting with.
+    - As a user, I want to be able to update my own user profile, so that I can give others a sense of who I am and to 
+      provide more depth to the profile.
+    - As a user, I want to be able to update my user profile, so that I can update incorrect or out-of-date information.
 
 Liam:
 
@@ -196,6 +214,7 @@ Shoan:
       entire messages to be able to search them up.
 
 Harry:
+    - As a user, I want to be able to search for messages based on an inputted string, so that I can find old but important messages.
 
 Liam:
 
@@ -211,6 +230,7 @@ Shoan:
       the authority to change the channel settings if required. 
 
 Harry:
+    - As a channel owner, I want to be able to change user privelages, so that I can entrust people with modifying the channel.
 
 Liam:
 
@@ -227,6 +247,7 @@ Shoan:
       information which I can then save for future reference.
 
 Harry:
+    - I need to break this one down...
 
 Liam:
 
