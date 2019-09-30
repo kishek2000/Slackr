@@ -25,9 +25,10 @@ Shoan:
 Harry:
     - As a user, I want to be able to log into Slackr only using an email and password, so that I am able to access 
       the service regardless of my device.
-    - As a user, I want to be able to create an account using a legitimate email address, so that I recieve notifications
+    - As a user, I want to be able to create an account using a legitimate email address, password, first name and last name, 
+      so that I recieve notifications
       to my email and have a means of reseting my password.
-    - As a user, I want to be able to log out of Slackr, so that my account cannot be accessed once it has been logged out.
+    - As a user, I want to be able to log out of Slackr from any page, so that my account cannot be accessed once it has been logged out.
     - As a user, I want to be able to log into Slackr after logging out, so that I do not need to register a new account.
     - As a user, I want my account account preferences to be the same after logging into my account again, so that I do
       not need to repeatedly change my preferences.
@@ -99,7 +100,8 @@ Shoan:
     
 
 Harry:
-    - As a user, I want to be able to create a new channel, so that I and other users can organise the topics that are talked about.
+    - As a user, I want to be able to create a new channel that is either public or private, so that I and other 
+      users can organise the topics that are talked about.
     - As a user, I want to be able to join a channel and be a part of the channel, so that I can participate in channel discussions.
     - As a user, I want to be able to leave a channel, so that I am not bound to a single channel.
 
@@ -131,7 +133,8 @@ Shoan:
 
 Harry:
     - As a user, I want to be able to view all messages in a channel, so that I can know what other members have posted.
-    - As a user, I want to be able to view the members in a channel, so that I can know who has posted what and to see who is participating.
+    - As a user, I want to be able to view the members and their role in a channel, so that I can know who has posted what 
+      and to see who is participating.
     - As a user, I want to be able to view the details of the current channel, so that I understand the context of the discussion.
 
 Liam:
@@ -156,7 +159,7 @@ Shoan:
     
 Harry:
     - As a user, I want to be able to instantly send a message, so that I can interact with other online users without a buffer.
-    - As a user, I want to be able to schedule a time to have a message automatically send, so that I can send a message 
+    - As a user, I want to be able to schedule a date and time to have a message automatically send, so that I can send a message 
       when I know the time it needs to be sent.
 
 Liam:
@@ -283,7 +286,8 @@ Shoan:
       information which I can then save for future reference.
 
 Harry:
-    - I need to break this one down...
+    - As a user, I want to be able to create a collect all messages in a 15 minute period after typing '/standup', so that I can read 
+      the summarised the collected data.
 
 Liam:
     - As a user, I want to be able to initiate a standup to provide a summary of messages in a short time frame, so extended discussions can be summarised.
