@@ -33,6 +33,10 @@ Harry:
       not need to repeatedly change my preferences.
 
 Liam:
+    - As a user, I want Slackr to prevent me from registering with a weak password, so I do not accidentally create an easily hackable account
+    - As a user, I want Slackr to prevent me from registering with an invalid email address, so I can use Slackr with a functioning email
+    - As a user, I want an email to be sent to my email address after registration so I can verify that I have entered the right email
+    - As a user, I want to be able to log out of Slackr by pressing a single button, so I'm not slowed down when moving onto other things
 
 
 Ability to reset password if forgotten it
@@ -55,6 +59,8 @@ Harry:
       a new account.
 
 Liam:
+    - As a user, I want a password reset to only be possible through sending an email to my email address, so someone else cannot reset my password
+    - As a user, I want a password reset to not change any other details of my account
 
 Ability to see a list of channels
 
@@ -74,6 +80,7 @@ Harry:
       quickly to another channel.
 
 Liam:
+    - As a user, I want shown channels to be those channels I am a member of, so my channel list is not cluttered with other channels I don't care about
 
 Ability to create a channel, join a channel, invite someone else to a channel, and leave a channel
 
@@ -92,11 +99,16 @@ Shoan:
     
 
 Harry:
-    - As a user, I want to be able to create a new channel, so that I and other uses can organise the topics that are talked about.
+    - As a user, I want to be able to create a new channel, so that I and other users can organise the topics that are talked about.
     - As a user, I want to be able to join a channel and be a part of the channel, so that I can participate in channel discussions.
     - As a user, I want to be able to leave a channel, so that I am not bound to a single channel.
 
 Liam:
+    - As a user, I want to invite other people to the channels I am in, so I can be in the same channels as those people.
+    - As a user, I want to be able to join multiple channels, so I can work on multiple tasks
+    - As a channel owner, I want to be able to make my channel public or private when I first create it, so I can control who joins my channel
+    - As a channel owner, I want to automatically join any channels I create, so I'm not locked out when I set it to private
+    - As a user, when I invite people to a channel, I want them to be added to the channel immediately, so they do not miss any messages
 
 Within a channel, ability to view all messages, view the members of the channel, and the details of the channel
 
@@ -123,6 +135,10 @@ Harry:
     - As a user, I want to be able to view the details of the current channel, so that I understand the context of the discussion.
 
 Liam:
+    - As a user, I want to see all messages sent in a channel, so I can see messages sent while I was away, and remind myself of messages sent some time ago
+    - As a user, I want to see the members of a channel, so I can see if I need to invite anyone I think should be there
+    - As a user, I want to see the details of a channel, so I know what the channel is for
+    - As a user, when seeing the list of members, I want to see who the owner of the channel is, so I can know who to contact in regards to the channel
 
 Within a channel, ability to send a message now, or to send a message at a specified time in the future
 
@@ -144,6 +160,9 @@ Harry:
       when I know the time it needs to be sent.
 
 Liam:
+    - As a user, I want to be able to send messages immeditately, so I can discuss things with other users in real time
+    - As a user, I want to be able to send messages at specified times in the future, so I can send a message at a time when I might be away
+    - As a user, I want to cancel a message queued for the future, so I can avoid sending messages I no longer want to send
 
 Within a channel, ability to edit, remove, pin, unpin, react, or unreact to a message
 
@@ -177,6 +196,12 @@ Harry:
     - As a user, I want to be able to unreact to a message, so that I could change the react or it may be inappropriate for the post.
 
 Liam:
+    - As a user, I want to edit the messages I send, so I can fix typos, change my wording, or add additional detail without sending a new message
+    - As a user, I want to remove the messages I send if I do not want the message to remain in the channel any more
+    - As a user, I want to be able to pin messages in a channel, so they can be easily seen later
+    - As a user, I want to be able to unpin messages in a channel, so the number of pinned messages doesn't pile up with messages that are no longer relevant
+    - As a user, I want to be able to react to messages, and withdraw my reactions, so I can respond to messages without writing my own messages
+    - As a user, the most important reaction is the thumbs up, so I can say yes to things without actually sending a message saying "yes"
 
 Ability to view user anyone's user profile, and modify a user's own profile (name, email, handle, and profile photo)
 
@@ -200,6 +225,12 @@ Harry:
     - As a user, I want to be able to update my user profile, so that I can update incorrect or out-of-date information.
 
 Liam:
+    - As a user, I want to view other users profile, so I can see their name and picture to figure out who they are
+    - As a user, I want to be able to pick a handle to be represented by, so I can use a nickname or otherwise to represent me
+    - As a user, I want to be able to upload a profile picture, so others can figure out who I am
+    - As a user, I want to be able to change my name, email, handle and profile whenever I want so I can keep my details updated
+    - As a user, I want the option of not uploading a profile picture, so I have the option of not sharing my picture
+    - As a user, I want my default handle to be my provided real name
 
 Ability to search for messages based on a search string
 
@@ -217,6 +248,7 @@ Harry:
     - As a user, I want to be able to search for messages based on an inputted string, so that I can find old but important messages.
 
 Liam:
+    - As a user, I want to be able to search for messages in a channel by providing a string, so I can find relevant conversations from the past easily
 
 Ability to modify a user's admin privileges: (MEMBER, ADMIN, OWNER)
 
@@ -233,6 +265,10 @@ Harry:
     - As a channel owner, I want to be able to change user privelages, so that I can entrust people with modifying the channel.
 
 Liam:
+    - As a channel owner, I want to be able to make someone else the owner of a channel so I can transfer ownership of a channel to someone else
+    - As a channel owner, I want to give other users admin priviliges, so they can assist with running the channel
+    - As a channel owner, I want users coming in to have member priviliges, so I can check who they are before giving them admin powers
+    - As a channel owner, I want to strip a user of admin priviliges, in case they do not need them anymore, or have been misusing them
 
 Ability to begin a "standup", which is a 15 minute period where users can send messages that at the end of the period will automatically be collated and summarised to all users
 
@@ -250,6 +286,7 @@ Harry:
     - I need to break this one down...
 
 Liam:
+    - As a user, I want to be able to initiate a standup to provide a summary of messages in a short time frame, so extended discussions can be summarised.
 
 
 Requirements from video
