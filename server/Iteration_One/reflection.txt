@@ -1,0 +1,16 @@
+The reflections will reflect on how we reached each milestone for iteration 1 and the processes involved to reach them:
+
+Online meeting (3:50pm - 5:00pm 29/09/2019) took place where we discussed how we would tackle the project. Initially we discussed and timetabled availabilities for each individual group member. We then looked at the project specification for Iteration One and broke it down into the following milestones (Subject to change): 
+
+1) User Stories Draft (By end of Monday)
+2) User Stories Finalised (By end of Wednesday)
+3) Extensive Tests Draft (By end of Wednesday)
+4) Extensive Tests Finalising (By end of Saturday)
+5) Plan Following Iteration (By end of Sunday)
+6) Assumptions (To be done throughout Iteration 1)
+7) Reflection (To be done throughout Iteration 1)
+
+Details of how each of the 7 milestones were approached is reflected below:
+
+1) User Stories Draft: Was decided that each team member would go through the video 'COMP1531 19T3 - Project - Stakeholder Interview' and derive user stories for the provided user requirements.
+
