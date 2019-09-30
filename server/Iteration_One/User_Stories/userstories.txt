@@ -63,6 +63,11 @@ Adi:
 
 Shoan:
 
+    - As a slackr user, I want to see easily see all the channels I am in, so that I can easily access them.
+    - As a slackr user, I want to be able to list or search all channels, so that I am able to easily find and
+      join channels of my choice.
+
+
 Harry:
     - As a user, I want to be able to see a list of available channels, so that I can select a channel to message to.
     - As a user, I want to be able to see all available channels regardless of the channel I am currently on, so that I can move
@@ -77,6 +82,14 @@ Adi:
 	  on projects. Also, I want to be able to leave any outdated or unused groups. 
 
 Shoan:
+
+    - As a slackr user, I want to be able to create a channel where I can set the channel's name, purpose and
+      whether the channel is public/private, so that I am able to create a channel to my own needs and specifications.
+    - As a slackr user, I want to be able to send invites to other slackr users to my channel, so that I can message
+      them on the channel.
+    - As a slackr user, I want to be able to leave a channel, so that I will not have to follow channels which I 
+      decide I do not want to be a part of anymore.
+    
 
 Harry:
     - As a user, I want to be able to create a new channel, so that I and other uses can organise the topics that are talked about.
@@ -94,6 +107,16 @@ Adi:
 
 Shoan:
 
+    - As a slackr user, I want to be able to see the list of people in the channel, so I know who will be able
+      to see my messages in the channel.
+
+    - As a slackr user, I want to be able to see all messages from other users and myself in a channel, so that I am  
+      able to keep track of conversations and will be able to refer to the conversations in the 
+      future if required.
+      
+    - As a slackr user, I want to be able to see who are the owners of the channel, so that I know who has the
+      authority to change channel settings.
+
 Harry:
 
 Liam:
@@ -105,7 +128,13 @@ Adi:
 	  but also, if I could schedule messages like reminders while I am offline, that would be helpful as well. 
 
 Shoan:
-
+    
+    - As a slackr user, I want to be able to send messages in a channel, so that I can communicate with other users
+      in the channel.
+    - As a slackr user, I want to be able to send messages at a specific time in the future, so that I can release 
+      specific information at a specified time to indiviauls or use the timed message as a reminder for other users
+      and myself. 
+    
 Harry:
 
 Liam:
@@ -117,6 +146,20 @@ Adi:
 	  contain a typo in it. 
 
 Shoan:
+
+    - As a slackr user, I want to be able to edit my messages, so that I can correct an incorrect or unintended 
+      message which was sent.
+    - As a slackr user, I want to be able to remove messages, so that I can prevent other users from seeing 
+      a message which was ininteded for.
+    - As a slackr user, I want the ability to pin messages, so that I can easily reference them in the future
+      if required.
+    - As a slackr user, I want the ability to unpin messages, so that I can dismiss messages which are no longer
+      relevant.
+    - As a slackr user, I want the ability to react to messages, to give a sense of emotion to online messaging,
+      as interactions online are not face to face, so reactions will allow users to understand how a message was 
+      recieved by other users in a channel.
+    - As a slackr user, I want the ability to unreact to messages, incase I made the wrong react and want to change
+      it or if the reaction was unintentional.
 
 Harry:
 
@@ -130,6 +173,12 @@ Adi:
 
 Shoan:
 
+    - As a slackr user, I want to be able to view anyone's user profile, so that I am able to identity users if I 
+      want to add them to my channel or contanct them.
+    - As a slackr user, I want to be able to modify my own user profile information, including name, email, handle, 
+      and profile photo, in case I had previously entered the details wrong or if the need updating, so that other
+      users can easilty identify and then contanct me if required.
+
 Harry:
 
 Liam:
@@ -140,6 +189,11 @@ Adi:
 	- As a constant user in group messaging, scrolling up long threads of messages can be tiresome and so being able to search for messages would be ideal and helpful. 
 
 Shoan:
+
+    - As a slackr user, I want to be able to search for messages, so that I can easily find earlier messages if 
+      required for reference at any point of time.
+    - As a slackr user, I want to be able to search messages on a search string, so that I do not require to remember
+      entire messages to be able to search them up.
 
 Harry:
 
@@ -153,6 +207,9 @@ Adi:
 
 Shoan:
 
+    - As a slackr channel owner, I want to be able to modify any user's priviliges, so that I can decide who has 
+      the authority to change the channel settings if required. 
+
 Harry:
 
 Liam:
@@ -164,6 +221,10 @@ Adi:
 	  ability to review this discussion would be ideal for people attending the session, and for people who could not make it. 
 
 Shoan:
+
+    - As a slackr user, I want to be able to quickly obtain a summary of the chat from the last 15 minute window, so
+      that I am able to quickly catch up on messages which I have missed, or so that I can make a summary of important
+      information which I can then save for future reference.
 
 Harry:
 
