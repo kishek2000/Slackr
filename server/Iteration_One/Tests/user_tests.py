@@ -1,5 +1,4 @@
 import pytest
-
 # user_profile tests
 # function inputs: token, u_id
 # function returns: email, name_first, name_last, handle_str
@@ -28,7 +27,7 @@ def user_profile_incorrect_return:
 def user_profile_invalid_id:
     returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
     upii_token = returned_dict['token']
-    with pytest.raises(ValueError)
+    with pytest.raises(ValueError):
         user_profile(upii_token, 'wrong')
 
 # user_profile_setname tests
@@ -51,7 +50,7 @@ def user_profile_setname_updated_values():
     upsuv_dictionary = user_profile(upsuv_token, upsuv_u_id)
     assert upsuv_dictionary[name_first] == 'dan'
     assert upsuv_dictionary[name_last] == 'man'
-    user_profile_setname(upcr_token, 'danny', 'manny')
+    user_profile_setname(upsuv_token, 'danny', 'manny')
     upsuv_dictionary = user_profile(upsuv_token, upsuv_u_id)
     assert upsuv_dictionary[name_first] == 'danny'
     assert upsuv_dictionary[name_last] == 'manny'
@@ -60,31 +59,127 @@ def user_profile_setname_long_name_first():
     returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
     upslnf_token = returned_dict['token']
     upslnf_u_id = returned_dict['u_id']
-    with pytest.raises(ValueError)
+    with pytest.raises(ValueError):
         user_profile_setname(upslnf_token, '123456789012345678901234567890123456789012345678901', 'manny')
 
 def user_profile_setname_long_name_last():
     returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
     uplnl_token = returned_dict['token']
     uplnl_u_id = returned_dict['u_id']
-    with pytest.raises(ValueError)
+    with pytest.raises(ValueError):
         user_profile_setname(uplnl_token, 'danny', '123456789012345678901234567890123456789012345678901')
 
 def user_profile_setname_no_input():
     returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
     upni_token = returned_dict['token']
     upni_u_id = returned_dict['u_id']
-    with pytest.raises(ValueError)
+    with pytest.raises(ValueError):
         user_profile_setname(upni_token, '', '')
 
 # user_profile_setemail tests
 # function inputs: token, email
 # function returns: 
+'''
+Assumptions
+    - If given no email input, it should throw an error
+'''
+def user_profile_setemail_no_return():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsnr_token = returned_dict['token']
+    upsnr_u_id = returned_dict['u_id']
+    assert user_profile_setemail(upsnr_token, 'dantheman@gmail.com') == None
+
+def user_profile_setemail_updated_values():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsuv_token = returned_dict['token']
+    upsuv_u_id = returned_dict['u_id']
+    upsuv_dictionary = user_profile(upsuv_token, upsuv_u_id)
+    assert upsuv_dictionary[email] == 'example@gmail.com'
+    user_profile_setemail(upsuv_token, 'dantheman@gmail.com')
+    upsuv_dictionary = user_profile(upsuv_token, upsuv_u_id)
+    assert upsuv_dictionary[email] == 'dantheman@gmail.com'
+    
+def user_profile_setemail_not_valid():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsnv_token = returned_dict['token']
+    upsnv_u_id = returned_dict['u_id']
+    #not valid email stuff can be copied from other areas
+    with pytest.raises(ValueError):
+        user_profile_setname(upsnv_token, '', '')
+
+def user_profile_setname_no_input():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsni_token = returned_dict['token']
+    upsni_u_id = returned_dict['u_id']
+    with pytest.raises(ValueError):
+        user_profile_setname(upsni_token, '')
 
 # user_profile_sethandle tests
 # function inputs: token, handle_str
 # function returns: 
+'''
+Assumptions
+- Handle should not be that same as one that already exists
+'''
+def user_profile_sethandle_no_return():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsnr_token = returned_dict['token']
+    upsnr_u_id = returned_dict['u_id']
+    assert user_profile_sethandle(upsnr_token, 'dantheman') == None
+
+def user_profile_sethandle_updated_values():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsuv_token = returned_dict['token']
+    upsuv_u_id = returned_dict['u_id']
+    upsuv_dictionary = user_profile(upsuv_token, upsuv_u_id)
+    assert upsuv_dictionary[handle_str] == 'example@gmail.com'
+    user_profile_sethandle(upsuv_token, 'dantheman')
+    upsuv_dictionary = user_profile(upsuv_token, upsuv_u_id)
+    assert upsuv_dictionary[handle_str] == 'dantheman'
+    
+def user_profile_sethandle_too_long():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsnv_token = returned_dict['token']
+    upsnv_u_id = returned_dict['u_id']
+    with pytest.raises(ValueError):
+        user_profile_sethandle(upsnv_token, 'dantheman12345678901234567890')
+
+def user_profile_sethandle_no_input():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsni_token = returned_dict['token']
+    upsni_u_id = returned_dict['u_id']
+    with pytest.raises(ValueError):
+        user_profile_sethandle(upsni_token, '')
+
+def user_profile_sethandle_already_exists():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upsae_token = returned_dict['token']
+    upsae_u_id = returned_dict['u_id']
+    #need to think about how this is done
+    with pytest.raises(ValueError):
+        user_profile_sethandle(upsnv_token, 'something that already exists')
 
 # user_profiles_uploadphoto tests
 # function inputs: token, img_url, x_start, y_start, x_end, y_end
 # function returns: 
+def user_profiles_uploadphoto_no_return():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upunr_token = returned_dict['token']
+    upunr_u_id = returned_dict['u_id']
+    assert user_profiles_uploadphoto(upunr_token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 0, 2864, 1861) == None
+
+def user_profiles_uploadphoto_not_200():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upun2_token = returned_dict['token']
+    upun2_u_id = returned_dict['u_id']
+    with pytest.raises(ValueError):
+        assert user_profiles_uploadphoto(upun2_token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Potates.jpg', 0, 0, 2864, 1861)
+        
+def user_profiles_uploadphoto_wrong_dimensions():
+    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    upuwd_token = returned_dict['token']
+    upuwd_u_id = returned_dict['u_id']
+    with pytest.raises(ValueError):
+        assert user_profiles_sethandle(upuwd_token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Potates.jpg', 2864, 1861, 0, 0)
+    
+#need to think more about the tests for this one
