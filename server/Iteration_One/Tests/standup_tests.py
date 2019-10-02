@@ -174,7 +174,7 @@ def test_standup_send_standup_time_finished():
     
     time_current = datetime.now()
     
-    #Loops until the time_finish is past 15 minutes fromcd time_finish
+    #Loops until the time_current is past 15 minutes fromcd time_finish
     while (((time_finish.minute % 60) - (time_current.minute % 60)) < 15 or 
            ((time_finish.minute % 60) - (time_current.minute % 60)) > -15 )):
            
