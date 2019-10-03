@@ -1,315 +1,42 @@
-Requirements:
+Ability to login, register if not logged in, and log out & Ability to reset password if forgotten it
+-> Epic 1: As a prospective/existing user of Slackr, I want the registration and login/logout processes to be quick, easy and secure so that I can regularly use the application for my messaging needs. 
+    - US 1.1 [Register] : “As a Slackr user, I want to be able to create an account using a legitimate email address, strong password, first name and last name, so that I can register in the app with my identity.”
+    - US 1.2 [Login & Logout] : “As a Slackr user, I want to be able to quickly and securely login and logout, so that I can control the access to my personalised Slackr account.“
+    - US 1.3 [Reset Password] : “As a Slackr user, if I forget my password, I want password reset instructions to be sent to my registered email, so that I can securely reset my account password with clear steps and validation. 
 
-Ability to login, register if not logged in, and log out
-
-Adi: 
-	- As a regular user of messaging platforms throughout my day and week, I want to be able to get to my messages very quickly after the first
-	  registration process. 
-	- 
-
-Shoan:
-
-    - As a user, I want to be able to register on slackr with email, as an email is easier to remember than an
-      alternate form of username.
-    - As a user, I want to be able to register on slackr with a strong password, so that my account will be more
-      secure.
-    - As a user, I want to able to register on slackr with my first and last name, so that my account can be easily
-      identified by other users whom I would want to message or recieve messages from.
-      
-    - As a slackr user, I want to be able to login with my email and password, as they are easy to remember.
-    - As a slackr user, I want an error message to be displayed if incorret login details are provided, so I know
-      that I am aware that I have entered wrong details.
-    
-    - As a slackr user, I want to be able to logout, so that no one else can access my account while I am away from
-      my device.
-    
-Harry:
-    - As a user, I want to be able to log into Slackr only using an email and password, so that I am able to access 
-      the service regardless of my device.
-    - As a user, I want to be able to create an account using a legitimate email address, password, first name and last name, 
-      so that I recieve notifications
-      to my email and have a means of reseting my password.
-    - As a user, I want to be able to log out of Slackr from any page, so that my account cannot be accessed once it has been logged out.
-    - As a user, I want to be able to log into Slackr after logging out, so that I do not need to register a new account.
-    - As a user, I want my account account preferences to be the same after logging into my account again, so that I do
-      not need to repeatedly change my preferences.
-
-Liam:
-    - As a user, I want Slackr to prevent me from registering with a weak password, so I do not accidentally create an easily hackable account
-    - As a user, I want Slackr to prevent me from registering with an invalid email address, so I can use Slackr with a functioning email
-    - As a user, I want an email to be sent to my email address after registration so I can verify that I have entered the right email
-    - As a user, I want to be able to log out of Slackr by pressing a single button, so I'm not slowed down when moving onto other things
-
-
-Ability to reset password if forgotten it
-
-Adi:
-	- As a regular user of online messaging, and many software apps, I would need the process of restoring passwords in the case where I forget my password
-	  for the app. 
-	- As a slackr user, I want to be able to restore my password in a safe and secure way so that if I forget it I do not need another account. 
-
-Shoan:
-    
-    - As a slackr user, I want to be able to reset my password using my email, as my email is secure and easy to 
-      access for a password reset.
-    - As a slackr user who entered an email for a password resest, I want to be prompted with a message stating  
-      that password reset instructions have been sent out to my email, so that I am clear with validation of the 
-      steps required to reset the password.
-
-Harry:
-    - As a user, I want to be able to use my registered email to reset my account password, so that I can continue using my account.
-    - As a user, I want to be able to reset my password without needing to know my previous password, so that I do not need to make
-      a new account.
-
-Liam:
-    - As a user, I want a password reset to only be possible through sending an email to my email address, so someone else cannot reset my password
-    - As a user, I want a password reset to not change any other details of my account
-
-Ability to see a list of channels
-
-Adi:
-	- As a regular user of messaging, I want to have a clear view of all my connections and groups where I talk with people, for quick access.
-	- As a slackr user, I want to be able to categorise my priority channels and my less used channels so that I can have quicker access to more frequently used channels that I have.
-
-Shoan:
-
-    - As a slackr user, I want to see easily see all the channels I am in, so that I can easily access them.
-    - As a slackr user, I want to be able to list or search all channels, so that I am able to easily find and
-      join channels of my choice.
-
-
-Harry:
-    - As a user, I want to be able to see a list of available channels, so that I can select a channel to message to.
-    - As a user, I want to be able to see all available channels regardless of the channel I am currently on, so that I can move
-      quickly to another channel.
-
-Liam:
-    - As a user, I want shown channels to be those channels I am a member of, so my channel list is not cluttered with other channels I don't care about
-
-Ability to create a channel, join a channel, invite someone else to a channel, and leave a channel
-
-Adi:
-	- As a regular user of messaging, I want to be able to easily create different groups, and invite my friends so we can talk together, or work
-	  on projects. 
-	- As a slackr user, I want to be able to leave any outdated or unused groups so that I do not have unnecessary clutter in my account. 
-	- As a slackr user, I want to be able to accept invites to groups that my friends make so that I can stay connected with others and either collaborate or just communicate 
-	  together. 
-
-Shoan:
-
-    - As a slackr user, I want to be able to create a channel where I can set the channel's name, purpose and
-      whether the channel is public/private, so that I am able to create a channel to my own needs and specifications.
-    - As a slackr user, I want to be able to send invites to other slackr users to my channel, so that I can message
-      them on the channel.
-    - As a slackr user, I want to be able to leave a channel, so that I will not have to follow channels which I 
-      decide I do not want to be a part of anymore.
-    
-
-Harry:
-    - As a user, I want to be able to create a new channel that is either public or private, so that I and other 
-      users can organise the topics that are talked about.
-    - As a user, I want to be able to join a channel and be a part of the channel, so that I can participate in channel discussions.
-    - As a user, I want to be able to leave a channel, so that I am not bound to a single channel.
-
-Liam:
-    - As a user, I want to invite other people to the channels I am in, so I can be in the same channels as those people.
-    - As a user, I want to be able to join multiple channels, so I can work on multiple tasks
-    - As a channel owner, I want to be able to make my channel public or private when I first create it, so I can control who joins my channel
-    - As a channel owner, I want to automatically join any channels I create, so I'm not locked out when I set it to private
-    - As a user, when I invite people to a channel, I want them to be added to the channel immediately, so they do not miss any messages
+Ability to see a list of channels & Ability to create a channel, join a channel, invite someone else to a channel, and leave a channel
+-> Epic 2: As a Slackr user, I want to be able to easily create, join, view or leave channels, as well as invite others to a channel that I am a member of, so that I am able to communicate with specified others in the channels of my choice.  
+    - US 2.1 [Create] : “ As a Slackr user, I want to be able to create a channel where I can set the channel's name, purpose and whether the channel is public/private, so that I am able to create a channel to my own needs and specifications. “
+    - US 2.2 [Join/Leave] : “As a Slackr user, I want to be able to join or leave a channel, so that I am only a member of channels that I want to be in.“
+    - US 2.3 [View] : “As a Slackr user, I want a clear view of all my groups and connections that I am a member of, so that I can quickly/easily access them.“
+    - US 2.4 [Invite] : “As a Slackr user, I want to be able to send invites to other Slackr users to my channel, so that I can communicate with them on the channel.“
 
 Within a channel, ability to view all messages, view the members of the channel, and the details of the channel
-
-Adi:
-	- As a member of groups, and messaging groups, I would like to be able to see all the messages that are sent by each member, especially those
-	  that are sent when I am offline so I do not miss any information. 
-	- As a slackr user, I would prefer the visibility of all members with their photo and name so I can have a clear view of who is in the group and who 
-	  has sent what message.
-	- As a user, I want to have access to the details of the group such as when it was made, and the ability to name the group, so that 
-	  I can better organise my channels.
-
-Shoan:
-
-    - As a slackr user, I want to be able to see the list of people in the channel, so I know who will be able
-      to see my messages in the channel.
-
-    - As a slackr user, I want to be able to see all messages from other users and myself in a channel, so that I am  
-      able to keep track of conversations and will be able to refer to the conversations in the 
-      future if required.
-      
-    - As a slackr user, I want to be able to see who are the owners of the channel, so that I know who has the
-      authority to change channel settings.
-
-Harry:
-    - As a user, I want to be able to view all messages in a channel, so that I can know what other members have posted.
-    - As a user, I want to be able to view the members and their role in a channel, so that I can know who has posted what 
-      and to see who is participating.
-    - As a user, I want to be able to view the details of the current channel, so that I understand the context of the discussion.
-
-Liam:
-    - As a user, I want to see all messages sent in a channel, so I can see messages sent while I was away, and remind myself of messages sent some time ago
-    - As a user, I want to see the members of a channel, so I can see if I need to invite anyone I think should be there
-    - As a user, I want to see the details of a channel, so I know what the channel is for
-    - As a user, when seeing the list of members, I want to see who the owner of the channel is, so I can know who to contact in regards to the channel
+-> Epic 3: As a Slackr user, I want to be able to view all messages and channel details, so that I can clearly identify the channels I am a member of.  
+    - US 3.1 [View Messages] : “As a Slackr user, I want to be able to see all messages in a channel, so that I can keep track of all conversations and be able to refer to them at any point in time if required.“
+    - US 3.2 [View Details - Members] : “As a Slackr user, I want to be able to see the list of people in the channel, so I know who will be able to see my messages in the channel.“
+    - US 3.3 [View Details - Other] : “As a user, I want to have access to the details of the channel such as its name, so that I can better identify my channels.“
 
 Within a channel, ability to send a message now, or to send a message at a specified time in the future
-
-Adi:
-	- As a constant user of group messaging, I want my messages to be sent in real time, so others in the channel can communicate with me
-	  immediately. 
-	- As a user, I want to be able to schedule a message, so I could setup reminders for entities such as deadlines or milestone completions
-	  without sending the message manually. 
-
-Shoan:
-    
-    - As a slackr user, I want to be able to send messages in a channel, so that I can communicate with other users
-      in the channel.
-    - As a slackr user, I want to be able to send messages at a specific time in the future, so that I can release 
-      specific information at a specified time to indiviauls or use the timed message as a reminder for other users
-      and myself. 
-    
-Harry:
-    - As a user, I want to be able to instantly send a message, so that I can interact with other online users without a buffer.
-    - As a user, I want to be able to schedule a date and time to have a message automatically send, so that I can send a message 
-      when I know the time it needs to be sent.
-
-Liam:
-    - As a user, I want to be able to send messages immeditately, so I can discuss things with other users in real time
-    - As a user, I want to be able to send messages at specified times in the future, so I can send a message at a time when I might be away
-    - As a user, I want to cancel a message queued for the future, so I can avoid sending messages I no longer want to send
+-> Epic 4: As a Slackr user I want to be able to send messages at varying times to a channel, so that it can be read by other users.
+    - US 4.1 [Send] : “As a Slackr user, I want my messages to be sent in real time, so others in the channel can communicate with me immediately.”
+    - US 4.2 [Send Later] : “As a Slackr user, I want the option of sending these messages at a set time so that I can plan announcements.”
+    - US 4.3 [Search] : “As a Slackr user, I want to be able to search for strings in the full set of messages in a channel, so I can easily find earlier messages if required for reference at any point of time.”
+    - US 4.4 [Standup] : “As a user, I want to be able to edit a message, so that I can correct myself or add more detail without sending a new message.”
 
 Within a channel, ability to edit, remove, pin, unpin, react, or unreact to a message
-
-Adi:
-	- As a user, I want to edit my message in case I require correcting any typos or incorrect information that it contains.
-	- As a user, I want to be able to remove any messages which I believe are inappropriate, or accidentally sent multiple times, 
-	  so the channel can be moderated and kept clean.
-	- As a user, I want to be able to pin or unpin any messages so that I can easily reference important messages or links that
-	  the group can use for particular information. 
-	- As a user, I want to be able to react or unreact to messages so I can share my understanding and emotions about messages
-	  that are sent. 
-
-Shoan:
-
-    - As a slackr user, I want to be able to edit my messages, so that I can correct an incorrect or unintended 
-      message which was sent.
-    - As a slackr user, I want to be able to remove messages, so that I can prevent other users from seeing 
-      a message which was ininteded for.
-    - As a slackr user, I want the ability to pin messages, so that I can easily reference them in the future
-      if required.
-    - As a slackr user, I want the ability to unpin messages, so that I can dismiss messages which are no longer
-      relevant.
-    - As a slackr user, I want the ability to react to messages, to give a sense of emotion to online messaging,
-      as interactions online are not face to face, so reactions will allow users to understand how a message was 
-      recieved by other users in a channel.
-    - As a slackr user, I want the ability to unreact to messages, incase I made the wrong react and want to change
-      it or if the reaction was unintentional.
-
-Harry:
-    - As a user, I want to be able to edit a message, so that I can correct myself, add more detail as to what was meant.
-    - As a user, I want to be able to remove a message, so that I can avoid misleading, confusing or offending 
-      others if the post was inappropriate.
-    - As a user, I want to be able to pin a message, so that I can show others important or relevant posts they should see.
-    - As a user, I want to be able to unpin a message, so that I can reduce the chance others are mislead by an obsolete post.
-    - As a user, I want to be able to react to messages, so that others can easily gain a sense of my emotion in response to a post.
-    - As a user, I want to be able to unreact to a message, so that I could change the react or it may be inappropriate for the post.
-
-Liam:
-    - As a user, I want to edit the messages I send, so I can fix typos, change my wording, or add additional detail without sending a new message
-    - As a user, I want to remove the messages I send if I do not want the message to remain in the channel any more
-    - As a user, I want to be able to pin messages in a channel, so they can be easily seen later
-    - As a user, I want to be able to unpin messages in a channel, so the number of pinned messages doesn't pile up with messages that are no longer relevant
-    - As a user, I want to be able to react to messages, and withdraw my reactions, so I can respond to messages without writing my own messages
-    - As a user, the most important reaction is the thumbs up, so I can say yes to things without actually sending a message saying "yes"
+-> Epic 5: As a user of Slackr, I want to be able to interact with sent messages, so that I can enhance my communication experience. 
+    - US 5.1 [Edit] : “As a Slackr user, I want to be able to edit a message, so that I can correct myself or add more detail without sending a new message.”
+    - US 5.2 [Remove] : “As a Slackr user, I want to remove the messages I send if I do not want the message to remain in the channel any more.”
+    - US 5.3 [Pin/Unpin] : “As a Slackr user, I want to be able to pin or unpin any messages so that I can easily reference important messages or links that the group can use for particular information.”
+    - US 5.4 [React/Unreact] : “As a Slackr user, I want to be able to react and unreact to messages so that I can quickly convey my feelings.”
 
 Ability to view user anyone's user profile, and modify a user's own profile (name, email, handle, and profile photo)
-
-Adi:
-	- As a constant user of social media, I want to be able to construct my own profile with my picture, name, email and handle, and also be able to choose
-	  how much personal information I want to provide the app. 
-
-Shoan:
-
-    - As a slackr user, I want to be able to view anyone's user profile, so that I am able to identity users if I 
-      want to add them to my channel or contanct them.
-    - As a slackr user, I want to be able to modify my own user profile information, including name, email, handle, 
-      and profile photo, in case I had previously entered the details wrong or if the need updating, so that other
-      users can easilty identify and then contanct me if required.
-
-Harry:
-    - As a user, I want to be able to view other people's user profiles, so that I can have an increased understanding
-      about the people I am interacting with.
-    - As a user, I want to be able to update my own user profile, so that I can give others a sense of who I am and to 
-      provide more depth to the profile.
-    - As a user, I want to be able to update my user profile, so that I can update incorrect or out-of-date information.
-
-Liam:
-    - As a user, I want to view other users profile, so I can see their name and picture to figure out who they are
-    - As a user, I want to be able to pick a handle to be represented by, so I can use a nickname or otherwise to represent me
-    - As a user, I want to be able to upload a profile picture, so others can figure out who I am
-    - As a user, I want to be able to change my name, email, handle and profile whenever I want so I can keep my details updated
-    - As a user, I want the option of not uploading a profile picture, so I have the option of not sharing my picture
-    - As a user, I want my default handle to be my provided real name
-
-Ability to search for messages based on a search string
-
-Adi:
-	- As a constant user in group messaging, scrolling up long threads of messages can be tiresome and so being able to search for messages would be ideal and helpful. 
-
-Shoan:
-
-    - As a slackr user, I want to be able to search for messages, so that I can easily find earlier messages if 
-      required for reference at any point of time.
-    - As a slackr user, I want to be able to search messages on a search string, so that I do not require to remember
-      entire messages to be able to search them up.
-
-Harry:
-    - As a user, I want to be able to search for messages based on an inputted string, so that I can find old but important messages.
-
-Liam:
-    - As a user, I want to be able to search for messages in a channel by providing a string, so I can find relevant conversations from the past easily
+-> Epic 6: As a Slackr user, I want to view the user profiles of others, and update my own, so that we can find current information about one another.
+    - US 6.1 [View] : “As a Slackr user, I want to be able to view other people's user profiles, so that I can identify the people I am interacting with.”
+    - US 6.2 [Modify] : “As a Slackr user, I want to be able to construct my own profile with a picture, name, email and handle, and also be able to choose how much personal information I want to provide the app.”
 
 Ability to modify a user's admin privileges: (MEMBER, ADMIN, OWNER)
-
-Adi:
-	- As a constant user of group messaging, it would be ideal to be able to control the privileges of each member in a channel so that it is easier to control the 
-	  logistics and flow of the channel, such as who can be added into the group, or moderation of messages. 
-
-Shoan:
-
-    - As a slackr channel owner, I want to be able to modify any user's priviliges, so that I can decide who has 
-      the authority to change the channel settings if required. 
-
-Harry:
-    - As a channel owner, I want to be able to change user privelages, so that I can entrust people with modifying the channel.
-
-Liam:
-    - As a channel owner, I want to be able to make someone else the owner of a channel so I can transfer ownership of a channel to someone else
-    - As a channel owner, I want to give other users admin priviliges, so they can assist with running the channel
-    - As a channel owner, I want users coming in to have member priviliges, so I can check who they are before giving them admin powers
-    - As a channel owner, I want to strip a user of admin priviliges, in case they do not need them anymore, or have been misusing them
-
-Ability to begin a "standup", which is a 15 minute period where users can send messages that at the end of the period will automatically be collated and summarised to all users
-
-Adi:
-	- As a constant user of group messaging and virtual meetings, summarisation of a long period of talking with all members, such as a virtual meeting or discussion, and the 
-	  ability to review this discussion would be ideal for people attending the session, and for people who could not make it. 
-
-Shoan:
-
-    - As a slackr user, I want to be able to quickly obtain a summary of the chat from the last 15 minute window, so
-      that I am able to quickly catch up on messages which I have missed, or so that I can make a summary of important
-      information which I can then save for future reference.
-
-Harry:
-    - As a user, I want to be able to create a collect all messages in a 15 minute period after typing '/standup', so that I can read 
-      the summarised the collected data.
-
-Liam:
-    - As a user, I want to be able to initiate a standup to provide a summary of messages in a short time frame, so extended discussions can be summarised.
-
-
-Requirements from video
-Extra requirements here ...
-
-
+-> Epic 7: “As a Slackr admin, I want to be able to modify admin privileges so that I and other members can moderate a channel to our specifications.” 
+    - US 7.1 [Admin]: “As a Slackr admin, I want to give other members admin and owner privileges, so that they can assist with the running of the channel.”
+    - US 7.2 [Owner]: “As a Slackr channel owner, I want to be able to control invites to the channel, so that only a decided list of members can be part of a channel”
