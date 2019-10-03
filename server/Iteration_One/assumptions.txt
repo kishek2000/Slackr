@@ -12,3 +12,10 @@ of functions, namely:
 	- message_*
 	- 
 
+message_*:
+    - Assuming message_send_later and message_edit have the same 1000 character limit as message_send
+    - Assuming testing computer is fast enough to perform
+    - Assuming the empty string is an invalid token
+    - Assuming no id's will be -1
+    - Assuming helper functions return valid tokens
+    - Assuming channels_create is working
