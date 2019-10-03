@@ -4,47 +4,58 @@
 ## Might need to add tests where a member is made an admin
 import pytest
 
-def test_message_send():
+@pytest.fixture()
+def login():
+    pass
     # Setting up
-    u_id, token = auth_register("email@email.com", "Password132", "Liam", "Staples")
+    uid, token = get_data()['uid'], get_data()['token']
     channel_id = channels_create(token, "test", False)
     dead_channel = channels_create(token, "empty test", True) # Check to see if this channel is empty
     
+def test_message_max_length():
     # Testing message of maximum length
     message_send(token, channel_id, "x"*1000)
     #CHECK#
     
+def test_message_too_big():
     # Testing message that's too big
     with pytest.raises(ValueError):
         message_send(token, channel_id, "x"*1001)
     #CHECK NOTHING HAPPENED#
         
+def test_message_no_channel():
     # Testing message sent to nonexistant channel
     with pytest.raises(ValueError):
         message_send(token, -1, "Hello")
     #CHECK NOTHING HAPPENED#
-      
+
+def test_message_symbols():
     # Testing weird characters
     message_send(token, channel_id, "Testing All Character Types: 54, ][")
     #CHECK#
+
+def test_message_special_characters:
     message_send(token, channel_id, "1\n2\0 3\b 4") # This should just be that straight message?
     #CHECK#
     
+def test_message_empty():
     # Testing empty message
-    message_send(token, channel_id, "") # This might raise an exception, idk
-    #CHECK#
-    
+    with pytest.raises(ValueError):
+        message_send(token, channel_id, "")
+    #CHECK NOTHING HAPPENED#
+
+def test_message_bad_token():
     # Testing bad token
     with pytest.raises(Exception):
         message_send("", channel_id, "Hello") # This probably raises an exception. Which one, idk
     #CHECK NOTHING HAPPENED#
         
+def test_message_disaster():
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_send("", -1, "x"*1001)
     #CHECK NOTHING HAPPENED#
     
-    auth_logout(token)
 
 def test_message_send_later():
     '''
@@ -52,7 +63,7 @@ def test_message_send_later():
     '''
 
     # Setting up
-    u_id, token = auth_register("email@email.com", "Password132", "Liam", "Staples")
+    uid, token = get_data()['uid'], get_data()['token']
     channel_id = channels_create(token, "test", False)
     dead_channel = channels_create(token, "empty test", True) # Check to see if this channel is empty
     
@@ -74,9 +85,10 @@ def test_message_send_later():
     #CHECK IS THERE#
     
     # Testing empty message
-    message_send_later(token, channel_id, "", time()+3) # This might raise an exception, idk
+    with pytest.raises(ValueError):
+        message_send_later(token, channel_id, "", time()+3)
     sleep(4)
-    #CHECK#
+    #CHECK NOTHING HAPENED#
     
     # Testing message with time in the past
     with pytest.raises(ValueError):
@@ -108,13 +120,11 @@ def test_message_send_later():
     with pytest.raises(Exception):
         message_send_later("", -1, "x"*1001, time()-1)
     #CHECK NOTHING HAPPENED#
-    
-    auth_logout(token)
 
 def test_message_remove():
     # Setting up
-    a_id, a_token = auth_register("email@email.com", "Password132", "Liam", "Staples")
-    b_id, b_token = auth_register("Buser@Buser.com", "BuserbUSER", "B", "User")
+    a_id, a_token = get_data()['uid'], get_data()['token']
+    b_id, b_token = get_data_two()['uid'], get_data_two()['token']
     channel_a = channels_create(a_token, "Channel A", False)
     channel_b = channels_create(b_token, "Channel B", True)    
     message_send(a_token, channel_b, "Hello")
@@ -185,14 +195,11 @@ def test_message_remove():
     with pytest.raises(Exception):
         message_remove("", messages[0]['message_id'])
         #CHECK#
-        
-    auth_logout(a_token)
-    auth_logout(b_token)
 
 def test_message_edit():
     # Setting Up
-    a_id, a_token = auth_register("email@email.com", "Password132", "Liam", "Staples")
-    b_id, b_token = auth_register("Buser@Buser.com", "BUSERbuser", "B", "User")
+    a_id, a_token = get_data()['uid'], get_data()['token']
+    b_id, b_token = get_data_two()['uid'], get_data_two()['token']
     channel_a = channels_create(a_token, "Channel A", False)
     channel_b = channels_create(b_token, "Channel B", True)
     message_send(a_token, channel_b, "Hello")
@@ -210,8 +217,9 @@ def test_message_edit():
     
     # Testing editing an empty message
     message_send(a_token, channel_a, "a")
-    message_edit(a_token, messages[0]['message_id'], "") # Dunno if this is an exception or not
-    #CHECK#
+    with pytest.raises(ValueError):
+        message_edit(a_token, messages[0]['message_id'], "")
+    #CHECK NOTHING HAPPENED#
     
     # Testing when editor did not post the message, and is not admin
     with pytest.raises(ValueError):
@@ -238,8 +246,6 @@ def test_message_edit():
         message_edit("", -1, "")
     #CHECK#
     
-    auth_logout(a_token)
-    auth_logout(b_token)
 
 def test_message_react():
 
