@@ -12,6 +12,12 @@ of functions, namely:
 	- message_*
 	- 
 
+general:
+    - Assuming trying to send an empty string will send no message
+    - Assuming trying to send a string of spaces will send no message
+    - Assuming sending a string containing special characters (\0, \n, \b) will send the characters as is
+        - This would be consistent with Slack
+
 message_*:
     - Assuming message_send_later and message_edit have the same 1000 character limit as message_send
     - Assuming testing computer is fast enough to perform sequential commands in less than a second
@@ -20,3 +26,4 @@ message_*:
     - Assuming helper functions return valid tokens
     - Assuming channels_create is working
     - Assuming sending the empty string will throw a value error
+    - Assuming AccessError has been defined
