@@ -7,12 +7,13 @@ import pytest
 @pytest.fixture()
 def setup():
     # Setting up
-    a_id, a_token = get_data()['uid'], get_data()['token']
-    b_id, b_token = get_data_two()['uid'], get_data_two()['token']
+    a_id, a_token = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
+    b_id, b_token = auth_register("userB@userB.com", "Go0dPa>sword", "User", "B")
     channel_a = channels_create(a_token, "Channel A", False)
     channel_b = channels_create(b_token, "Channel B", True)    
     dead_channel = channels_create(token, "empty test", True) # Check to see if this channel is empty
     return [a_token, b_token, channel_a, channel_b, dead_channel]
+    #       setup[0], setup[1], setup[2], setup[3], setup[4]
    
    
 ################################################################################
