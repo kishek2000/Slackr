@@ -298,8 +298,9 @@ def test_message_edit_nonexistant(setup):
     
 def test_message_edit_bad_token(setup):
     # Testing editing a message with bad token
+    message_send(setup[0], setup[2], "Edit this")
     with pytest.raises(AccessError):
-        message_edit("", message_id, "Edited
+        message_edit("", message_id, "Edited")
     #CHECK
     
 def test_message_edit_disaster(setup):
