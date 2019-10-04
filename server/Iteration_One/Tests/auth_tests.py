@@ -86,7 +86,7 @@ def test_auth_login_valid_token_generated(registered_user_1):
     password = "validp@ssword"
     
     #Should produce no errors
-    user_token = registered_user_1['token']
+    user_token = auth_login(email, password)['token']
     
     assert(token_is_valid(returned_token) == True)    
  
@@ -96,7 +96,7 @@ def test_auth_login_valid_u_id_generated():
     password = "validp@ssword"
     
     #Should produce no errors
-    user_u_id = registered_user_1['u_id']
+    user_u_id = auth_login(email, password)['u_id']
     
     assert(u_id_is_valid(returned_u_id) == True)  
         
