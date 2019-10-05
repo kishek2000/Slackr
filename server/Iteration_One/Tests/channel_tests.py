@@ -84,7 +84,6 @@ def tests_channel_invite_token_invalid(setup):
 	
 '''
 
-
 def tests_channel_details_valid(setup):
 	channel_id_private = setup[4]  
     channel_id_public = setup[5]
@@ -196,9 +195,9 @@ def tests_channel_messages_token_invalid(setup):
 ################################################################################
 ##                           TESTING channel_leave                            ##
 ################################################################################
-## Add in check with channel_details after execution of a member leave, to 
-## ensure amount of members has changed in channel (Add assumption that details 
-## works)
+## Potentially could add in check with channel_details after execution of a member 
+## leave, to ensure amount of members has changed in channel (Add assumption that 
+## details works)
 
 def tests_channel_leave_valid(setup):
 	channel_id_private = setup[4]  
@@ -351,7 +350,6 @@ def tests_channel_addowner_token_invalid(setup):
 	In channel_removeowner, we are assuming that channel_addowner adds a user into 
 	a channel as a member AND owner. 
 '''
-
 
 def tests_channel_removeowner_valid(setup, add_extra_owner):
 	## Adding extra owner:
