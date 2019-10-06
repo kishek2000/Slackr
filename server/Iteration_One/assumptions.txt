@@ -15,9 +15,7 @@ of functions, namely:
     - search
     - admin_userpermission_change  
 
-
 auth_*:
-	
     - Assume an accepted password used in the logging in and registration has the following requirements 
       (A function called is_valid_password() will check against these requirements and return either
       True or False) :-
@@ -59,6 +57,44 @@ channel_*:
 	that prompts users for an input of 'Yes' or 'No' for the option of making a public or 
 	private channel, called get_public_status() (it returns True or False)
 
+
+channel_*:
+    - In general, we assume an invalid id is channel_id = -1, an invalid token is 'InvalidToken' and an 
+      invalid u_id is -1.
+    channel_details;
+        - 	Within channel_details, we intepret from the spec, and 'assume', that the 
+        	function returns a dictionary that provides the channel name as a string, 
+        	then a list of the owners ids, then a list of all members ids.
+    
+    channel_messages:
+        - 	For channel_messages, we assume there is some function within 
+        	channel_messages() that promptsusers for an input of some start value, called 
+        	message_start_index().
+        - 	We also assume there is some function within channel_messages() that provides 
+        	us the number of messages in the channel, as long as the token given pertains 
+        	to a user that is a member of the channel, called total_channel_messages().
+        -	In the testing of channel_messages, we assume that message_send has complete
+        	functionality.
+    
+    channel_leave:
+        - 	Although not fully implemented in Iteration One, we plan to consider the addition
+        	of a test in channel_leave where we check the previous member list, and post 
+        	member list using channel_details. The assumption will be that channel_details
+        	is fully functioning in this usage (with valid arguments given to the function).
+    
+    channel_removeowner:
+        - 	In our testing of channel_removeowner, when we add an extra owner of our created
+        	public and private channels made in the first fixture 'setup' in channel_tests, 
+        	we are assuming that the function channel_addowner() adds a user to a channel, and
+        	also then makes them an owner; that is, they are a member of the channel and an 
+        	owner of it. 
+    
+    channels_create:
+        - 	For the testing of channels_create, we are assuming that we will create some function
+        	that prompts users for an input of some channel name, called get_channel_name()
+        - 	For the testing of channels_create, we are also assuming that we will create some function
+        	that prompts users for an input of 'Yes' or 'No' for the option of making a public or 
+        	private channel, called get_public_status() (it returns True or False)
 
 message_*:
     - Assuming trying to send an empty string will send no message
