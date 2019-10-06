@@ -21,13 +21,11 @@ auth_*:
 - Assume an accepted password used in the logging in and registration has the following requirements 
 (A function called is_valid_password() will check against these requirements and return either
 True or False):
-
     - Password length between 5 and 20 characters inclusive
     - At least 1 upper character
     - At least 1 lower case character
     - At least 1 number
     - At least 1 special character
-
 - Assume we have a function token_is_valid() which returns either True if token is active
  and False inactive
 - Similalry we have a funtion, u_id_is_valid() which returns either True or False
