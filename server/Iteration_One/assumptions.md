@@ -61,31 +61,31 @@ private channel, called get_public_status() (it returns True or False)
 
 
 message_*:
-    - Assuming trying to send an empty string will send no message
-    - Assuming trying to send a string of spaces will send no message
-    - Assuming sending a string containing special characters (\0, \n, \b) will send the characters as is
-    	This would be consistent with Slack
-    - Assuming message_send_later and message_edit have the same 1000 character limit as message_send
-    - Assuming testing computer is fast enough to perform sequential commands in less than a second
-    - Assuming the empty string is an invalid token
-    - Assuming no valid id's will be -1
-    - Assuming helper functions return valid tokens
-    - Assuming channels_create, channel_invite, channel_join, channel_leave and channel_message is working
-    - Assuming sending the empty string will throw a value error
-    - Assuming AccessError has been defined
-    - Assuming the stored time sent for message_send_later will be the time it was posted to the channel
-    - There is currently no specified way to store the reacts and pins, so testing these is going to be difficult
-    - Assuming a valid react id is 1 and 2
-    - Assuming only one person can use each react_id on each message (probably a mistake with the specs)
-    - Assuming messages sent later can only be removed, edited, reacted and pinned once they've actually been posted
-    - Assuming all message functions will throw an access error without a valid token
-    - Assuming anyone can unreact any existing react on a message (regardless of if they made it)
-    - Assuming there is a function that tests if a channel has no messages in it called channel_is_empty
-    - Assuming message functions are implemented in the order they are in the test file
-    - Assuming editing a message ONLY changes the messasge, and not time_created, is_read, u_id, or message_id
+- Assuming trying to send an empty string will send no message
+- Assuming trying to send a string of spaces will send no message
+- Assuming sending a string containing special characters (\0, \n, \b) will send the characters as is
+	This would be consistent with Slack
+- Assuming message_send_later and message_edit have the same 1000 character limit as message_send
+- Assuming testing computer is fast enough to perform sequential commands in less than a second
+- Assuming the empty string is an invalid token
+- Assuming no valid id's will be -1
+- Assuming helper functions return valid tokens
+- Assuming channels_create, channel_invite, channel_join, channel_leave and channel_message is working
+- Assuming sending the empty string will throw a value error
+- Assuming AccessError has been defined
+- Assuming the stored time sent for message_send_later will be the time it was posted to the channel
+- There is currently no specified way to store the reacts and pins, so testing these is going to be difficult
+- Assuming a valid react id is 1 and 2
+- Assuming only one person can use each react_id on each message (probably a mistake with the specs)
+- Assuming messages sent later can only be removed, edited, reacted and pinned once they've actually been posted
+- Assuming all message functions will throw an access error without a valid token
+- Assuming anyone can unreact any existing react on a message (regardless of if they made it)
+- Assuming there is a function that tests if a channel has no messages in it called channel_is_empty
+- Assuming message functions are implemented in the order they are in the test file
+- Assuming editing a message ONLY changes the messasge, and not time_created, is_read, u_id, or message_id
     
 user_*:
-	- Assuming an invalid token will cause raise an error
-    - Assuming an empty string will raise an error
-    - Assuming an invalid u_id will raise an error
-    - Handle should not be the same as one that already exists
+- Assuming an invalid token will cause raise an error
+- Assuming an empty string will raise an error
+- Assuming an invalid u_id will raise an error
+- Handle should not be the same as one that already exists
