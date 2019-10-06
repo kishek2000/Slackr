@@ -6,19 +6,13 @@ different stages of the project: that is, Iterations 1-3.
 ==== Iteration One ====
 
 This iteration will be grouped into the assumptions made in each category
-of functions, namely:
-	- auth_*
-	
-	- channel(s)_*
-
-	- message_*
-	
-    - user_*
-    
-    - standup_*
-    
-    - search
-    
+of functions, namely:  
+	- auth_*  
+	- channel(s)_*  
+	- message_*  
+    - user_*  
+    - standup_*  
+    - search  
     - admin_userpermission_change  
 
 
