@@ -99,7 +99,7 @@ def test_standup_send_valid(channel_id_user_1, registered_user_1, registered_use
     
     #registered_user_1 starts the standup
     
-    standup_start(user_1_token, channel_id)
+    standup_start(user_token_1, channel_id)
     
     #Should produce no error as a valid message is sent by both registered_users during the standup
     
