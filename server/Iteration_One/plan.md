@@ -33,6 +33,9 @@ To
     - Review progression and completion of tasks
     - Plan for Iteration 3
     - End iteration
+    
+Go into edit mode on Gitlab or open with text editor E.g. gedit, to be able to view the flow chart    
+    
 +------------------+
 |         	       |
 |   Spec released  |
