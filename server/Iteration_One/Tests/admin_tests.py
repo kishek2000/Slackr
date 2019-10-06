@@ -3,6 +3,10 @@ import pytest
 @pytest.fixture():
 def register_account:
     return auth_register('example@gmail.com', '12345', 'dan', 'man')
+
+#################################################################################
+##                       TESTING admin_userpermission_change                   ##
+#################################################################################
 # admin_userpermission_change tests
 # function inputs: token, u_id, permission_id
 # function returns:

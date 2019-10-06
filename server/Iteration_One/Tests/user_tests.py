@@ -3,7 +3,10 @@ import pytest
 @pytest.fixture
 def register_account():
     return auth_register('example@gmail.com', '12345', 'dan', 'man')
-# user_profile tests
+    
+#################################################################################
+##                           TESTING user_profile                              ##
+#################################################################################
 # function inputs: token, u_id
 # function returns: email, name_first, name_last, handle_str
 
@@ -36,6 +39,9 @@ def test_user_profile_invalid_token(register_account):
     with pytest.raises(ValueError):
         user_profile('wrong token', u_id)
 
+#################################################################################
+##                      TESTING user_profile_setname                           ##
+#################################################################################
 # user_profile_setname tests
 # function inputs: token, name_first, name_last
 # function returns: 
@@ -83,7 +89,9 @@ def test_user_profile_setname_no_input(register_account):
     with pytest.raises(ValueError):
         user_profile_setname(token, '', '')
 
-# user_profile_setemail tests
+#################################################################################
+##                        TESTING user_profile_setemail                        ##
+#################################################################################
 # function inputs: token, email
 # function returns: 
 '''
@@ -122,12 +130,15 @@ def test_user_profile_setemail_no_input(register_account):
     with pytest.raises(ValueError):
         user_profile_setname(token, '')
 
+#################################################################################
+##                        TESTING user_profile_sethandle                       ##
+#################################################################################
 # user_profile_sethandle tests
 # function inputs: token, handle_str
 # function returns: 
 '''
 Assumptions
-- Handle should not be that same as one that already exists
+- Handle should not be the same as one that already exists
 '''
 #Ensure the function does not return anything
 def test_user_profile_sethandle_no_return(register_account):
@@ -168,7 +179,9 @@ def test_user_profile_sethandle_already_exists(register_account):
     with pytest.raises(ValueError):
         user_profile_sethandle(token, 'something that already exists')
 
-# user_profiles_uploadphoto tests
+#################################################################################
+##                  TESTING user_profiles_uploadphoto                          ##
+#################################################################################
 # function inputs: token, img_url, x_start, y_start, x_end, y_end
 # function returns: 
 
