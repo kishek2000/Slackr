@@ -42,7 +42,7 @@ meeting:
                                                                                                         
 How we can improve:-
 
-		- Ensuring enough time was allocated to work on milestones
+        - Ensuring enough time was allocated to work on milestones
         - Our initial process of coding tests individually introduced several inconsistencies, which
           we only noticed in our group session of checking the code after our first draft.
           These should be clarified earlier.
