@@ -20,7 +20,7 @@ auth_*:
 	
 - Assume an accepted password used in the logging in and registration has the following requirements 
 (A function called is_valid_password() will check against these requirements and return either
-True or False) :-
+True or False):
 
     - Password length between 5 and 20 characters inclusive
     - At least 1 upper character
@@ -31,9 +31,9 @@ True or False) :-
 - Assume we have a function token_is_valid() which returns either True if token is active
  and False inactive
 - Similalry we have a funtion, u_id_is_valid() which returns either True or False
-- For the use of auth_passwordreset_reset and its testing, assume that get_reset_code() provides 
+- For the use of auth_passwordreset_reset and its testing, assume that get_reset_code() provides
 a valid reset code
-- Assume that -1 is an invalid reset_code 
+- Assume that -1 is an invalid reset_code
     
 channel_*:
 - Within channel_details, we intepret from the spec, and 'assume', that the 
