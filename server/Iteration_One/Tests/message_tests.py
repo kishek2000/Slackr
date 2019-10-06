@@ -15,7 +15,7 @@ def setup():
     channel_invite(token_a, channel_a, b_id)
     channel_join(a_tokne, channel_b)
     channel_dead = channels_create(token, "empty test", True) # Check to see if this channel is empty
-    return ["token_a": token_b, "token_b": token_b, "channel_a": channel_a, "channel_b": channel_b, "channel_dead": channel_dead, "a_id": a_id, "b_id": b_id]
+    return {"token_a": token_a, "token_b": token_b, "channel_a": channel_a, "channel_b": channel_b, "channel_dead": channel_dead, "a_id": a_id, "b_id": b_id}
    
    
 ################################################################################
@@ -35,14 +35,14 @@ def test_message_send_too_big(setup):
     with pytest.raises(ValueError):
         message_send(setup["token_a"], setup["channel_a"], "x"*1001)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_send_no_channel(setup):
     # Testing message sent to nonexistant channel
     with pytest.raises(ValueError):
         message_send(setup["token_a"], -1, "Hello")
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_send_symbols(setup):
     # Testing weird characters
@@ -69,28 +69,28 @@ def test_message_send_empty(setup):
     with pytest.raises(ValueError):
         message_send(setup["token_a"], setup["channel_a"], "")
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_send_spaces(setup):
     # Testing empty message
     with pytest.raises(ValueError):
         message_send(setup["token_a"], setup["channel_a"], "     ")
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_send_bad_token(setup):
     # Testing bad token
     with pytest.raises(Exception):
         message_send("", setup["channel_a"], "Hello") # This probably raises an exception. Which one, idk
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_send_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_send("", -1, "x"*1001)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 
 ################################################################################
@@ -125,7 +125,7 @@ def test_message_send_later_on_time(setup):
     sleep(5)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_send_later_empty_message(setup):
     # Testing empty message
@@ -133,7 +133,7 @@ def test_message_send_later_empty_message(setup):
         message_send_later(setup["token_a"], setup["channel_a"], "", time()+3)
     sleep(4)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_send_later_spaces(setup):
     # Testing empty message
@@ -141,23 +141,23 @@ def test_message_send_later_spaces(setup):
         message_send_later(setup["token_a"], setup["channel_a"], "     ", time()+3)
     sleep(4)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_send_later_time_past(setup):
     # Testing message with time in the past
     with pytest.raises(ValueError):
         message_send_later(setup["token_a"], setup["channel_a"], "Hello", time()-1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_send_later_intermediate_messages(setup):
     # Testing message order is right when messages are sent before later message is sent
     message_send_later(setup["token_a"], setup["channel_a"], "c", time()+10)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     message_send_later(setup["token_a"], setup["channel_a"], "b", time()+5)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     message_send(setup["token_a"], setup["channel_a"], "a")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
     sleep(5)
@@ -173,37 +173,37 @@ def test_message_send_later_too_big(setup):
     with pytest.raises(ValueError):
         message_send_later(setup["token_a"], setup["channel_a"], "x"*1001, time()+2)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_send_later_no_channel(setup):
     # Testing message sent to nonexistant channel
     with pytest.raises(ValueError):
         message_send_later(setup["token_a"], -1, "Hello", time()+2)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_send_later_bad_token(setup):
     # Testing bad token
     with pytest.raises(Exception):
         message_send_later("", setup["channel_a"], "Hello", time()+2) # This probably raises an exception. Which one, idk
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_send_later_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_send_later("", -1, "x"*1001, time()-1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 ################################################################################
 ##                         TESTING message_remove                             ##
@@ -214,14 +214,14 @@ def test_message_remove_empty(setup):
     with pytest.raises(ValueError):
         message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_remove_one_message(setup):
     # Testing deletion of one message
     message_send(setup["token_a"], setup["channel_a"], "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_remove_two_messages_first(setup):
     # Testing deletion of first message
@@ -234,7 +234,7 @@ def test_message_remove_two_messages_first(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["is_unread"] == False)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"]) # 'There'
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_remove_two_messages_second(setup):    
     # Testing deletion of second message
@@ -247,7 +247,7 @@ def test_message_remove_two_messages_second(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["is_unread"] == False)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][1]["message_id"]) # 'Hello'
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_remove_middle_mssage(setup):
     # Testing deletion of middle message
@@ -260,7 +260,7 @@ def test_message_remove_middle_mssage(setup):
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][1]["message_id"]) # 'Hello'
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"]) # 'World'
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_remove_other_person(setup):
     # Testing deletion of message sent by another person
@@ -270,14 +270,14 @@ def test_message_remove_other_person(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_remove_admin_deletes_other_person(setup):
     # Testing deletion of a message sent by another person by an admin
     message_send(setup["token_b"], setup["channel_a"], "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_remove_bad_token(setup):        
     # Testing deletion of message with bad token
@@ -287,44 +287,44 @@ def test_message_remove_bad_token(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_remove_already_deleted(setup):
     # Testing deletion of already deleted message
     message_send(setup["token_a"], setup["channel_a"], "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     with pytest.raises(ValueError):
         message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_remove_nonexistant(setup):
     # Testing removal of a nonexistant message
     with pytest.raises(ValueError):
         message_remove(setup["token_a"], -1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_remove_send_later(setup):
     # Testing removal of a message that hasn't been sent yet
     message_send_later(setup["token_a"], setup["channel_a"], "Hello", time()+5)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     sleep(6)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_remove_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_remove("", -1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 ################################################################################
 ##                          TESTING message_edit                              ##
@@ -334,7 +334,7 @@ def test_message_edit_no_messages(setup):
     with pytest.raises(ValueError):
         message_edit(setup["token_a"], 42, "b"*1000) # A plausible but missing message_id
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_edit_max_length(setup):
     # Testing message of max length
@@ -343,7 +343,7 @@ def test_message_edit_max_length(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "b"*1000)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_edit_too_big(setup):
     # Testing message of too long a length
@@ -353,7 +353,7 @@ def test_message_edit_too_big(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_edit_empty_message(setup):
     # Testing editing an empty message
@@ -363,7 +363,7 @@ def test_message_edit_empty_message(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_edit_spaces(setup):
     # Testing editing an empty message
@@ -373,7 +373,7 @@ def test_message_edit_spaces(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_edit_other_person(setup):
     # Testing when editor did not post the message, and is not admin
@@ -383,7 +383,7 @@ def test_message_edit_other_person(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_edit_admin_edits_other_person(setup):
     # Testing when editor did not post the message, but is an admin
@@ -392,14 +392,14 @@ def test_message_edit_admin_edits_other_person(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Edited")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_edit_nonexistant(setup):
     # Testing editing a nonexistant message
     with pytest.raises(ValueError):
         message_edit(setup["token_a"], -1, "Edited")
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_edit_bad_token(setup):
     # Testing editing a message with bad token
@@ -409,7 +409,7 @@ def test_message_edit_bad_token(setup):
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Edit this")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_edit_send_later(setup):
     # Testing editing of a message that hasn't been sent yet
@@ -417,19 +417,19 @@ def test_message_edit_send_later(setup):
     with pytest.raises(ValueError):
         message_edit(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], "There")
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     sleep(6)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])  
+    assert(channel_is_empty(setup["channel_dead"]))  
       
 def test_message_edit_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_edit("", -1, "")
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 ################################################################################
 ##                          TESTING message_react                             ##
@@ -445,7 +445,7 @@ def test_message_react_normal(setup):
     message_react(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_react_to_another(setup):
     # Testing reacting to another person's message
@@ -453,14 +453,14 @@ def test_message_react_to_another(setup):
     message_react(setup["token_b"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_react_no_message(setup):
     # Testing reacting to no message
     with pytest.raises(ValueError):
         message_react(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_react_not_in_channel(setup):
     # Testing reacting to a message in a channel without being in that channel
@@ -470,7 +470,7 @@ def test_message_react_not_in_channel(setup):
         mesage_react(setup["token_b"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])    
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_react_bad_react(setup):
     # Testing trying to react to a nonexistant react_id
@@ -479,7 +479,7 @@ def test_message_react_bad_react(setup):
         mesage_react(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], -1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])   
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"]) 
+    assert(channel_is_empty(setup["channel_dead"])) 
     
 def test_message_react_same_twice(setup):
     # Testing someone reacting to the same message twice
@@ -489,7 +489,7 @@ def test_message_react_same_twice(setup):
         message_react(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_react_same_different_people(setup):
     # Testing two people using the same react on the same message
@@ -499,7 +499,7 @@ def test_message_react_same_different_people(setup):
         message_react(setup["token_a"], channel_messages(setup["token_b"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_react_two_different_reacts(setup):
     # Testing two different reacts on the same message
@@ -508,7 +508,7 @@ def test_message_react_two_different_reacts(setup):
     message_react(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 2)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_react_bad_token(setup):
     # Testing message_react with a bad token
@@ -517,14 +517,14 @@ def test_message_react_bad_token(setup):
         message_react("", channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_react_disaster(setup):
     # Testing the worst case scenario
     with pytest.raises(Exception):
         message_react("", -1, -1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 ################################################################################
 ##                         TESTING message_unreact                            ##
@@ -535,7 +535,7 @@ def test_message_unreact_no_message(setup):
     with pytest.raises(ValueError):
         message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_unreact_no_react(setup):
     # Testing unreacting to a message that wasn't reacted.
@@ -544,7 +544,7 @@ def test_message_unreact_no_react(setup):
         message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_unreact_normal(setup):
     # Testing normal scenario
@@ -553,7 +553,7 @@ def test_message_unreact_normal(setup):
     message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_to_another(setup):
     # Testing unreacting a message someone else reacted to
@@ -562,7 +562,7 @@ def test_message_unreact_to_another(setup):
     message_unreact(setup["token_b"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_wrong_react_id(setup):
     # Testing unreacting a reacted message with the wrong reaction
@@ -572,7 +572,7 @@ def test_message_unreact_wrong_react_id(setup):
         message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 2)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_bad_react_id(setup):
     # Testing unreacting to a bad react id
@@ -582,7 +582,7 @@ def test_message_unreact_bad_react_id(setup):
         message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], -1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_unreact_twice(setup):
     # Testing unreacting twice on the same message
@@ -593,7 +593,7 @@ def test_message_unreact_twice(setup):
         message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_two_reacts_same_order(setup):
     # Testing unreacting twice, for two different reacts, in the order it was reacted to
@@ -604,7 +604,7 @@ def test_message_unreact_two_reacts_same_order(setup):
     message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 2)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_two_reacts_same_order(setup):
     # Testing unreacting twice, for two different reacts, in the opposite order to what it was reacted to
@@ -615,7 +615,7 @@ def test_message_unreact_two_reacts_same_order(setup):
     message_unreact(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_not_in_channel(setup):
     # Testing unreacting to a message in another channel
@@ -625,7 +625,7 @@ def test_message_unreact_not_in_channel(setup):
         mesage_react(setup["token_b"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_bad_token(setup):
     # Testing unreacting with a bad token
@@ -635,14 +635,14 @@ def test_message_unreact_bad_token(setup):
         message_unreact("", channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"], 1)
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unreact_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_unreact("", -1, -1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
 
 ################################################################################
 ##                           TESTING message_pin                              ##
@@ -657,7 +657,7 @@ def test_message_pin_no_message(setup):
     with pytest.raises(ValueError):
         message_pin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_pin_normal(setup):
     # Testing pinning normally
@@ -665,7 +665,7 @@ def test_message_pin_normal(setup):
     message_pin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_pin_twice(setup):
     # Testing pinning a message twice
@@ -675,7 +675,7 @@ def test_message_pin_twice(setup):
         message_pin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_pin_not_admin(setup):
     # Testing pinnning a message when you aren't an admin
@@ -684,7 +684,7 @@ def test_message_pin_not_admin(setup):
         message_pin(setup["token_b"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_pin_not_in_channel(setup):
     # Testing pinning a message in another channel
@@ -694,7 +694,7 @@ def test_message_pin_not_in_channel(setup):
         mesage_pin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_b"], channel_messages(setup["token_b"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_pin_bad_token(setup):
     # Testing pinning a message with a bad token
@@ -703,14 +703,14 @@ def test_message_pin_bad_token(setup):
         message_pin("", channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_pin_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
         message_pin("", -1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 ################################################################################
 ##                          TESTING message_unpin                             ##
@@ -721,7 +721,7 @@ def test_message_unpin_no_message(setup):
     with pytest.raises(ValueError):
         message_unpin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
         
 def test_message_unpin_not_pinned(setup):
     # Testing unpinning a message that wasn't pinned
@@ -730,7 +730,7 @@ def test_message_unpin_not_pinned(setup):
         message_unpin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unpin_normal(setup):
     # Testing normal case
@@ -739,7 +739,7 @@ def test_message_unpin_normal(setup):
     message_unpin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unpin_twice(setup):
     # Testing unpinning the same message twice
@@ -749,7 +749,7 @@ def test_message_unpin_twice(setup):
     message_unpin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unpin_not_an_admin(setup):
     # Testing unpinning a message when you aren't an admin
@@ -759,7 +759,7 @@ def test_message_unpin_not_an_admin(setup):
         message_unpin(setup["token_b"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unpin_not_in_channel(setup):
     # Testing unpinning a message when you don't have access to a channel
@@ -769,7 +769,7 @@ def test_message_unpin_not_in_channel(setup):
         mesage_unpin(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_b"], channel_messages(setup["token_b"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unpin_bad_token(setup):
     # Testing unpinning a message with a bad token
@@ -778,11 +778,11 @@ def test_message_unpin_bad_token(setup):
         mesage_unpin("", channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     message_remove(setup["token_a"], channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message_id"])
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_unpin_disaster(setup):
     # Testing the worst case scenario
     with pytest.raises(Exception):
         message_unpin("", -1)
     assert(channel_is_empty(setup["channel_a"]))
-    assert(channel_is_empty(setup["channel_dead"])
+    assert(channel_is_empty(setup["channel_dead"]))
