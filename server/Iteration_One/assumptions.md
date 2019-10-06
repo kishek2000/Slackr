@@ -7,13 +7,13 @@ different stages of the project: that is, Iterations 1-3.
 
 This iteration will be grouped into the assumptions made in each category
 of functions, namely:  
-	- auth_*  
-	- channel(s)_*  
-	- message_*  
-    - user_*  
-    - standup_*  
-    - search  
-    - admin_userpermission_change  
+- auth_*  
+- channel(s)_*  
+- message_*  
+- user_*  
+- standup_*  
+- search  
+- admin_userpermission_change  
 
 
 auth_*:
@@ -22,7 +22,7 @@ auth_*:
 (A function called is_valid_password() will check against these requirements and return either
 True or False) :-
 
-- Passoword length between 5 and 20 characters inclusive
+- Password length between 5 and 20 characters inclusive
 - At least 1 upper character
 - At least 1 lower case character
 - At least 1 number
