@@ -55,3 +55,6 @@ message_*:
     - Assuming messages sent later can only be removed, edited, reacted and pinned once they've actually been posted
     - Assuming all message functions will throw an access error without a valid token
     - Assuming anyone can unreact any existing react on a message (regardless of if they made it)
+    - Assuming there is a function that tests if a channel has no messages in it called channel_is_empty
+    - Assuming message functions are implemented in the order they are in the test file
+    - Assuming editing a message ONLY changes the messasge, and not time_created, is_read, u_id, or message_id
