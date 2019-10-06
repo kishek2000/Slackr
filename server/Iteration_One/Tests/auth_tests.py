@@ -1,40 +1,27 @@
-import pytest
 
-'''
-Assume an accepted password has the following requirements (A function called 
-is_valid_password() will check against these requirements and return either True or False) :-
-    
-    - Passoword length between 5 and 20 characters inclusive
-    - At least 1 upper character
-    - At least 1 lower case character
-    - At least 1 number
-    - At least 1 special character
-    
-'''
+#################################################################################
+##                              AUTH TESTS                                     ##
+#################################################################################
+
+import pytest
 
 @pytest.fixture
 def registered_user_1():
-    return auth_register("PokemonMaster@gmail.com", "validp@ssword", "Ash", "Ketcham")
+    return auth_register("PokemonMaster@gmail.com", "validP@sswrd1", "Ash", "Ketcham")
 
+  
 @pytest.fixture
 def registered_user_2():
-    return auth_register("TheRealPokemonMaster@gmail.com", "ValidP@sswordRocks", "Gary", "Oak")
-    
-######TESTS FOR auth_login#######
-
-'''
-
-Assume we have a function token_is_valid() which returns either True if token is active
-and False inactive.
-
-Similalry we have a funtion, u_id_is_valid() which returns either True or False
-
-'''
+    return auth_register("TheRealPokemonMaster@gmail.com", "ValidP@sswordRocks1", "Gary", "Oak")
+  
+#################################################################################
+##                           TESTING auth_login                                ##
+#################################################################################    
 
 def test_auth_login_correct_details(registered_user_1):
 
     email = "PokemonMaster@gmail.com"
-    password = "validp@ssword"
+    password = "validP@sswrd1"
     
     #Should produce no errors as the user is registered in the fixture
     auth_login(email, password)
@@ -43,7 +30,7 @@ def test_auth_login_correct_details(registered_user_1):
 def test_auth_login_invalid_email(registered_user_1):
 
     email = "PokemonMaster"
-    password = "validp@ssword"
+    password = "validp@ssword1"
     
     #Should produce ValueError as an invalid email is provided
     with pytest.raises(ValueError):
@@ -53,7 +40,7 @@ def test_auth_login_invalid_email(registered_user_1):
 def test_auth_login_email_not_registered():
 
     email = "nonRegisterdEmail@gmail.com"
-    password = "validp@ssword"
+    password = "validp@ssword1"
     
     #Should produce ValueError as an invalid email entered does not belong to a user
     with pytest.raises(ValueError):
@@ -73,7 +60,7 @@ def test_auth_login_incorrect_password(registered_user):
 def test_auth_login_email_and_password_mismatch(registered_user_1, registered_user_2):
 
     email = "TheRealPokemonMaster@gmail.com"
-    password = "validp@ssword"
+    password = "validp@ssword1"
     
     #Should produce ValueError as the password does not match to the email provided, hence is incorrect
     with pytest.raises(ValueError):
@@ -83,31 +70,27 @@ def test_auth_login_email_and_password_mismatch(registered_user_1, registered_us
 def test_auth_login_valid_token_generated(registered_user_1):
     
     email = "PokemonMaster@gmail.com"
-    password = "validp@ssword"
+    password = "validp@ssword1"
     
     #Should produce no errors
     user_token = auth_login(email, password)['token']
     
     assert(token_is_valid(returned_token) == True)    
  
+
 def test_auth_login_valid_u_id_generated():
     
     email = "PokemonMaster@gmail.com"
-    password = "validp@ssword"
+    password = "validp@ssword1"
     
     #Should produce no errors
     user_u_id = auth_login(email, password)['u_id']
     
     assert(u_id_is_valid(returned_u_id) == True)  
-        
-######TESTS FOR auth_logout#######
-
-'''
-
-Assume we have a function token_is_valid() which returns either True if token is active
-and False inactive.
-
-'''
+    
+#################################################################################
+##                           TESTING auth_logout                               ##
+#################################################################################        
 
 def test_auth_logout_active_token_provided(registered_user_1):
 
@@ -137,30 +120,15 @@ def test_auth_logout_inactive_token_provided(registered_user_1):
     assert(token_is_valid(user_token) == False)
     
     #The function auth_logout should do nothing, as the token provided is already invalid
-    auth_logout(token_1)
+    auth_logout(user_token)
     
     #Check if the token is still invalid
-    assert(token_is_valid(token_1) == False)    
+    assert(token_is_valid(user_token) == False)    
     
+#################################################################################
+##                           TESTING auth_register                             ##
+#################################################################################    
 
-######TESTS FOR auth_register#######
-
-'''
-Assume an accepted password has the following requirements (A function called 
-is_valid_password() will check against these requirements and return either True or False) :-
-    
-    - Passoword length between 5 and 20 characters inclusive
-    - At least 1 upper character
-    - At least 1 lower case character
-    - At least 1 number
-    - At least 1 special character
-   
-Assume we have a function token_is_valid() which returns either True if token is active
-and False inactive.
-
-Similalry we have a funtion, u_id_is_valid() which returns either True or False
-
-'''
 def test_auth_register_correct_details():
 
     email = "AshKetchum@yahoo.com"
@@ -170,6 +138,7 @@ def test_auth_register_correct_details():
     
     #Should produce no errors
     auth_register(email, password, name_first, name_last)
+    
     
 def test_auth_register_invalid_email():
 
@@ -181,7 +150,8 @@ def test_auth_register_invalid_email():
     #Should produce ValueError as an invalid email is provided
     with pytest.raises(ValueError):
         auth_register(email, password, name_first, name_last)
-        
+ 
+
 def test_auth_register_email_already_used(registered_user_1):
 
     email = "PokemonMaster@gmail.com"
@@ -217,7 +187,7 @@ def test_auth_register_first_name_too_long():
     with pytest.raises(ValueError):
         auth_register(email, password, name_first, name_last)  
      
-        
+
 def test_auth_register_last_name_too_long():
 
     email = "AshKetchum@yaheecom"
@@ -228,6 +198,7 @@ def test_auth_register_last_name_too_long():
     #Should produce ValueError as the last name is greater than 50 characters
     with pytest.raises(ValueError):
         auth_register(email, password, name_first, name_last)     
+
         
 def test_auth_register_first_and_last_name_too_long():
 
@@ -253,9 +224,8 @@ def test_auth_register_valid_token_generated():
     
     assert(token_is_valid(user_token) == True)    
  
- 
- 
-def test_auth_register_valid_u_id_generated():
+
+def test_auth_register_valid_u_id_generated():  
     
     email = "AshKetchum@yahoo.com"
     password = "IWann@BeTheVeryBest123"
@@ -267,17 +237,16 @@ def test_auth_register_valid_u_id_generated():
     
     assert(u_id_is_valid(user_u_id) == True)       
     
-    
-######TESTS FOR auth_passwordreset_request#######  
-        
-    
-
+#################################################################################
+##                    TESTING auth_passwordreset_request                       ##
+#################################################################################        
+      
 def test_auth_passwordreset_request_valid_email_provided(registered_user_1):
 
     email = "PokemonMaster@gmail.com"      
     
     #Should produce no errors as the provided email for the password reset is valid
-    auth_passwordreset_request(email)    
+    auth_passwordreset_request(email)  
 
  
 def test_auth_passwordreset_request_invalid_email_provided(registered_user_1):
@@ -297,22 +266,9 @@ def test_auth_passwordreset_request_non_registered_email_provided():
     with pytest.raises(ValueError):
         auth_passwordreset_request(email)    
         
-        
-######TESTS FOR auth_passwordreset_reset#######          
-        
-'''
-Assume that get_reset_code() provides a valid reset code
-
-Note: Assuming an accepted new password for reset has the following requirements (A function called 
-is_valid_password() will check against these requirements and return either True or False) :-
-    
-    - Passoword length between 5 and 20 characters inclusive
-    - At least 1 upper character
-    - At least 1 lower case character
-    - At least 1 number
-    - At least 1 special character 
-
-'''          
+#################################################################################
+##                    TESTING auth_passwordreset_reset                         ##
+#################################################################################                       
         
 def test_auth_passwordreset_reset_correct_details():
 
@@ -325,7 +281,7 @@ def test_auth_passwordreset_reset_correct_details():
     
 def test_auth_passwordreset_reset_incorrect_reset_code():
 
-    reset_code = "invalid_reset_code"
+    reset_code = -1
     new_password = "ThisIsAV@lidNewPassword123"
     
     #Should produce a ValueError as an incorrect reset_code is provided
@@ -345,11 +301,9 @@ def test_auth_passwordreset_reset_invalid_password():
 
 def test_auth_passwordreset_reset_invalid_password_and_reset_code():
 
-    reset_code = "invalid_reset_code"
+    reset_code = -1
     new_password = "password"
     
     #Should produce a ValueError as an reset code and invalid password is provided
     with pytest.raises(ValueError):
-        auth_passwordreset_reset(reset_code, new_password)  
-
- 
+        auth_passwordreset_reset(reset_code, new_password)
