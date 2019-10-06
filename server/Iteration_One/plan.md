@@ -33,11 +33,10 @@ To
     - Review progression and completion of tasks
     - Plan for Iteration 3
     - End iteration
-
- +------------------+
-|         	        |
-|   Spec released   |
-|       	        |
++------------------+
+|         	       |
+|   Spec released  |
+|       	       |
 +---------+--------+
    	      |
    	      |
