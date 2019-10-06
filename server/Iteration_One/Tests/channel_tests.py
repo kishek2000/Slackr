@@ -24,7 +24,7 @@ def tests_channel_invite_valid(setup):
   
 def tests_channel_invite_channel_nonexisting(setup):
 	u_id = setup[1] ## u_id that is being invited to channel
-	channel_id = -1 ## some invalid channel_id -> chuck into assumptions
+	channel_id = -1 ## some invalid channel_id
 	token = setup[2]
 
 	## The channel id is a non-existing and thereby invaild id, and hence should produce a ValueError:
@@ -332,7 +332,6 @@ def tests_channel_addowner_channel_nonexisting(setup):
 	with pytest.raises(ValueError):	
 		channel_addowner(token, channel_id, u_id)
 
-## chuck in user invalid
 def tests_channel_addowner_token_invalid(setup):	
 	channel_id = setup[4]
 	token = 'InvalidTokenString' ## token of accessing user
@@ -399,7 +398,6 @@ def tests_channel_removeowner_channel_nonexisting(setup):
 	with pytest.raises(ValueError):	
 		channel_removeowner(token, channel_id, u_id)
 
-## chuck in user invalid
 def tests_channel_removeowner_token_invalid(setup):	
 	channel_id = setup[4]
 	token = 'InvalidTokenString' ## token of accessing user
