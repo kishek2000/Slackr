@@ -1,0 +1,60 @@
+import re 
+
+#Dictionary with key as email as the corrosponding values e.g.
+list_of_users = {"rajeshkumar@gmail.com" : {"password": "V@lidPassword123", "u_id": 1, "token" : 12345}} 
+global number_of_users 
+number_of_users = 1
+
+def valid_email(email):
+
+    regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' 
+    
+    if re.search(regex,email) is None:
+        return False
+    else:
+        return True
+        
+def valid_password(password):
+    
+    no_of_characters = 0
+    no_of_numbers = 0
+    no_of_upper_case = 0
+    no_of_lower_case = 0
+    no_of_special_characters = 0
+    
+    for character in password:
+    
+        no_of_characters += 1
+    
+        if character.isupper():
+            no_of_upper_case += 1
+            
+        if character.islower():
+            no_of_lower_case += 1   
+    
+        if character.isdigit():
+            no_of_numbers += 1
+        
+        regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+       
+        if regex.search(character) is not None: 
+            no_of_special_characters += 1
+            
+            
+    if (no_of_characters >= 1 and no_of_numbers >= 1 and
+        no_of_upper_case >= 1 and no_of_lower_case >= 1 and
+        no_of_special_characters >= 1 and len(password) >= 6):
+        
+        return True
+        
+    else:
+        return False  
+        
+def generate_token():
+
+    return "123452"                    
+
+def generate_u_id():
+    global number_of_users
+    number_of_users += 1
+    return number_of_users
