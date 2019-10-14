@@ -1,7 +1,13 @@
 import re 
+import random
 
 #Dictionary with key as email as the corrosponding values e.g.
-list_of_users = {"rajeshkumar@gmail.com" : {"password": "V@lidPassword123", "u_id": 1, "token" : 12345}} 
+list_of_users = {"rajeshkumar@gmail.com" : {"password": "V@lidPassword123", "u_id": 1, "token" : 12345, 
+                 "reset_code": None}} 
+                 
+list_of_valid_tokens = [12345]
+
+
 global number_of_users 
 number_of_users = 1
 
@@ -51,10 +57,20 @@ def valid_password(password):
         return False  
         
 def generate_token():
-
-    return "123452"                    
+     
+    token = random.randint(1,10000000)   
+    list_of_valid_tokens.append(token)
+    
+    return token                    
 
 def generate_u_id():
     global number_of_users
     number_of_users += 1
     return number_of_users
+    
+def generate_reset_code():
+    reset_code = random.randint(1,10000000)   
+    list_of_active_reset_codes.append(reset_code)
+    return reset_code
+    
+    
