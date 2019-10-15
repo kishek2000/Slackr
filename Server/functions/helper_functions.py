@@ -1,11 +1,15 @@
 import re 
 import random
 import hashlib
+import datetime
 
 #Dictionary with key as email as the corresponding values e.g.
-list_of_users = ["rajeshkumar@gmail.com" : {"password": "V@lidPassword123", "u_id": 1, "token" : 12345, 
-                 "reset_code": None}]
-                 
+## Shoan version for Auth
+#  list_of_users = [{'rajeshkumar@gmail.com':{'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None}}]
+
+## Adi new version for more general use:
+list_of_users = [{'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar'}]
+
 list_of_valid_tokens = [12345]
 
 global number_of_users 
@@ -14,12 +18,19 @@ number_of_users = 1
 #===============================================================================#
 #=============================== GENERAL HELPERS ===============================#
 #===============================================================================#
+def get_user_details(u_id):
+    for user in list_of_users:
+        if user['u_id'] == u_id:
+            return {'u_id': u_id, 'name_first': user['name_first'], 'name_last': user['name_last']}
+        else:
+            return {}
 
 def generate_token(username):   
     for user in list_of_users:
         if user['username'] == username:
-            user['token'] = hashlib.sha256(username.encode()).hexdigest()
-    return token                    
+            hashed_token = hashlib.sha256(username.encode()).hexdigest()
+            user['token'] = hashed_token
+    return hashed_token                    
 
 def generate_u_id():
     global number_of_users
@@ -28,19 +39,28 @@ def generate_u_id():
 
 def check_valid_u_id(u_id):
     for user in list_of_users:
-        if u_id in user['u_id']:
+        if u_id == user['u_id']:
             return True
     return False
 
 def check_valid_token(token):
     for user in list_of_users:
-        if token in user['token']:
+        if token == user['token']:
             return True
     return False 
 
+def check_token_matches_user(u_id, token):
+    for user in list_of_users:
+        if u_id == user['u_id']:
+            if token == user['token']:
+                return True
+    return False
+
 ## def reset_data():
 
-######## AUTH FUNCTION HELPERS ##########
+#===============================================================================#
+#================================= AUTH HELPERS ================================#
+#===============================================================================#
 
 def valid_email(email):
 
@@ -96,10 +116,32 @@ def generate_reset_code():
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
 #===============================================================================#
+
+#================= data storage for channels =================#
+all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'isPublic': True}]
+all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime(2019,10,15,19,30), 'is_unread': False, 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
+
 global number_of_channels
-number_of_channels = 0
+number_of_channels = 1
+
+def check_valid_channel_id(channel_id):
+    for channel in all_channels_details:
+        if channel_id == channel['channel_id']:
+            return True
+    return False
 
 def generate_channel_id():
     global number_of_channels
     number_of_channels += 1
     return number_of_channels
+
+def check_token_in_channel(token, channel_id):
+    authorised_user_in_channel = False    
+    for channels in all_channels_details:
+        if channel_id == channels['channel_id']:
+            for users in channels['all_members']:
+                if check_token_matches_user(users['u_id'], token) == True:
+                    authorised_user_in_channel = True
+    return authorised_user_in_channel
+                
+
