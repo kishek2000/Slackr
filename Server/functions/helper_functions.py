@@ -11,6 +11,10 @@ list_of_valid_tokens = [12345]
 global number_of_users 
 number_of_users = 1
 
+#===============================================================================#
+#=============================== GENERAL HELPERS ===============================#
+#===============================================================================#
+
 def generate_token():
      
     token = random.randint(1,10000000)   
@@ -22,6 +26,9 @@ def generate_u_id():
     global number_of_users
     number_of_users += 1
     return number_of_users
+
+
+######## AUTH FUNCTION HELPERS ##########
 
 def valid_email(email):
 
