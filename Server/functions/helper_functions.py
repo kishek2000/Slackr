@@ -10,6 +10,16 @@ import datetime
 ## Adi new version for more general use:
 list_of_users = [{'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar'}]
 
+## Addition of a permissions list:
+'''
+    Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
+    1 and 2 have same permissions but 2 cannot change the privileges that 1 has. 
+    First member that is added to Slackr has owner permission. Only other owners could then
+    change this. 
+'''
+list_of_user_permissions = [{'u_id': 1, 'permission_id': 1}] 
+
+
 list_of_valid_tokens = [12345]
 
 global number_of_users 
@@ -55,6 +65,16 @@ def check_token_matches_user(u_id, token):
             if token == user['token']:
                 return True
     return False
+
+def get_user_from_token(token):
+    for user in list_of_users:
+        if token == user['token']:
+            return user['u_id']
+
+def get_user_permission(u_id):
+    for user in list_of_user_permissions:
+        if u_id == user['u_id']:
+            return user['permission_id']
 
 ## def reset_data():
 
