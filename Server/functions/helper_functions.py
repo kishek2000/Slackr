@@ -11,6 +11,18 @@ list_of_valid_tokens = [12345]
 global number_of_users 
 number_of_users = 1
 
+def generate_token():
+     
+    token = random.randint(1,10000000)   
+    list_of_valid_tokens.append(token)
+    
+    return token                    
+
+def generate_u_id():
+    global number_of_users
+    number_of_users += 1
+    return number_of_users
+
 def valid_email(email):
 
     regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' 
@@ -55,18 +67,6 @@ def valid_password(password):
         
     else:
         return False  
-        
-def generate_token():
-     
-    token = random.randint(1,10000000)   
-    list_of_valid_tokens.append(token)
-    
-    return token                    
-
-def generate_u_id():
-    global number_of_users
-    number_of_users += 1
-    return number_of_users
     
 def generate_reset_code():
     reset_code = random.randint(1,10000000)   
