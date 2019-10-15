@@ -1,12 +1,12 @@
 import re 
 import random
+import hashlib
 
-#Dictionary with key as email as the corrosponding values e.g.
-list_of_users = {"rajeshkumar@gmail.com" : {"password": "V@lidPassword123", "u_id": 1, "token" : 12345, 
-                 "reset_code": None}} 
+#Dictionary with key as email as the corresponding values e.g.
+list_of_users = ["rajeshkumar@gmail.com" : {"password": "V@lidPassword123", "u_id": 1, "token" : 12345, 
+                 "reset_code": None}]
                  
 list_of_valid_tokens = [12345]
-
 
 global number_of_users 
 number_of_users = 1
@@ -15,11 +15,10 @@ number_of_users = 1
 #=============================== GENERAL HELPERS ===============================#
 #===============================================================================#
 
-def generate_token():
-     
-    token = random.randint(1,10000000)   
-    list_of_valid_tokens.append(token)
-    
+def generate_token(username):   
+    for user in list_of_users:
+        if user['username'] == username:
+            user['token'] = hashlib.sha256(username.encode()).hexdigest()
     return token                    
 
 def generate_u_id():
@@ -27,6 +26,19 @@ def generate_u_id():
     number_of_users += 1
     return number_of_users
 
+def check_valid_u_id(u_id):
+    for user in list_of_users:
+        if u_id in user['u_id']:
+            return True
+    return False
+
+def check_valid_token(token):
+    for user in list_of_users:
+        if token in user['token']:
+            return True
+    return False 
+
+## def reset_data():
 
 ######## AUTH FUNCTION HELPERS ##########
 
@@ -81,3 +93,13 @@ def generate_reset_code():
     return reset_code
     
     
+#===============================================================================#
+#=============================== CHANNEL HELPERS ===============================#
+#===============================================================================#
+global number_of_channels
+number_of_channels = 0
+
+def generate_channel_id():
+    global number_of_channels
+    number_of_channels += 1
+    return number_of_channels
