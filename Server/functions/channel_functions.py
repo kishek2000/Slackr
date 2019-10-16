@@ -91,7 +91,7 @@ def channel_join(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
-                if get_user_p   return channel_idermission(get_user_from_token(token)) > 2:
+                if get_user_permission(get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
                     new_user_dict = get_user_details(get_user_from_token(token))
@@ -181,6 +181,8 @@ def channels_listall(token):
 #=================================== channels/create [POST] ==================================#
 def channels_create(token, name, is_public):
     channel_id = generate_channel_id()
+    print("======+DEBUG - CHANNELS/CREATE =========")
+    print(list_of_users)
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
     name_first, name_last = get_name_from_token(token)

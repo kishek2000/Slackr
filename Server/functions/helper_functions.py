@@ -89,8 +89,13 @@ def email_matches_password(registered_email, password):
     return False
 
 def reset_data():
-
     list_of_users.clear()
+
+def get_name_from_token(token):
+    for user in list_of_users:
+        if token == user['token']:
+            return [user['name_first'], user['name_last']]
+    return []
 
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
