@@ -89,8 +89,10 @@ def email_matches_password(registered_email, password):
     return False
 
 def reset_data():
+    global number_of_users 
 
     list_of_users.clear()
+    number_of_users = 0
 
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
