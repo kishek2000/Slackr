@@ -17,16 +17,12 @@ def auth_login(email, password):
     if list_of_users[email]["password"] != password:
         raise ValueError("Incorrect Password Entered")
     
-    #Check if user is already logged in:
-    if list_of_users[email]["token"] not in list_of_valid_tokens:              
-        #Generate new valid token for user
-        list_of_users[email]["token"] = generate_token()
-        print("User has logged in")
-    else:
-        print("User already logged in elsewhere")
-        
+    #Assign token to user if they are not logged in:
     
-    return {list_of_users[email]["u_id"], list_of_users[email]["token"]}
+    for user in list_of_users:
+        if user["email"] == email:
+            user["token"] = generate_token()
+            return {user["u_id"], user["token"]}
     
 def auth_logout(token):
     
@@ -104,8 +100,8 @@ def auth_passwordreset_reset(reset_code, new_password):
     
     raise ValueError("Invalid Reset Code")
        
-auth_register("shoandesai@gmail.com", "V@lidPassword123", "Shoan", "Desai")      
-auth_register("santaIsRipped@gmail.com", "V@lidPassword123", "Santa", "Claus")    
+#auth_register("shoandesai@gmail.com", "V@lidPassword123", "Shoan", "Desai")      
+#auth_register("santaIsRipped@gmail.com", "V@lidPassword123", "Santa", "Claus")    
 auth_login("santaIsRipped@gmail.com", "V@lidPassword123")    
-auth_logout(12345) 
-auth_passwordreset_request("shoandesai@gmail.com")
+#auth_logout(12345) 
+#auth_passwordreset_request("shoandesai@gmail.com")
