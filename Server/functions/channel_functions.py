@@ -14,6 +14,8 @@ def channel_invite(token, channel_id, u_id):
         return ValueError
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError ## accessing user's token is not part of the given channel
+    if check_user_in_channel(u_id, channel_id) == True:
+        raise ValueError ## invited user already in channel
 
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
@@ -21,7 +23,7 @@ def channel_invite(token, channel_id, u_id):
                 if users['u_id'] == get_user_from_token(token):
                     new_user_dict = get_user_details(u_id)
                     channels['all_members'].append(new_user_dict)
-
+                    break
 #======================================= channel/details [GET] =======================================#
 def channel_details(token, channel_id):
     ## First make sure the token is actually in the channel, and the channel id also is valid
@@ -36,7 +38,8 @@ def channel_details(token, channel_id):
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
                 if check_token_matches_user(users['u_id'], token) == True:
-                    return {channels['name'], channels['owner_members'], channels['all_members']}
+                    return {'name': channels['name'], 'owner_members': channels['owner_members'], 'all_members': channels['all_members']}
+                    break
 
 #======================================= channel/messages [GET] =======================================#
 def channel_messages(token, channel_id, start):
@@ -77,6 +80,7 @@ def channel_leave(token, channel_id):
             for member in channels['all_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
                     del member
+                    break
 
 #======================================= channel/join [POST] ========================================#
 def channel_join(token, channel_id):
@@ -120,9 +124,11 @@ def channel_addowner(token, channel_id, u_id):
             for users in channels['owner_members']:
                 if u_id == users['u_id']:
                     raise ValueError ## since u_id given is already owner of channel 
+                    break
                 elif check_token_matches_user(users['u_id'], token) == True: ## implies token must be owner of channel
                     new_user_dict = get_user_details(u_id)
                     channels['owner_members'].append(new_user_dict)
+                    break
     
 #==================================== channel/removeowner [POST] ====================================#
 def channel_removeowner(token, channel_id, u_id):
@@ -169,6 +175,10 @@ def channels_list(token):
             if users['u_id'] == u_id:
                 returning_list.append({channels['channel_id'], channels['name']})
                 break
+            else:
+                continue
+    print("Returning list is this:")
+    print(returning_list)
     return returning_list
 
 #=================================== channels/listall [GET] ==================================#

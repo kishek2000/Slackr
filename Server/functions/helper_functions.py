@@ -174,11 +174,6 @@ all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'m
 global number_of_channels
 number_of_channels = 1
 
-def reset_channel_data():
-    global number_of_channels
-    number_of_channels = 0
-    
-
 def check_valid_channel_id(channel_id):
     for channel in all_channels_details:
         if channel_id == channel['channel_id']:
@@ -191,14 +186,25 @@ def generate_channel_id():
     return number_of_channels
 
 def check_token_in_channel(token, channel_id):
-    authorised_user_in_channel = False    
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
                 print("MORE DEBUG ====== checktokeninchannel HELPER ========")
                 print(users)
                 if check_token_matches_user(users['u_id'], token) == True:
-                    authorised_user_in_channel = True
-    return authorised_user_in_channel
+                    return True
+            break
+    return False
+
+def check_user_in_channel(u_id, channel_id):
+    for channels in all_channels_details:
+        if channel_id == channels['channel_id']:
+            for users in channels['all_members']:
+                print("MORE DEBUG ====== checktokeninchannel HELPER ========")
+                print(users)
+                if users['u_id'] == u_id:
+                    return True
+            break
+    return False
                 
 

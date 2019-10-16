@@ -5,9 +5,12 @@ from auth_functions import auth_register
 @pytest.fixture()
 def setup():
 	reset_data()
-	reset_channel_data()
-	a_user_id, a_token = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
-	b_user_id, b_token = auth_register("userB@userB.com", "G00DPa>$word", "First", "B")
+	a_user_details = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
+	a_user_id = a_user_details['u_id']
+	a_token = a_user_details['token']
+	b_user_details = auth_register("userB@userB.com", "G00DPa>$word", "First", "B")
+	b_user_id = b_user_details['u_id']
+	b_token = b_user_details['token']
 	channel_a_id = channels_create(a_token, "Channel A", False) # Private Channel created by user A
 	channel_b_id = channels_create(a_token, "Channel B", True)  # Public Channel created by user A  
 	return [a_user_id, b_user_id, a_token, b_token, channel_a_id, channel_b_id]
@@ -94,8 +97,9 @@ def tests_channel_details_valid(setup):
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
 
 	## These are valid values, and hence should not produce errors:
-	assert channel_details(token, channel_id_private) == {'Channel A', [setup[0]], [setup[0]]} 
-	assert channel_details(token, channel_id_public) == {'Channel B', [setup[0]], [setup[0]]}
+	name_first, name_last = get_name_from_token(token)
+	assert channel_details(token, channel_id_private) == {'name': 'Channel A', 'owner_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}], 'all_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}]}
+	assert channel_details(token, channel_id_public) == {'name': 'Channel B', 'owner_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}], 'all_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}]}
 
 def tests_channel_details_channel_nonexisting(setup):
 	channel_id = -1
