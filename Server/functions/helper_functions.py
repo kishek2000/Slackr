@@ -177,8 +177,7 @@ number_of_channels = 1
 def reset_channel_data():
     global number_of_channels
     number_of_channels = 0
-    all_channels_details.clear()
-    all_channels_messages.clear()
+    
 
 def check_valid_channel_id(channel_id):
     for channel in all_channels_details:
