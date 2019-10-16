@@ -1,10 +1,11 @@
 import pytest
 from channel_functions import *
-from auth_functions import *
+from auth_functions import auth_register
 
 @pytest.fixture()
 def setup():
 	reset_data()
+	reset_channel_data()
 	a_user_id, a_token = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
 	b_user_id, b_token = auth_register("userB@userB.com", "G00DPa>$word", "First", "B")
 	channel_a_id = channels_create(a_token, "Channel A", False) # Private Channel created by user A

@@ -15,7 +15,7 @@ def channel_invite(token, channel_id, u_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
-                if check_token_matches_user(users['u_id'], token) == True:
+                if users['u_id'] == get_user_from_token(token):
                     new_user_dict = get_user_details(u_id)
                     channels['all_members'].append(new_user_dict)
 
