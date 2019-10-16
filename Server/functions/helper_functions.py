@@ -76,6 +76,14 @@ def get_user_permission(u_id):
         if u_id == user['u_id']:
             return user['permission_id']
 
+def email_registered(email):
+
+    for user in list_of_users:
+        if email == user['email']:
+            return True
+    
+    return False
+
 ## def reset_data():
 
 #===============================================================================#
