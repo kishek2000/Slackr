@@ -35,10 +35,10 @@ def get_user_details(u_id):
         else:
             return {}
 
-def generate_token(username):   
+def generate_token(email):   
     for user in list_of_users:
-        if user['username'] == username:
-            hashed_token = hashlib.sha256(username.encode()).hexdigest()
+        if user['email'] == email:
+            hashed_token = hashlib.sha256(email.encode()).hexdigest()
             user['token'] = hashed_token
     return hashed_token                    
 
@@ -81,6 +81,12 @@ def email_registered(email):
     for user in list_of_users:
         if email == user['email']:
             return True
+
+def email_matches_password(registered_email, password):
+
+    for user in list_of_users:
+        if registered_email == user['email'] and password == user['password']:
+            return True 
     
     return False
 
