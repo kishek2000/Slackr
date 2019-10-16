@@ -143,7 +143,7 @@ def valid_password(password):
     
 def generate_reset_code():
     reset_code = random.randint(1,10000000)   
-    list_of_active_reset_codes.append(reset_code)
+   #list_of_active_reset_codes.append(reset_code)
     return reset_code
     
     
