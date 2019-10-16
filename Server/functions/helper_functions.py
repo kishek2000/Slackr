@@ -89,7 +89,13 @@ def email_matches_password(registered_email, password):
     return False
 
 def reset_data():
+<<<<<<< HEAD
+=======
+    global number_of_users 
+
+>>>>>>> 37d846fc1d6d4621b7f235e16d67af482f55ed29
     list_of_users.clear()
+    number_of_users = 0
 
 def get_name_from_token(token):
     for user in list_of_users:
