@@ -4,6 +4,11 @@
 ## Might need to add tests where a member is made an admin. This will add more tokens :(
 ## Also the private/public channel differences, if any
 import pytest
+import sys
+sys.path.insert(1, '../Server/functions/')
+from message_functions import *
+from auth_functions import auth_register
+from channel_functions import channel_messages, channels_create, channel_invite, channel_join
 
 @pytest.fixture()
 def setup():
@@ -14,7 +19,7 @@ def setup():
     channel_a = channels_create(token_a, "Channel A", False)
     channel_b = channels_create(token_b, "Channel B", True)    
     channel_invite(token_a, channel_a, b_id)
-    channel_join(a_tokne, channel_b)
+    channel_join(a_token, channel_b)
     channel_dead = channels_create(token, "empty test", True) # Check to see if this channel is empty
     return {"token_a": token_a, "token_b": token_b, "channel_a": channel_a, "channel_b": channel_b, "channel_dead": channel_dead, "a_id": a_id, "b_id": b_id}
    
@@ -82,8 +87,8 @@ def test_message_send_spaces(setup):
 
 def test_message_send_bad_token(setup):
     # Testing bad token
-    with pytest.raises(Exception):
-        message_send("", setup["channel_a"], "Hello") # This probably raises an exception. Which one, idk
+    with pytest.raises(AccessError):
+        message_send("", setup["channel_a"], "Hello")
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
         
@@ -190,8 +195,8 @@ def test_message_send_later_no_channel(setup):
         
 def test_message_send_later_bad_token(setup):
     # Testing bad token
-    with pytest.raises(Exception):
-        message_send_later("", setup["channel_a"], "Hello", time()+2) # This probably raises an exception. Which one, idk
+    with pytest.raises(AccessError):
+        message_send_later("", setup["channel_a"], "Hello", time()+2)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
@@ -824,7 +829,7 @@ def test_message_unpin_twice(setup):
     # Testing unpinning the same message twice
     message_id = message_send(setup["token_a"], setup["channel_a"], "Twoo Wuv")
     message_pin(setup["token_a"], message_id)
-    message_unpin(setup["token_a"], message_id])
+    message_unpin(setup["token_a"], message_id)
     assert(channel_messages(setup["token_b"], setup["channel_a"], 0)["messages"][0]["is_pinned"] == True)
     with pytest.raises(ValueError):
         message_unpin(setup["token_a"], message_id)
