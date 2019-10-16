@@ -59,7 +59,7 @@ def auth_register(email, password, name_first, name_last):
     
     #If not then add the user to list_of_users
     
-    list_of_users.append({"email" : email, "password": password, "u_id": generate_u_id(),
+    list_of_users.append({"email" : email, "password": password, "u_id": None,
                           "token" : None, "reset_code": None , 
                           "name_first": name_first, "name_last": name_last})
                           
@@ -67,8 +67,9 @@ def auth_register(email, password, name_first, name_last):
     for user in list_of_users:
         if user["email"] == email:
             user["token"] = generate_token(email)
+            user["u_id"] = generate_u_id()
             
-            return {user["u_id"], user["token"]}
+            return {'u_id' : user["u_id"], 'token': user["token"]}
     
 def auth_passwordreset_request(reset_email):
 
