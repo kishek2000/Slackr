@@ -187,6 +187,8 @@ def check_token_in_channel(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
+                print("MORE DEBUG ====== checktokeninchannel HELPER ========")
+                print(users)
                 if check_token_matches_user(users['u_id'], token) == True:
                     authorised_user_in_channel = True
     return authorised_user_in_channel

@@ -2,6 +2,9 @@ from helper_functions import *
 
 #====================================== channel/invite [POST] ======================================#
 def channel_invite(token, channel_id, u_id):
+    print("======+DEBUG - CHANNELS/INVITE =========")
+    print(all_channels_details)
+    print("END OF DUMP")
     ## First make sure the given channel id, u_id and token are existing, and token is member of channel 
     if check_valid_channel_id(channel_id) == False:
         raise ValueError
@@ -182,7 +185,9 @@ def channels_listall(token):
 def channels_create(token, name, is_public):
     channel_id = generate_channel_id()
     print("======+DEBUG - CHANNELS/CREATE =========")
-    print(list_of_users)
+    print("Here are the channels right now:")
+    print(all_channels_details)
+    print("end of list")
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
     name_first, name_last = get_name_from_token(token)

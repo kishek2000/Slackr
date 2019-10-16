@@ -55,7 +55,7 @@ def tests_channel_invite_user_already_member(setup):
 
 	## The invited user is already a member of either channel, and hence should produce a ValueError:
 	with pytest.raises(ValueError):
-		channel_invite(token, channel_id_privte, u_id)
+		channel_invite(token, channel_id_private, u_id)
 	with pytest.raises(ValueError):
 		channel_invite(token, channel_id_public, u_id)
 
@@ -194,7 +194,7 @@ def tests_channel_messages_token_invalid(setup):
 	## The token passed into the function does not correspond to any accessing 
 	## user, and hence AccessError should occur;
 	with pytest.raises(AccessError):
-		channel_messages(token, channel_id)
+		channel_messages(token, channel_id, start)
 
 ################################################################################
 ##                           TESTING channel_leave                            ##
@@ -357,8 +357,7 @@ def tests_channel_addowner_token_invalid(setup):
 def tests_channel_removeowner_valid(setup):
 	## Adding extra owner:
 	token = setup[2] ## token of user who is owner of channel setup[4] and setup[5]
-	c_user_id, c_token = auth_register("userC@userC.com", "gO0dPa$$3orD", "User", "C")['u_id'] 
-	c_token = auth_register("userC@userC.com", "gO0dPa$$3orD", "User", "C")['token']
+	c_user_id, c_token = auth_register("userC@userC.com", "gO0dPa$$3orD", "User", "C")
 	## These will now add user C as a member and owner of channels setup[4] and setup[5]:
 	channel_addowner(token, setup[4], c_user_id) 
 	channel_addowner(token, setup[5], c_user_id) 
