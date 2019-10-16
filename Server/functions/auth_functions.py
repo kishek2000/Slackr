@@ -64,11 +64,11 @@ def auth_register(email, password, name_first, name_last):
                           "name_first": name_first, "name_last": name_last})
                           
     #Assign token
-    list_of_users[-1]["token"] = generate_token(email)
-                          
-    print("USER ADDED")
- 
-    return {list_of_users[-1]["u_id"], list_of_users[-1]["token"]}
+    for user in list_of_users:
+        if user["email"] == email:
+            user["token"] = generate_token(email)
+            
+            return {user["u_id"], user["token"]}
     
 def auth_passwordreset_request(reset_email):
 
@@ -202,7 +202,7 @@ def test_auth_login_valid_token_generated(registered_user_1):
     
     #Should produce no errors
       
-    assert(token_is_valid(user_token) == True)    
+    assert(user_token == generate_token("PokemonMaster@gmail.com"))    
  
     
 
