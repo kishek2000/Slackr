@@ -88,7 +88,9 @@ def email_matches_password(registered_email, password):
     
     return False
 
-## def reset_data():
+def reset_data():
+
+    list_of_users.clear()
 
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
