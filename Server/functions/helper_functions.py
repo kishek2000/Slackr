@@ -100,6 +100,16 @@ def get_name_from_token(token):
             return [user['name_first'], user['name_last']]
     return []
 
+# Better version of the check_token_in_channel function
+def check_token_in_channel_liam(token, channel_id): 
+    for channels in all_channels_details:
+        if channel_id == channels['channel_id']:
+            for users in channels['all_members']:
+                if check_token_matches_user(users['u_id'], token) == True:
+                    return True
+            break
+    return False
+
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
