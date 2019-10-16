@@ -184,10 +184,6 @@ def channels_listall(token):
 #=================================== channels/create [POST] ==================================#
 def channels_create(token, name, is_public):
     channel_id = generate_channel_id()
-    print("======+DEBUG - CHANNELS/CREATE =========")
-    print("Here are the channels right now:")
-    print(all_channels_details)
-    print("end of list")
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
     name_first, name_last = get_name_from_token(token)

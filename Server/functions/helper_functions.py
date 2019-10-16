@@ -98,7 +98,6 @@ def get_name_from_token(token):
     for user in list_of_users:
         if token == user['token']:
             return [user['name_first'], user['name_last']]
-    return []
 
 # Better version of the check_token_in_channel function
 def check_token_in_channel_liam(token, channel_id): 
