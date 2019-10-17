@@ -43,7 +43,7 @@ def message_remove(token, message_id):
     if check_token_in_channel(token, channel_id):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if get_user_id_from_message_id(message_id) != uid && get_user_permission(uid) == 3:
+    if get_user_id_from_message_id(message_id) != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission")
     
 def message_edit(token, message_id, message):
@@ -59,7 +59,7 @@ def message_edit(token, message_id, message):
     if len(message) <= 0 or message.isspace() == True:
         raise ValueError("Message must contain a nonspace character")
     uid = get_user_from_token(token)
-    if get_user_id_from_message_id(message_id) != uid && get_user_permission(uid) == 3:
+    if get_user_id_from_message_id(message_id) != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission") 
     
 def message_react(token, message_id, react_id):
@@ -71,7 +71,7 @@ def message_react(token, message_id, react_id):
     if check_token_in_channel(token, channel_id):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if get_user_id_from_message_id(message_id) != uid && get_user_permission(uid) == 3:
+    if get_user_id_from_message_id(message_id) != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission")
     if react_id not in valid_reacts:
         raise ValueError("Not a valid react_id")
@@ -87,7 +87,7 @@ def message_unreact(token, message_id, react_id):
     if check_token_in_channel(token, channel_id):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if get_user_id_from_message_id(message_id) != uid && get_user_permission(uid) == 3:
+    if get_user_id_from_message_id(message_id) != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission") 
     if react_id not in valid_reacts:
         raise ValueError("Not a valid react_id")
@@ -103,10 +103,10 @@ def message_pin(token, message_id):
     if check_token_in_channel(token, channel_id):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if get_user_id_from_message_id(message_id) != uid && get_user_permission(uid) == 3:
+    if get_user_id_from_message_id(message_id) != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission")
     if message_is_pinned(message_id):
-        raise ValueError("Message already pinned"]
+        raise ValueError("Message already pinned")
     
 def message_unpin(token, message_id):
     if message_id_exists(message_id):
@@ -117,7 +117,7 @@ def message_unpin(token, message_id):
     if check_token_in_channel(token, channel_id):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if get_user_id_from_message_id(message_id) != uid && get_user_permission(uid) == 3:
+    if get_user_id_from_message_id(message_id) != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission")
     if message_is_pinned(message_id):
-        raise ValueError("Message isn't pinned"]
+        raise ValueError("Message isn't pinned")

@@ -8,7 +8,7 @@ import datetime
 #  list_of_users = [{'rajeshkumar@gmail.com':{'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None}}]
 
 ## Adi new version for more general use:
-list_of_users = [{'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar'}]
+list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar'}]
 
 ## Addition of a permissions list:
 '''
@@ -29,9 +29,8 @@ number_of_users = 1
 def get_user_details(token):
     for user in list_of_users:
         if user['token'] == token:
-            return {'u_id': u_id, 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str']}
-        else:
-            return {}
+            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str']}
+    return {}
 
 def generate_token(email):   
     for user in list_of_users:
@@ -52,12 +51,16 @@ def check_valid_u_id(u_id):
     return False
 
 def check_valid_token(token):
+    if token == -1:
+        return False
     for user in list_of_users:
         if token == user['token']:
             return True
     return False 
 
 def check_token_matches_user(u_id, token):
+    if token == -1:
+        return False
     for user in list_of_users:
         if u_id == user['u_id']:
             if token == user['token']:
@@ -68,6 +71,11 @@ def get_user_from_token(token):
     for user in list_of_users:
         if token == user['token']:
             return user['u_id']
+
+def get_token_from_user(u_id):
+    for user in list_of_users:
+        if u_id == user['u_id']:
+            return user['token']
 
 def get_user_permission(u_id):
     for user in list_of_user_permissions:
@@ -169,6 +177,12 @@ all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'m
 global number_of_channels
 number_of_channels = 1
 
+def reset_channel_data():
+    global number_of_channels
+    number_of_channels = 0
+    all_channels_details.clear()
+    all_channels_messages.clear()
+
 def check_valid_channel_id(channel_id):
     for channel in all_channels_details:
         if channel_id == channel['channel_id']:
@@ -184,8 +198,6 @@ def check_token_in_channel(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
-                print("MORE DEBUG ====== checktokeninchannel HELPER ========")
-                print(users)
                 if check_token_matches_user(users['u_id'], token) == True:
                     return True
             break

@@ -1,10 +1,13 @@
 import pytest
-from channel_functions import *
+from channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall, reset_data, reset_channel_data, get_name_from_token, all_channels_details, list_of_users 
 from auth_functions import auth_register
+from message_functions import message_send
+from Errors import AccessError
 
 @pytest.fixture()
 def setup():
 	reset_data()
+	reset_channel_data()
 	a_user_details = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
 	a_user_id = a_user_details['u_id']
 	a_token = a_user_details['token']
@@ -44,10 +47,10 @@ def tests_channel_invite_user_not_member(setup):
 	channel_id_public = setup[5]
 	token = setup[3] ## token of accessing user who is not an owner or member of channel setup[4] or setup[5]
 
-	## The accessing user is not a member of either channel, and hence should produce a ValueError:
-	with pytest.raises(ValueError):
+	## The accessing user is not a member of either channel, and hence should produce a AccessError:
+	with pytest.raises(AccessError):
 		channel_invite(token, channel_id_private, u_id)
-	with pytest.raises(ValueError):
+	with pytest.raises(AccessError):
 		channel_invite(token, channel_id_public, u_id)
 
 def tests_channel_invite_user_already_member(setup):
@@ -151,7 +154,6 @@ def add_messages_to_channel(setup):
 	message_send(token_user_A, channel_id_public, "Team HD WILL HD!!!!!")
 
 def tests_channel_messages_valid(setup):
-	channel_id_private = setup[4]  
 	channel_id_public = setup[5]
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
 	start = message_start_index() ##= consider naming function better
@@ -328,7 +330,7 @@ def tests_channel_addowner_access_user_not_owner(setup):
 	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
 
 	## With the accessing authorised user not being an owner of the channel, there should be an AccessError:
-	with pytest.raises(ValueError):	
+	with pytest.raises(AccessError):	
 		channel_addowner(token, channel_id, u_id)
 
 def tests_channel_addowner_channel_nonexisting(setup):
@@ -361,8 +363,13 @@ def tests_channel_addowner_token_invalid(setup):
 def tests_channel_removeowner_valid(setup):
 	## Adding extra owner:
 	token = setup[2] ## token of user who is owner of channel setup[4] and setup[5]
-	c_user_id, c_token = auth_register("userC@userC.com", "gO0dPa$$3orD", "User", "C")
+	c_user_details = auth_register("userC@userC.com", "gO0dPa$$3orD", "User", "C")
+	c_user_id = c_user_details['u_id']
+	c_token = c_user_details['token']
 	## These will now add user C as a member and owner of channels setup[4] and setup[5]:
+	print("This is what our channels lookin like before adding C")
+	print(all_channels_details)
+	print('\n\n\n')
 	channel_addowner(token, setup[4], c_user_id) 
 	channel_addowner(token, setup[5], c_user_id) 
 
@@ -370,18 +377,21 @@ def tests_channel_removeowner_valid(setup):
 	channel_id_private = setup[4]  
 	channel_id_public = setup[5] 
 	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
+	print('\n\n\n')
+	print("This is what our channels lookin like after adding C")
+	print(all_channels_details)
 
 	## With all valid values, this should produce no errors:
-	channel_removeowner(token, channel_id_private, u_id)
 	channel_removeowner(token, channel_id_public, u_id)
+	channel_removeowner(token, channel_id_private, u_id)
 
 def tests_channel_removeowner_access_user_not_owner(setup):
 	token = setup[3] ## token of accessing user who is not an owner or member of channel setup[4] and setup[5]
 	channel_id = setup[4]
 	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
 
-	## Given an authorised accessing user that is not an owner, there should be a ValueError:
-	with pytest.raises(ValueError):	
+	## Given an authorised accessing user that is not an owner, there should be a AccessError:
+	with pytest.raises(AccessError):	
 		channel_removeowner(token, channel_id, u_id)
 
 def tests_channel_removeowner_provided_user_not_owner(setup):
@@ -390,7 +400,7 @@ def tests_channel_removeowner_provided_user_not_owner(setup):
 	channel_id_public = setup[5] 
 	u_id = setup[1] ## token of user who is not an owner or member of channel setup[4] or setup[5]
 	
-	## With the provided user id not being an owner of either channel already, there should be an AccessError:
+	## With the provided user id not being an owner of either channel already, there should be an ValueError:
 	with pytest.raises(ValueError):	
 		channel_removeowner(token, channel_id_private, u_id)
 	with pytest.raises(ValueError):	
@@ -424,7 +434,7 @@ def tests_channels_list_valid(setup):
 	returning_channels = channels_list(token)
 	## This should succeed:
 	assert returning_channels[0]['name'] == "Channel A" ## name of first channel that user is member of
-	assert returning_channels[0]['name'] == "Channel B" ## name of second channel that user is member of
+	assert returning_channels[1]['name'] == "Channel B" ## name of second channel that user is member of
 
 def tests_channels_list_user_nonexisting(setup):
 	token = setup[3] ## token of accessing user who is not an owner of channel 
@@ -451,7 +461,7 @@ def tests_channels_listall_valid(setup):
 	returning_channels = channels_listall(token)
 	## This should succeed:
 	assert returning_channels[0]['name'] == "Channel A" ## name of first channel that user is member of
-	assert returning_channels[0]['name'] == "Channel B" ## name of second channel that user is member of
+	assert returning_channels[1]['name'] == "Channel B" ## name of second channel that user is member of
 
 def tests_channels_listall_user_nonexisting(setup):
 	token = setup[3] ## token of accessing user who is not an owner of channel setup[4] or setup[5]. They are member of no channels.
@@ -459,14 +469,14 @@ def tests_channels_listall_user_nonexisting(setup):
 	returning_channels = channels_listall(token)
 	## This should succeed:
 	assert returning_channels[0]['name'] == "Channel A" ## name of first channel that is existing
-	assert returning_channels[0]['name'] == "Channel B" ## name of second channel that is existing
+	assert returning_channels[1]['name'] == "Channel B" ## name of second channel that is existing
 
 def tests_channels_listall_token_invalid(setup):	
 	token = 'InvalidTokenString'
 
 	## The token passed into the function does not correspond to any accessing user, and hence AccessError should occur;
 	with pytest.raises(AccessError):
-		channel_channels_listall(token)
+		channels_listall(token)
 
 #################################################################################
 ##                           TESTING channels_create                           ##
@@ -503,6 +513,8 @@ def tests_channels_create_name_over_twenty(setup):
 
 def tests_channels_create_token_invalid(setup):
 	token = 'InvalidTokenString'
+	name = get_channel_name()
+	is_public = get_public_status()
 
 	## The token passed into the function does not correspond to any accessing user, and hence AccessError should occur;
 	with pytest.raises(AccessError):
