@@ -99,16 +99,6 @@ def get_name_from_token(token):
         if token == user['token']:
             return [user['name_first'], user['name_last']]
 
-# Better version of the check_token_in_channel function
-def check_token_in_channel_liam(token, channel_id): 
-    for channels in all_channels_details:
-        if channel_id == channels['channel_id']:
-            for users in channels['all_members']:
-                if check_token_matches_user(users['u_id'], token) == True:
-                    return True
-            break
-    return False
-
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
@@ -207,4 +197,10 @@ def check_user_in_channel(u_id, channel_id):
             break
     return False
                 
+#===============================================================================#
+#=============================== MESSAGE HELPERS ===============================#
+#===============================================================================#
+# Helper Functions to write: message_id_exists, get_channel_from_message_id
+# user_reacted_to_react_id, message_is_pinned
+
 
