@@ -1,13 +1,4 @@
-from helper_functions import *
-
-###Custom helpers###
-def get_user_details(token):
-    for user in list_of_users:
-        if user['token'] == token:
-            return {'email': user['email'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str']}
-        else:
-            return {}
-####################    
+from helper_functions import * 
     
 
 def user_profile(token, u_id):
@@ -38,7 +29,7 @@ def user_profile_setname(token, name_first, name_last):
     
 def user_profile_setemail(token, email):
     
-     #Checking for valid name_first
+     #Checking for valid email
     if not valid_email(email):
         raise ValueError("Invalid email")
     
@@ -48,3 +39,21 @@ def user_profile_setemail(token, email):
     
     
 def user_profile_sethandle(token, handle_str):
+
+    #Checking for valid handle_str
+    if len(name_first) > 20 or len(name_first) < 3:
+        raise ValueError("Invalid handle_str")
+   
+   #Checking for valid handle_str
+    if not check_valid_handle(handle_str):
+        raise ValueError("Invalid name_last")
+    
+    for user in list_of_users:
+        if user['token'] == token:
+            user['handle_str'] = handle_str
+
+def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
+
+    # https://auth0.com/blog/image-processing-in-python-with-pillow/
+
+

@@ -99,6 +99,11 @@ def get_name_from_token(token):
         if token == user['token']:
             return [user['name_first'], user['name_last']]
 
+def check_valid_handle(handle_str):
+    for user in list_of_users:
+        if handle_str == user['handle_str']:
+            return True
+    return False 
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
