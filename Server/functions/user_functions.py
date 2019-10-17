@@ -15,8 +15,9 @@ def user_profile(token, u_id):
     #Checking for valid u_id
     if not check_valid_u_id(u_id):
         raise ValueError("Invalid u_id")
-        
-    return get_user_details(token)
+    returnedDict = get_user_details(token)
+    userDict = {'email': returnedDict['email'], 'name_first': returnedDict['name_first'], 'name_last': returnedDict['name_last'], 'handle_str': returnedDict['handle_str']}
+    return userDict
 
 
 def user_profile_setname(token, name_first, name_last):
