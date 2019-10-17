@@ -26,10 +26,10 @@ number_of_users = 1
 #===============================================================================#
 #=============================== GENERAL HELPERS ===============================#
 #===============================================================================#
-def get_user_details(u_id):
+def get_user_details(token):
     for user in list_of_users:
-        if user['u_id'] == u_id:
-            return {'u_id': u_id, 'name_first': user['name_first'], 'name_last': user['name_last']}
+        if user['token'] == token:
+            return {'u_id': u_id, 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str']}
         else:
             return {}
 
