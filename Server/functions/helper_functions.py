@@ -107,7 +107,7 @@ def reset_data():
 def get_name_from_token(token):
     for user in list_of_users:
         if token == user['token']:
-            return [user['name_first'], user['name_last']]
+            return {'name_first': user['name_first'], 'name_last': user['name_last']}
 
 def check_valid_handle(handle_str):
     for user in list_of_users:
