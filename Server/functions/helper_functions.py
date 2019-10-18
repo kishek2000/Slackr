@@ -8,7 +8,7 @@ import datetime
 #  list_of_users = [{'rajeshkumar@gmail.com':{'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None}}]
 
 ## Adi new version for more general use:
-list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar'}]
+list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'permission_id': 1}]
 
 ## Addition of a permissions list:
 '''
@@ -17,7 +17,8 @@ list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'pa
     First member that is added to Slackr has owner permission. Only other owners could then
     change this. 
 '''
-list_of_user_permissions = [{'u_id': 1, 'permission_id': 1}] 
+
+#list_of_user_permissions = [{'u_id': 1, }] 
 
 
 global number_of_users 

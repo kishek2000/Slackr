@@ -59,15 +59,25 @@ def auth_register(email, password, name_first, name_last):
     
     #If not then add the user to list_of_users
     handle = '@' + name_first
+    
+    
     list_of_users.append({"handle_str": handle, "email" : email, "password": password, "u_id": None,
                           "token" : None, "reset_code": None , 
-                          "name_first": name_first, "name_last": name_last})
+                          "name_first": name_first, "name_last": name_last, 'permission_id': None})
                           
-    #Assign token
+    #Assign token and u_id
     for user in list_of_users:
         if user["email"] == email:
             user["token"] = generate_token(email)
             user["u_id"] = generate_u_id()
+            
+            #Assign default permission_id
+            if len(list_of_users) == 0:
+                user["permission_id"] = 1
+                
+            else:
+                user["permission_id"] = 3
+            
             
             return {'u_id' : user["u_id"], 'token': user["token"]}
     
