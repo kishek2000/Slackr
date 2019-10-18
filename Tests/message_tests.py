@@ -35,9 +35,6 @@ def setup():
 def test_message_send_max_length(setup):
     # Testing message of maximum length
     message_send(setup["token_a"], setup["channel_a"], "x"*1000)
-    print("Setup:")
-    print(setup)
-    print("End setup")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "x"*1000)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
