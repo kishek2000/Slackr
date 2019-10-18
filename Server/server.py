@@ -19,5 +19,90 @@ def echo2():
         'echo' : request.form.get('echo'),
     })
 
+
+#===============================================================================#
+#=================================     AUTH     ================================#
+#===============================================================================#
+
+@APP.route('auth/login', methods=['POST']):
+def login_user():
+        
+    email = request.form.get('Email')
+    password = request.form.get('Password')
+        
+    try:
+    
+        user_details = auth_login(email, password)
+        return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
+        
+    except ValueError as error:
+        
+        return {'error': error}
+        
+
+@APP.route('auth/logout', methods=['POST'])
+def logout_user():
+    
+    token = request.form.get('Token')
+    
+    if auth_logout(token):
+        return dumps({"Action": "Success"})
+    else:
+        return dumps({"Action": "Failure"})
+        
+        
+@APP.route('auth/register', methods=['POST'])
+def create_user():
+
+    email = request.form.get('Email')
+    password = request.form.get('Password')
+    name_first = request.form.get('First Name')
+    name_last = request.form.get('Last Name')
+        
+    try:
+    
+        user_details = auth_register(email, password, name_first, name_last)
+        return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
+        
+    except ValueError as error:
+        
+        return {'error': error}
+
+
+@APP.route('auth/passwordreset/request', methods=['POST'])
+def request_password_reset():
+
+    email = request.form.get('Email')
+
+    try:
+    
+        auth_passwordreset_request(email)
+        return dumps({"Action": "Success"})
+        
+    except ValueError as error:
+        
+        return {'error': error}
+
+
+@APP.route('auth/passwordreset/reset', methods=['POST'])
+def reset_password():
+
+    reset_code = request.form.get('Reset Code')
+    new_password = request.form.get('New Password')
+
+    try:
+    
+        auth_passwordreset_reset(reset_code, new_password)
+        return dumps({"Action": "Success"})
+        
+    except ValueError as error:
+        
+        return {'error': error}
+
+
+
 if __name__ == '__main__':
     APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 5000))
+    
+    
+    
