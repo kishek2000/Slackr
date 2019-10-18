@@ -68,7 +68,7 @@ def channel_messages(token, channel_id, start):
                     end = start + increment
                 print("this is the return dict:")
                 print({messages['messages'][start:start+increment]})
-                return {messages['messages'][start:start+increment], start, end}
+                return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
 
 #======================================= channel/leave [POST] =======================================#
 def channel_leave(token, channel_id):
