@@ -2,7 +2,7 @@
 import sys
 from json import dumps
 from flask import Flask, request
-sys.path.insert(1, './functions/')
+sys.path.insert(1, 'path/to/functions')
 from auth_functions import *
 
 
