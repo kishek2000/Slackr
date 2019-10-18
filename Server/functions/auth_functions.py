@@ -72,9 +72,8 @@ def auth_register(email, password, name_first, name_last):
             user["u_id"] = generate_u_id()
             
             #Assign default permission_id
-            if len(list_of_users) == 0:
+            if user['u_id'] == 1:
                 user["permission_id"] = 1
-                
             else:
                 user["permission_id"] = 3
             

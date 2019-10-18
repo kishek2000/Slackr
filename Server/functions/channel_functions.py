@@ -60,11 +60,15 @@ def channel_messages(token, channel_id, start):
             else:
                 ## Let us assume for now that the messages will be sorted correctly by time of sending, 
                 ## and that the first index (0) will be the most recent message
-                if start + 50 == total_messages:
+                increment = 50
+                if start + increment == total_messages or total_messages < increment:
                     end = -1
+                    increment = total_messages
                 else:
-                    end = start + 50
-                return {messages['messages'][start:start+50], end}
+                    end = start + increment
+                print("this is the return dict:")
+                print({messages['messages'][start:start+increment]})
+                return {messages['messages'][start:start+increment], start, end}
 
 #======================================= channel/leave [POST] =======================================#
 def channel_leave(token, channel_id):
@@ -99,6 +103,10 @@ def channel_join(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
+                print("This here is the list of users:")
+                print(list_of_users)
+                print("Now, here is what get user permission tells us:")
+                print({'u_id': get_user_from_token(token), 'permission_id': get_user_permission(get_user_from_token(token))})
                 if get_user_permission(get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
@@ -117,8 +125,11 @@ def channel_addowner(token, channel_id, u_id):
         raise ValueError 
     if check_valid_token(token) == False:
         raise AccessError
-    if check_token_in_channel(token, channel_id) == False or get_user_permission(get_user_from_token(token)) > 1:
-        raise AccessError ## accessing user's token is not member of channel or owner of Slackr
+    if get_user_permission(get_user_from_token(token)) != 1:
+        raise AccessError ## accessing user's permission not owner status
+    if check_token_in_channel(token, channel_id) == False:
+        raise AccessError ## accessing user's token not in channel
+
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['owner_members']:

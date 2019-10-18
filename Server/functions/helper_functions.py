@@ -20,7 +20,6 @@ list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'pa
 
 #list_of_user_permissions = [{'u_id': 1, }] 
 
-
 global number_of_users 
 number_of_users = 1
 
@@ -79,7 +78,7 @@ def get_token_from_user(u_id):
             return user['token']
 
 def get_user_permission(u_id):
-    for user in list_of_user_permissions:
+    for user in list_of_users:
         if u_id == user['u_id']:
             return user['permission_id']
 
@@ -221,4 +220,11 @@ def check_user_in_channel(u_id, channel_id):
 # Helper Functions to write: message_id_exists, get_channel_from_message_id
 # user_reacted_to_react_id, message_is_pinned
 
-
+#===============================================================================#
+#============================= PERMISSIONS HELPERS =============================#
+#===============================================================================#
+def change_user_permission(u_id, permission_id):
+    for user in list_of_users:
+        if u_id == user['u_id']:
+            user['permission_id'] = permission_id
+            break

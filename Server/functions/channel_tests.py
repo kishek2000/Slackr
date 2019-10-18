@@ -1,8 +1,9 @@
 import pytest
-from channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall, reset_data, reset_channel_data, get_name_from_token, all_channels_details, list_of_users 
+from channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall, reset_data, reset_channel_data, get_name_from_token, all_channels_details, list_of_users, change_user_permission, get_user_from_token 
 from auth_functions import auth_register
 from message_functions import message_send
 from Errors import AccessError
+import datetime
 
 @pytest.fixture()
 def setup():
@@ -150,18 +151,17 @@ def add_messages_to_channel(setup):
 	token_user_A = setup[2] ## Token of user who is owner of channels setup[4] and setup[5]
 	channel_id_public = setup[5] ## Channel id of the public channel from main setup fixture
 	message_send(token_user_A, channel_id_public, "Hello here is a message.")
-	message_send(token_user_A, channel_id_public, "I LOVE YOU 3000 I MISS TONY STARK.")
-	message_send(token_user_A, channel_id_public, "Team HD WILL HD!!!!!")
 
-def tests_channel_messages_valid(setup):
+def tests_channel_messages_valid(setup, add_messages_to_channel):
 	channel_id_public = setup[5]
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
-	start = message_start_index() ##= consider naming function better
+	start = 0 ## assume that message_start_index() is given an input of 0
 
 	## This should produce no errors as all valid values and cases are used:
-	assert channel_messages(token, channel_id_public, start)['messages'][0]['message'] == 'Hello here is a message.'
-	assert channel_messages(token, channel_id_public, start)['messages'][1]['message'] == 'I LOVE YOU 3000 I MISS TONY STARK.'
-	assert channel_messages(token, channel_id_public, start)['messages'][2]['message'] == 'Team HD WILL HD!!!!!'
+	all_messages = channel_messages(token, channel_id_public, start)
+	print("all messages:")
+	print(all_messages)
+	assert all_messages == [{'message_id': 1, 'u_id': 1, 'message': 'Hello here is a message.', 'time_created': datetime.datetime(2019,10,15,19,30), 'is_unread': False, 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]
 
 def tests_channel_messages_channel_nonexisting(setup):
 	channel_id = -1
@@ -253,11 +253,13 @@ def tests_channel_leave_token_invalid(setup):
 def tests_channel_join_valid(setup):
 	channel_id_private = setup[4]  
 	channel_id_public = setup[5]
-	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
+	token = setup[3] ## token of accessing user who is not owner of channel setup[4] and setup[5]
+	## Let us give this user a permission id of admin meaning they can join both channels:
+	change_user_permission(get_user_from_token(token), 2)
 
 	## This should produce no errors as all values are valid:
-	channel_join(token, channel_id_private)
 	channel_join(token, channel_id_public)
+	channel_join(token, channel_id_private)
 
 def tests_channel_join_channel_nonexisting(setup):
 	channel_id = -1
@@ -276,18 +278,17 @@ def tests_channel_join_user_not_admin(setup):
 	channel_id_private = setup[4] ## reassign to private channel
 	token = setup[3] ## token of accessing user who is an owner of public 
 					## channel [5] but not private channel [4]
-
 	## This should produce a AccessError as the authorised user is not an admin 
 	## of the private channel [4]:
 	with pytest.raises(AccessError):
 		channel_join(token, channel_id_private)
 
-def tests_channel_join_user_not_member(setup): ## Is this a repeat?
+def tests_channel_join_user_already_member(setup): ## Is this a repeat?
 	channel_id = setup[4]
 	token = setup[3] ## token of accessing user who is not an owner or member of 
 					## channel setup[4] or setup[5]
 
-	## This should produce a AccessError as the authorised user is not a member of the channel:
+	## This should produce a ValueError as the authorised user is already a member of the channel:
 	with pytest.raises(AccessError):
 		channel_join(token, channel_id)
 
