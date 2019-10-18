@@ -217,7 +217,20 @@ def check_user_in_channel(u_id, channel_id):
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
-# Helper Functions to write: message_id_exists, get_channel_from_message_id
-# user_reacted_to_react_id, message_is_pinned
-
-
+# Helper Functions to write: find_message_info, has_user_reacted
+    
+# Return None if message does not exist
+def find_message_info(message_id):
+    for channel in all_channel_messages:
+        for message in channel["messages"]:
+            if message["message_id"] == message_id:
+                return {"channel_id": channel["channel_id"], "message": message}
+    return None
+    
+def has_user_reacted(uid, react_id, message):
+    for react in message["reacts"]:
+        if react_id == react["react_id"]:
+            if uid in react["u_ids"]:
+                return True
+            else:
+                return False
