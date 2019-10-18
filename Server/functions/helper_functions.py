@@ -87,6 +87,8 @@ def email_registered(email):
     for user in list_of_users:
         if email == user['email']:
             return True
+    
+    return False
 
 def email_matches_password(registered_email, password):
 
@@ -164,7 +166,12 @@ def valid_password(password):
 def generate_reset_code():
     reset_code = random.randint(1,10000000)   
     return reset_code
-    
+  
+  
+def get_reset_code_from_user(email):
+    for user in list_of_users:
+        if email == user['email']:
+            return user['reset_code']    
     
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
