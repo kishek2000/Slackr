@@ -30,7 +30,10 @@ def auth_logout(token):
     for user in list_of_users:
         if user["token"] == token:
             user["token"] = None
+            return True
     
+    else False
+            
 def auth_register(email, password, name_first, name_last):
 
     #FIRST CHECK IF ALL THE PASSED IN PARAMETERS ARE VALID
