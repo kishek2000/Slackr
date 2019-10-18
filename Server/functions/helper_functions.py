@@ -179,7 +179,7 @@ def get_reset_code_from_user(email):
 
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'isPublic': True}]
-all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime.datetime(2019,10,15,19,30), 'is_unread': False, 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
+all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime.datetime(2019,10,15,19,30), 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
 
 global number_of_channels
 number_of_channels = 1
@@ -225,7 +225,9 @@ def check_user_in_channel(u_id, channel_id):
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
 # Helper Functions to write: find_message_info, has_user_reacted
-    
+global number_of_messages
+number_of_messages = 1
+
 # Return None if message does not exist
 def find_message_info(message_id):
     for channel in all_channel_messages:
@@ -241,6 +243,11 @@ def has_user_reacted(uid, react_id, message):
                 return True
             else:
                 return False
+            
+def generate_message_id():
+    global number_of_messages
+    number_of_messages += 1
+    return number_of_messages
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
