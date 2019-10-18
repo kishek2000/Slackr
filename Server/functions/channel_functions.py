@@ -216,7 +216,6 @@ def channels_create(token, name, is_public):
     channel_id = generate_channel_id()
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
-    name_first, name_last = get_name_from_token(token)
     full_name = get_name_from_token(token)
     name_first = full_name['name_first']
     name_last = full_name['name_last']
