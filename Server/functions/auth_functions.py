@@ -32,7 +32,7 @@ def auth_logout(token):
             user["token"] = None
             return True
     
-    else False
+    return False
             
 def auth_register(email, password, name_first, name_last):
 
