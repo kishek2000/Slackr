@@ -59,19 +59,36 @@ def auth_register(email, password, name_first, name_last):
     
     #If not then add the user to list_of_users
     handle = '@' + name_first
+    
+    
     list_of_users.append({"handle_str": handle, "email" : email, "password": password, "u_id": None,
                           "token" : None, "reset_code": None , 
-                          "name_first": name_first, "name_last": name_last})
+                          "name_first": name_first, "name_last": name_last, 'permission_id': None})
                           
-    #Assign token
+    #Assign token and u_id
     for user in list_of_users:
         if user["email"] == email:
             user["token"] = generate_token(email)
             user["u_id"] = generate_u_id()
             
+            #Assign default permission_id
+            if user['u_id'] == 1:
+                user["permission_id"] = 1
+            else:
+                user["permission_id"] = 3
+            
+            
             return {'u_id' : user["u_id"], 'token': user["token"]}
     
 def auth_passwordreset_request(reset_email):
+
+    #Checking for valid email
+    if not valid_email(reset_email):
+        raise ValueError("Invalid Email") 
+
+    #Checking if email provided is registered
+    if not email_registered(reset_email):
+        raise ValueError("Email Not Registered") 
 
     reset_code = generate_reset_code()
     
@@ -116,7 +133,8 @@ def auth_passwordreset_reset(reset_code, new_password):
 #auth_login("santaIsRipped@gmail.com", "V@lidPassword123")   
 #auth_logout(generate_token("santaIsRipped@gmail.com")) 
 #auth_passwordreset_request("shoandesai@gmail.com")
-
+ 
+ 
 
 #################################################################################
 ##                              AUTH TESTS                                     ##
@@ -128,7 +146,10 @@ def registered_user_1():
     
     reset_data() 
     
-    user_u_id, user_token = auth_register("PokemonMaster@gmail.com", "validP@sswrd1", "Ash", "Ketcham")      
+    user_details = auth_register("PokemonMaster@gmail.com", "validP@sswrd1", "Ash", "Ketcham")      
+    
+    user_u_id = user_details['u_id']
+    user_token = user_details['token']
     
     return {'u_id': user_u_id, 'token' : user_token}
 
@@ -138,8 +159,12 @@ def registered_user_2():
    
     reset_data() 
     
-    user_u_id, user_token = auth_register("TheRealPokemonMaster@gmail.com", "ValidP@sswordRocks1",
-                                          "Gary", "Oak")    
+    user_details = user_u_id, user_token = auth_register("TheRealPokemonMaster@gmail.com", 
+                                                         "ValidP@sswordRocks1",
+                                                         "Gary", "Oak")    
+        
+    user_u_id = user_details['u_id']
+    user_token = user_details['token']    
            
     return {'u_id': user_u_id, 'token' : user_token}
   
@@ -213,7 +238,7 @@ def test_auth_login_valid_u_id_generated(registered_user_1):
     
     #Should produce no errors
     
-    assert(user_u_id in range(0, len(list_of_users) + 1))  
+    assert(check_valid_u_id(user_u_id) == True)  
     
 
     
@@ -226,13 +251,13 @@ def test_auth_logout_active_token_provided(registered_user_1):
     user_token = registered_user_1['token']
     
     #Check if the token is valid
-    assert(token_is_valid(user_token) == True)    
+    assert(check_valid_token(user_token) == True)    
     
     #The function auth_logout should invalidate the token provided, logging the user out
     auth_logout(user_token)
     
     #Check if the token is now invalid
-    assert(token_is_valid(user_token) == False)    
+    assert(check_valid_token(user_token) == False)    
     
 
     
@@ -241,19 +266,19 @@ def test_auth_logout_inactive_token_provided(registered_user_2):
     user_token = registered_user_2['token']
     
     #Check if the token is valid
-    assert(token_is_valid(user_token) == True)    
+    assert(check_valid_token(user_token) == True)    
     
     #The function auth_logout should invalidate the token provided, logging the user out
     auth_logout(user_token)
     
     #Check if the token is now invalid
-    assert(token_is_valid(user_token) == False)
+    assert(check_valid_token(user_token) == False)
     
     #The function auth_logout should do nothing, as the token provided is already invalid
     auth_logout(user_token)
     
     #Check if the token is still invalid
-    assert(token_is_valid(user_token) == False)    
+    assert(check_valid_token(user_token) == False)    
 
 
     
@@ -351,11 +376,11 @@ def test_auth_register_valid_token_generated():
     name_last = "Ketchum"
     
     #Should produce no errors
-    user_u_id, user_token = auth_register(email, password, name_first, name_last)
-    print(list_of_valid_tokens)
-    print(user_token)
+    user_details = auth_register(email, password, name_first, name_last)
     
-    assert(token_is_valid(user_token) == True)    
+    user_token = user_details['token']
+    
+    assert(check_valid_token(user_token) == True)    
  
 def test_auth_register_valid_u_id_generated():  
     
@@ -365,9 +390,11 @@ def test_auth_register_valid_u_id_generated():
     name_last = "Ketchum"
     
     #Should produce no errors
-    user_u_id, user_token = auth_register(email, password, name_first, name_last)
+    user_details = auth_register(email, password, name_first, name_last)
     
-    assert(user_u_id in range(0, len(list_of_users) + 1))       
+    user_u_id = user_details['u_id']
+    
+    assert(check_valid_u_id(user_u_id) == True)       
 
     
 #################################################################################
@@ -404,18 +431,26 @@ def test_auth_passwordreset_request_non_registered_email_provided():
 ##                    TESTING auth_passwordreset_reset                         ##
 #################################################################################                       
         
-def test_auth_passwordreset_reset_correct_details():
+def test_auth_passwordreset_reset_correct_details(registered_user_1):
 
-    reset_code = get_reset_code()
+    #Registered user requests a reset code
+    auth_passwordreset_request("PokemonMaster@gmail.com")
+
+    reset_code = get_reset_code_from_user("PokemonMaster@gmail.com")
+    
     new_password = "ThisIsAV@lidNewPassword123"
     
     #Should produce no errors
     auth_passwordreset_reset(reset_code, new_password)    
     
         
-def test_auth_passwordreset_reset_incorrect_reset_code():
+def test_auth_passwordreset_reset_incorrect_reset_code(registered_user_1):
 
+    #Registered user requests a reset code
+    auth_passwordreset_request("PokemonMaster@gmail.com")
+    
     reset_code = -1
+    
     new_password = "ThisIsAV@lidNewPassword123"
     
     #Should produce a ValueError as an incorrect reset_code is provided
@@ -423,9 +458,13 @@ def test_auth_passwordreset_reset_incorrect_reset_code():
         auth_passwordreset_reset(reset_code, new_password)  
 
 
-def test_auth_passwordreset_reset_invalid_password():
+def test_auth_passwordreset_reset_invalid_password(registered_user_1):
 
-    reset_code = get_reset_code()
+    #Registered user requests a reset code
+    auth_passwordreset_request("PokemonMaster@gmail.com")
+
+    reset_code = get_reset_code_from_user("PokemonMaster@gmail.com")
+    
     new_password = "password"
     
     #Should produce a ValueError as an invalid password is provided
@@ -433,9 +472,13 @@ def test_auth_passwordreset_reset_invalid_password():
         auth_passwordreset_reset(reset_code, new_password)  
 
 
-def test_auth_passwordreset_reset_invalid_password_and_reset_code():
+def test_auth_passwordreset_reset_invalid_password_and_reset_code(registered_user_1):
+    
+    #Registered user requests a reset code
+    auth_passwordreset_request("PokemonMaster@gmail.com")
     
     reset_code = -1
+    
     new_password = "password"
     
     #Should produce a ValueError as an reset code and invalid password is provided

@@ -8,7 +8,7 @@ import datetime
 #  list_of_users = [{'rajeshkumar@gmail.com':{'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None}}]
 
 ## Adi new version for more general use:
-list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar'}]
+list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'permission_id': 1}]
 
 ## Addition of a permissions list:
 '''
@@ -17,8 +17,8 @@ list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'pa
     First member that is added to Slackr has owner permission. Only other owners could then
     change this. 
 '''
-list_of_user_permissions = [{'u_id': 1, 'permission_id': 1}] 
 
+#list_of_user_permissions = [{'u_id': 1, }] 
 
 global number_of_users 
 number_of_users = 1
@@ -78,7 +78,7 @@ def get_token_from_user(u_id):
             return user['token']
 
 def get_user_permission(u_id):
-    for user in list_of_user_permissions:
+    for user in list_of_users:
         if u_id == user['u_id']:
             return user['permission_id']
 
@@ -87,6 +87,8 @@ def email_registered(email):
     for user in list_of_users:
         if email == user['email']:
             return True
+    
+    return False
 
 def email_matches_password(registered_email, password):
 
@@ -164,7 +166,12 @@ def valid_password(password):
 def generate_reset_code():
     reset_code = random.randint(1,10000000)   
     return reset_code
-    
+  
+  
+def get_reset_code_from_user(email):
+    for user in list_of_users:
+        if email == user['email']:
+            return user['reset_code']    
     
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
@@ -234,3 +241,11 @@ def has_user_reacted(uid, react_id, message):
                 return True
             else:
                 return False
+#===============================================================================#
+#============================= PERMISSIONS HELPERS =============================#
+#===============================================================================#
+def change_user_permission(u_id, permission_id):
+    for user in list_of_users:
+        if u_id == user['u_id']:
+            user['permission_id'] = permission_id
+            break
