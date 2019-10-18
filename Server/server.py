@@ -2,6 +2,9 @@
 import sys
 from json import dumps
 from flask import Flask, request
+sys.path.insert(1, './functions/')
+from auth_functions import *
+
 
 APP = Flask(__name__)
 #echo/get
@@ -24,7 +27,7 @@ def echo2():
 #=================================     AUTH     ================================#
 #===============================================================================#
 
-@APP.route('auth/login', methods=['POST']):
+@APP.route('auth/login', methods=['POST'])
 def login_user():
         
     email = request.form.get('Email')
