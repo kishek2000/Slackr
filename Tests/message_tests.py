@@ -14,13 +14,17 @@ from channel_functions import channel_messages, channels_create, channel_invite,
 def setup():
     reset_data();
     # Setting up
-    a_id, token_a = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
-    b_id, token_b = auth_register("userB@userB.com", "Go0dPa>sword", "User", "B")
+    a_info = auth_register("userA@userA.com", "Go0dPa>sword", "User", "A")
+    a_id = a_info['u_id']
+    token_a = a_info['token']
+    b_info = auth_register("userB@userB.com", "Go0dPa>sword", "User", "B")
+    b_id = b_info['u_id']
+    token_b = b_info['token']
     channel_a = channels_create(token_a, "Channel A", False)
     channel_b = channels_create(token_b, "Channel B", True)    
     channel_invite(token_a, channel_a, b_id)
-    channel_join(a_token, channel_b)
-    channel_dead = channels_create(token, "empty test", True) # Check to see if this channel is empty
+    channel_join(token_a, channel_b)
+    channel_dead = channels_create(token_a, "empty test", True) # Check to see if this channel is empty
     return {"token_a": token_a, "token_b": token_b, "channel_a": channel_a, "channel_b": channel_b, "channel_dead": channel_dead, "a_id": a_id, "b_id": b_id}
    
    
@@ -31,6 +35,9 @@ def setup():
 def test_message_send_max_length(setup):
     # Testing message of maximum length
     message_send(setup["token_a"], setup["channel_a"], "x"*1000)
+    print("Setup:")
+    print(setup)
+    print("End setup")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "x"*1000)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())

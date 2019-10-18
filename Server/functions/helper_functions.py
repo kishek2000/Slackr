@@ -20,7 +20,6 @@ list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'pa
 
 #list_of_user_permissions = [{'u_id': 1, }] 
 
-
 global number_of_users 
 number_of_users = 1
 
@@ -79,7 +78,7 @@ def get_token_from_user(u_id):
             return user['token']
 
 def get_user_permission(u_id):
-    for user in list_of_user_permissions:
+    for user in list_of_users:
         if u_id == user['u_id']:
             return user['permission_id']
 
@@ -108,7 +107,7 @@ def reset_data():
 def get_name_from_token(token):
     for user in list_of_users:
         if token == user['token']:
-            return [user['name_first'], user['name_last']]
+            return {'name_first': user['name_first'], 'name_last': user['name_last']}
 
 def check_valid_handle(handle_str):
     for user in list_of_users:
@@ -180,7 +179,7 @@ def get_reset_code_from_user(email):
 
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'isPublic': True}]
-all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime.datetime(2019,10,15,19,30), 'is_unread': False, 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
+all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime.datetime(2019,10,15,19,30), 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
 
 global number_of_channels
 number_of_channels = 1
@@ -225,7 +224,35 @@ def check_user_in_channel(u_id, channel_id):
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
-# Helper Functions to write: message_id_exists, get_channel_from_message_id
-# user_reacted_to_react_id, message_is_pinned
+# Helper Functions to write: find_message_info, has_user_reacted
+global number_of_messages
+number_of_messages = 1
 
-
+# Return None if message does not exist
+def find_message_info(message_id):
+    for channel in all_channel_messages:
+        for message in channel["messages"]:
+            if message["message_id"] == message_id:
+                return {"channel_id": channel["channel_id"], "message": message}
+    return None
+    
+def has_user_reacted(uid, react_id, message):
+    for react in message["reacts"]:
+        if react_id == react["react_id"]:
+            if uid in react["u_ids"]:
+                return True
+            else:
+                return False
+            
+def generate_message_id():
+    global number_of_messages
+    number_of_messages += 1
+    return number_of_messages
+#===============================================================================#
+#============================= PERMISSIONS HELPERS =============================#
+#===============================================================================#
+def change_user_permission(u_id, permission_id):
+    for user in list_of_users:
+        if u_id == user['u_id']:
+            user['permission_id'] = permission_id
+            break
