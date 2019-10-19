@@ -1,4 +1,6 @@
 from helper_functions import * 
+from PIL import Image
+import urllib3
     
 
 def user_profile(token, u_id):
@@ -51,9 +53,26 @@ def user_profile_sethandle(token, handle_str):
     for user in list_of_users:
         if user['token'] == token:
             user['handle_str'] = handle_str
-'''
+
 def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
 
     # https://auth0.com/blog/image-processing-in-python-with-pillow/
-'''
+    #need to handle if image doesnt exist
+    r = requests.head(str(img_url))
+    if r.status_code != 200:
+        raise ValueError("Invalid img_url")
+    
+    image = Image.open(requests.get(str(img_url), stream=True).raw)
+    imgX = image.size[0]
+    imgX = image.size[1]
+    if x_start > imgX or x_end > imgX:
+        raise ValueError("Invalid x_dimension")
+    
+    if y_start > imgY or y_end > imgY:
+        raise ValueError("Invalid y_dimension")
+    
+    box = (x_start, y_start, x_end, y_end)
+    cropped_image = image.crop(box)
+    
+    #return cropped_image
 
