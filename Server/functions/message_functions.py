@@ -26,12 +26,10 @@ def message_send(token, channel_id, message):
                 "message_id": message_id,
                 "u_id": uid,
                 "message": message,
-                "time_created": datetime.datetime(2019,10,15,19,30),
+                "time_created": datetime.datetime.now(),
                 "reacts": [],
                 "is_pinned": False
             })
-    print("Message send:")
-    print(all_channels_messages)
     return message_id
 
 def message_send_later(token, channel_id, message, time_sent):

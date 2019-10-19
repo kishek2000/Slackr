@@ -65,7 +65,7 @@ def channel_messages(token, channel_id, start):
                     end = -1
                     increment = total_messages
                     if start == increment:
-                        return {'messages': messages['messages'][start], 'start': start, 'end': end}
+                        return {'messages': [messages['messages'][start]], 'start': start, 'end': end}
                 else:
                     end = start + increment
                 return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
