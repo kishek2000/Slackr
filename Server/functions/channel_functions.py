@@ -64,10 +64,10 @@ def channel_messages(token, channel_id, start):
                 if start + increment == total_messages or total_messages < increment:
                     end = -1
                     increment = total_messages
+                    if start == increment:
+                        return {'messages': messages['messages'][start], 'start': start, 'end': end}
                 else:
                     end = start + increment
-                print("this is the return dict:")
-                print({messages['messages'][start:start+increment]})
                 return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
 
 #======================================= channel/leave [POST] =======================================#
@@ -213,6 +213,8 @@ def channels_listall(token):
 
 #=================================== channels/create [POST] ==================================#
 def channels_create(token, name, is_public):
+    if check_valid_token(token) == False:
+        raise AccessError
     channel_id = generate_channel_id()
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
@@ -221,4 +223,5 @@ def channels_create(token, name, is_public):
     name_last = full_name['name_last']
     u_id = get_user_from_token(token)
     all_channels_details.append({'channel_id': channel_id, 'name': name, 'owner_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'is_public': is_public})
+    all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'messages': []})
     return channel_id

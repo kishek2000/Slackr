@@ -220,7 +220,17 @@ def check_user_in_channel(u_id, channel_id):
                     return True
             break
     return False
-                
+
+def get_total_channel_messages(channel_id):
+    for channels in all_channels_messages:
+        if channel_id == channels['channel_id']:
+            return channels['total_messages']
+
+def get_channel_id_from_name(name):
+    for channels in all_channels_details:
+        if channels['name'] == name:
+            return channels['channel_id']
+
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
