@@ -51,9 +51,9 @@ def user_profile_sethandle(token, handle_str):
     for user in list_of_users:
         if user['token'] == token:
             user['handle_str'] = handle_str
-
+'''
 def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
 
     # https://auth0.com/blog/image-processing-in-python-with-pillow/
-
+'''
 
