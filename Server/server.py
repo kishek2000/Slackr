@@ -27,7 +27,7 @@ def echo2():
 #=================================     AUTH     ================================#
 #===============================================================================#
 
-@APP.route('auth/login', methods=['POST'])
+@APP.route('/auth/login', methods=['POST'])
 def login_user():
         
     email = request.form.get('Email')
@@ -43,7 +43,7 @@ def login_user():
         return {'error': error}
         
 
-@APP.route('auth/logout', methods=['POST'])
+@APP.route('/auth/logout', methods=['POST'])
 def logout_user():
     
     token = request.form.get('Token')
@@ -54,7 +54,7 @@ def logout_user():
         return dumps({"Action": "Failure"})
         
         
-@APP.route('auth/register', methods=['POST'])
+@APP.route('/auth/register', methods=['POST'])
 def create_user():
 
     email = request.form.get('Email')
@@ -72,7 +72,7 @@ def create_user():
         return {'error': error}
 
 
-@APP.route('auth/passwordreset/request', methods=['POST'])
+@APP.route('/auth/passwordreset/request', methods=['POST'])
 def request_password_reset():
 
     email = request.form.get('Email')
@@ -87,7 +87,7 @@ def request_password_reset():
         return {'error': error}
 
 
-@APP.route('auth/passwordreset/reset', methods=['POST'])
+@APP.route('/auth/passwordreset/reset', methods=['POST'])
 def reset_password():
 
     reset_code = request.form.get('Reset Code')
