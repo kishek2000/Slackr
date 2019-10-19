@@ -1,6 +1,6 @@
 from helper_functions import * 
 from PIL import Image
-import urllib3
+import requests
     
 
 def user_profile(token, u_id):
