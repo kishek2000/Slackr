@@ -187,6 +187,7 @@ number_of_channels = 1
 def reset_channel_data():
     global number_of_channels
     number_of_channels = 0
+    number_of_messages = 0
     all_channels_details.clear()
     all_channels_messages.clear()
 
@@ -240,6 +241,8 @@ number_of_messages = 1
 
 # Return None if message does not exist
 def find_message_info(message_id):
+    if number_of_messages == 0:
+        return None
     for channel in all_channel_messages:
         for message in channel["messages"]:
             if message["message_id"] == message_id:

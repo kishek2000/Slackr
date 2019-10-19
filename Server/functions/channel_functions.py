@@ -51,8 +51,7 @@ def channel_messages(token, channel_id, start):
         raise AccessError
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError ## because token user not actually in requested channel id's channel
-    
-    total_messages = 0
+        
     for messages in all_channels_messages:
         if channel_id == messages['channel_id']:
             if start > messages['total_messages']:
@@ -61,9 +60,11 @@ def channel_messages(token, channel_id, start):
                 ## Let us assume for now that the messages will be sorted correctly by time of sending, 
                 ## and that the first index (0) will be the most recent message
                 increment = 50
-                if start + increment == total_messages or total_messages < increment:
+                if start + increment == messages['total_messages'] or messages['total_messages'] < increment:
                     end = -1
                     increment = messages['total_messages']
+                    if messages['total_messages'] == 0:
+                        return {'messages': [], 'start': start, 'end': end}
                     if start == increment:
                         return {'messages': [messages['messages'][start]], 'start': start, 'end': end}
                 else:
