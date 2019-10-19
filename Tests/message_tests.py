@@ -75,7 +75,6 @@ def test_message_send_thrice(setup):
     message_send(setup["token_a"], setup["channel_a"], "a")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
     message_send(setup["token_a"], setup["channel_a"], "b")
-    print(channel_messages(setup["token_a"], setup["channel_a"], 0))
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][1]["message"] == "a")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "b")
     message_send(setup["token_a"], setup["channel_a"], "c")
@@ -120,34 +119,34 @@ def test_message_send_disaster(setup):
     '''
 def test_message_send_later_max_length(setup):
     # Testing message of maximum length delivered on time
-    message_send_later(setup["token_a"], setup["channel_a"], "x"*1000, time()+5)
+    message_send_later(setup["token_a"], setup["channel_a"], "x"*1000, datetime.datetime.now()+5)
     sleep(5)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "x"*1000)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
-    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
+    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == datetime.datetime.now())
     
 def test_message_send_later_current_time(setup):
     # Testing message of maximum length sent at current time
-    message_send_later(setup["token_a"], setup["channel_a"], "x"*1000, time())
+    message_send_later(setup["token_a"], setup["channel_a"], "x"*1000, datetime.datetime.now())
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "x"*1000)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
-    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
+    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == datetime.datetime.now())
     
 def test_message_send_later_on_time(setup):
     # Testing message isn't sent prematurely
-    message_send_later(setup["token_a"], setup["channel_a"], "Hello", time()+10)
+    message_send_later(setup["token_a"], setup["channel_a"], "Hello", datetime.datetime.now()+10)
     assert(channel_is_empty(setup["channel_a"]))
     sleep(5)
     assert(channel_is_empty(setup["channel_a"]))
     sleep(5)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
-    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
+    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == datetime.datetime.now())
     assert(channel_is_empty(setup["channel_dead"]))
     
 def test_message_send_later_empty_message(setup):
     # Testing empty message
     with pytest.raises(ValueError):
-        message_send_later(setup["token_a"], setup["channel_a"], "", time()+3)
+        message_send_later(setup["token_a"], setup["channel_a"], "", datetime.datetime.now()+3)
     sleep(4)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
@@ -155,7 +154,7 @@ def test_message_send_later_empty_message(setup):
 def test_message_send_later_spaces(setup):
     # Testing empty message
     with pytest.raises(ValueError):
-        message_send_later(setup["token_a"], setup["channel_a"], "     ", time()+3)
+        message_send_later(setup["token_a"], setup["channel_a"], "     ", datetime.datetime.now()+3)
     sleep(4)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
@@ -163,16 +162,16 @@ def test_message_send_later_spaces(setup):
 def test_message_send_later_time_past(setup):
     # Testing message with time in the past
     with pytest.raises(ValueError):
-        message_send_later(setup["token_a"], setup["channel_a"], "Hello", time()-1)
+        message_send_later(setup["token_a"], setup["channel_a"], "Hello", datetime.datetime.now()-1)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
 
 def test_message_send_later_intermediate_messages(setup):
     # Testing message order is right when messages are sent before later message is sent
-    message_send_later(setup["token_a"], setup["channel_a"], "c", time()+10)
+    message_send_later(setup["token_a"], setup["channel_a"], "c", datetime.datetime.now()+10)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
-    message_send_later(setup["token_a"], setup["channel_a"], "b", time()+5)
+    message_send_later(setup["token_a"], setup["channel_a"], "b", datetime.datetime.now()+5)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     message_send(setup["token_a"], setup["channel_a"], "a")
@@ -188,7 +187,7 @@ def test_message_send_later_intermediate_messages(setup):
 def test_message_send_later_too_big(setup):
     # Testing message that's too big
     with pytest.raises(ValueError):
-        message_send_later(setup["token_a"], setup["channel_a"], "x"*1001, time()+2)
+        message_send_later(setup["token_a"], setup["channel_a"], "x"*1001, datetime.datetime.now()+2)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
@@ -198,7 +197,7 @@ def test_message_send_later_too_big(setup):
 def test_message_send_later_no_channel(setup):
     # Testing message sent to nonexistant channel
     with pytest.raises(ValueError):
-        message_send_later(setup["token_a"], -1, "Hello", time()+2)
+        message_send_later(setup["token_a"], -1, "Hello", datetime.datetime.now()+2)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
@@ -208,7 +207,7 @@ def test_message_send_later_no_channel(setup):
 def test_message_send_later_bad_token(setup):
     # Testing bad token
     with pytest.raises(AccessError):
-        message_send_later("", setup["channel_a"], "Hello", time()+2)
+        message_send_later("", setup["channel_a"], "Hello", datetime.datetime.now()+2)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     sleep(3)
@@ -218,7 +217,7 @@ def test_message_send_later_bad_token(setup):
 def test_message_send_later_disaster(setup):
     # Testing worst case scenario
     with pytest.raises(Exception):
-        message_send_later("", -1, "x"*1001, time()-1)
+        message_send_later("", -1, "x"*1001, datetime.datetime.now()-1)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
 
@@ -247,7 +246,7 @@ def test_message_remove_two_messages_first(setup):
     message_remove(setup["token_a"], message_id_1) # 'Hello'
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "There")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
-    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
+    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == datetime.datetime.now())
     message_remove(setup["token_a"], message_id_2) # 'There'
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
@@ -259,7 +258,7 @@ def test_message_remove_two_messages_second(setup):
     message_remove(setup["token_a"], message_id_2) # 'There'
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
-    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time())
+    #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == datetime.datetime.now())
     message_remove(setup["token_a"], message_id_1) # 'Hello'
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
@@ -324,7 +323,7 @@ def test_message_remove_nonexistant(setup):
 
 def test_message_remove_send_later(setup):
     # Testing removal of a message that hasn't been sent yet
-    message_id = message_send_later(setup["token_a"], setup["channel_a"], "Hello", time()+5)
+    message_id = message_send_later(setup["token_a"], setup["channel_a"], "Hello", datetime.datetime.now()+5)
     message_remove(setup["token_a"], message_id)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
@@ -428,7 +427,7 @@ def test_message_edit_bad_token(setup):
     
 def test_message_edit_send_later(setup):
     # Testing editing of a message that hasn't been sent yet
-    message_id = message_send_later(setup["token_a"], setup["channel_a"], "Hello", time()+5)
+    message_id = message_send_later(setup["token_a"], setup["channel_a"], "Hello", datetime.datetime.now()+5)
     with pytest.raises(ValueError):
         message_edit(setup["token_a"], message_id, "There")
     assert(channel_is_empty(setup["channel_a"]))

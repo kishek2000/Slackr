@@ -3,10 +3,10 @@ from Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
 def channel_invite(token, channel_id, u_id):
-    print("======+DEBUG - CHANNELS/INVITE =========")
-    print("given token is")
-    print(token)
-    print("END OF DUMP")
+   #print("======+DEBUG - CHANNELS/INVITE =========")
+   #print("given token is")
+   #print(token)
+   #print("END OF DUMP")
     ## First make sure the given channel id, u_id and token are existing, and token is member of channel 
     if check_valid_channel_id(channel_id) == False:
         raise ValueError
@@ -63,7 +63,7 @@ def channel_messages(token, channel_id, start):
                 increment = 50
                 if start + increment == total_messages or total_messages < increment:
                     end = -1
-                    increment = total_messages
+                    increment = messages['total_messages']
                     if start == increment:
                         return {'messages': [messages['messages'][start]], 'start': start, 'end': end}
                 else:

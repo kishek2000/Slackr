@@ -22,7 +22,7 @@ def message_send(token, channel_id, message):
     for channel in all_channels_messages:
         if channel["channel_id"] == channel_id:
             channel["total_messages"] += 1
-            channel["messages"].insert(1, {
+            channel["messages"].insert(0, {
                 "message_id": message_id,
                 "u_id": uid,
                 "message": message,

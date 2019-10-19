@@ -53,7 +53,7 @@ def auth_register(email, password, name_first, name_last):
     if (len(name_last) < 1 or len(name_last) > 50):
         raise ValueError("Invalid Last Name")
     
-    print("VALIDDD")
+    #print("VALIDDD")
     
     #Check if user is in list_of_users
     

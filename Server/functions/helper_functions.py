@@ -214,8 +214,8 @@ def check_user_in_channel(u_id, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
-                print("MORE DEBUG ====== checktokeninchannel HELPER ========")
-                print(users)
+               #print("MORE DEBUG ====== checktokeninchannel HELPER ========")
+               #print(users)
                 if users['u_id'] == u_id:
                     return True
             break
