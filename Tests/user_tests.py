@@ -1,4 +1,9 @@
 import pytest
+import sys
+sys.path.insert(1, '../Server/functions/')
+from user_functions import user_profile, user_profile_setname, user_profile_setemail, user_profile_sethandle
+from auth_functions import auth_register
+
 
 @pytest.fixture
 def register_account():
@@ -178,7 +183,7 @@ def test_user_profile_sethandle_already_exists(register_account):
     #Should raise an error as we cannot have two of the same handles
     with pytest.raises(ValueError):
         user_profile_sethandle(token, 'something that already exists')
-
+'''
 #################################################################################
 ##                  TESTING user_profiles_uploadphoto                          ##
 #################################################################################
@@ -207,4 +212,4 @@ def test_user_profiles_uploadphoto_wrong_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
         user_profiles_sethandle(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 2864, 1861, 0, 0)
-
+'''
