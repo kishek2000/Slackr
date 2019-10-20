@@ -1,13 +1,18 @@
 from helper_functions import * 
 from PIL import Image
 import requests
+from Errors import *
     
 
 def user_profile(token, u_id):
     
+    if not check_valid_token(token):
+        raise AccessError("Invalid token")
+
     #Checking for valid u_id
     if not check_valid_u_id(u_id):
         raise ValueError("Invalid u_id")
+        
     returnedDict = get_user_details(token)
     userDict = {'email': returnedDict['email'], 'name_first': returnedDict['name_first'], 'name_last': returnedDict['name_last'], 'handle_str': returnedDict['handle_str']}
     return userDict
@@ -23,6 +28,9 @@ def user_profile_setname(token, name_first, name_last):
     if len(name_last) > 50 or len(name_last) < 1:
         raise ValueError("Invalid name_last")
     
+    if not check_valid_token(token):
+        raise AccessError("Invalid token")
+    
     for user in list_of_users:
         if user['token'] == token:
             user['name_first'] = name_first
@@ -31,9 +39,12 @@ def user_profile_setname(token, name_first, name_last):
     
 def user_profile_setemail(token, email):
     
-     #Checking for valid email
+    #Checking for valid email
     if not valid_email(email):
         raise ValueError("Invalid email")
+    
+    if not check_valid_token(token):
+        raise AccessError("Invalid token")
     
     for user in list_of_users:
         if user['token'] == token:
@@ -42,19 +53,25 @@ def user_profile_setemail(token, email):
     
 def user_profile_sethandle(token, handle_str):
 
+    if not check_valid_token(token):
+        raise AccessError("Invalid token")
+
     #Checking for valid handle_str
-    if len(name_first) > 20 or len(name_first) < 3:
+    if len(handle_str) > 20 or len(handle_str) < 3:
         raise ValueError("Invalid handle_str")
    
-   #Checking for valid handle_str
-    if not check_valid_handle(handle_str):
-        raise ValueError("Invalid name_last")
+    #Checking for valid handle_str
+    if check_valid_handle(handle_str):
+        raise ValueError("Invalid handle_str")
     
     for user in list_of_users:
         if user['token'] == token:
             user['handle_str'] = handle_str
 
 def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
+
+    if not check_valid_token(token):
+        raise AccessError("Invalid token")
 
     # https://auth0.com/blog/image-processing-in-python-with-pillow/
     #need to handle if image doesnt exist

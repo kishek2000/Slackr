@@ -61,7 +61,15 @@ def auth_register(email, password, name_first, name_last):
         raise ValueError("Email Provided Already in Use")
     
     #If not then add the user to list_of_users
-    handle = '@' + name_first
+    if len(name_first + name_last) > 20:
+        if len(name_first) > 20 and len(name_last) < 20:
+            handle  = name_first[0] + name_last
+        elif len(name_last) > 20 and len(name_first) < 20:
+            handle = name_first + name_last[0]
+        else:
+            handle = name_first[0:2] + name_last[0:2]
+    else:
+        handle = name_first + name_last
     
     
     list_of_users.append({"handle_str": handle, "email" : email, "password": password, "u_id": None,
