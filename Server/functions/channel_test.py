@@ -152,18 +152,42 @@ def add_messages_to_channel(setup):
 	## Assuming that message_send has full functionality, (tested in message_tests.py):
 	token_user_A = setup[2] ## Token of user who is owner of channels setup[4] and setup[5]
 	channel_id_public = setup[5] ## Channel id of the public channel from main setup fixture
-	message_send(token_user_A, channel_id_public, "Hello here is a message.")
+	message_one_id = message_send(token_user_A, channel_id_public, "Hello here is a message.")
+	message_two_id = message_send(token_user_A, channel_id_public, "Hello here is a second message.")
+	return [message_one_id, message_two_id]
 
 def tests_channel_messages_valid(setup, add_messages_to_channel):
 	channel_id_public = setup[5]
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
-	start = 0 ## assume that message_start_index() is given an input of 0
+	start = 1 ## assume that message_start_index() is given an input of 0
+ 
+	## This should produce no errors as all valid values:
+	returning_messages = channel_messages(token, channel_id_public, start)
+	for message in returning_messages['messages']:
+		if add_messages_to_channel[0] == message['message_id']:
+			assert message['message'] == "Hello here is a message."
 
-	## This should produce no errors as all valid values and cases are used:
-	all_messages = channel_messages(token, channel_id_public, start)
-	print("all messages:")
-	print(all_messages)
-	assert all_messages == {'messages': {'message_id': 2, 'u_id': 1, 'message': 'Hello here is a message.', 'time_created': datetime.datetime(2019,10,15,19,30), 'reacts': [], 'is_pinned': False}, 'start': 0, 'end': -1}
+def tests_channel_messages_empty(setup):
+	channel_id_public = setup[5] ## valid channel id
+	token = setup[2] ## valid token
+	start = 0 ## only valid start index for an empty channel
+
+	## This should produce no errors:
+	returning_messages = channel_messages(token, channel_id_public, start)
+	assert returning_messages == {'end': -1, 'messages': [], 'start': 0}
+
+def tests_channel_messages_single_message(setup):
+	channel_id_public = setup[5] ## valid channel id
+	token = setup[2] ## valid token of member in channel
+	start = 0 ## only valid start index for a single message channel
+	
+	message_id = message_send(token, channel_id_public, "Hello here is a message.")
+	## This should produce no errors:
+	returning_messages = channel_messages(token, channel_id_public, start)
+	for message in returning_messages['messages']:
+		if message_id == message['message_id']:
+			assert message['message'] == "Hello here is a message."
+
 def tests_channel_messages_channel_nonexisting(setup):
 	channel_id = -1
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
@@ -283,13 +307,13 @@ def tests_channel_join_user_not_admin(setup):
 	with pytest.raises(AccessError):
 		channel_join(token, channel_id_private)
 
-def tests_channel_join_user_already_member(setup): ## Is this a repeat?
+def tests_channel_join_user_already_member(setup): 
 	channel_id = setup[4]
-	token = setup[3] ## token of accessing user who is not an owner or member of 
+	token = setup[2] ## token of accessing user who is already an owner or member of 
 					## channel setup[4] or setup[5]
 
 	## This should produce a ValueError as the authorised user is already a member of the channel:
-	with pytest.raises(AccessError):
+	with pytest.raises(ValueError):
 		channel_join(token, channel_id)
 
 def tests_channel_join_token_invalid(setup):
@@ -325,11 +349,12 @@ def tests_channel_addowner_provided_user_already_owner(setup):
 		channel_addowner(token, channel_id, u_id)
 
 def tests_channel_addowner_access_user_not_owner(setup):
-	token = setup[3] ## token of accessing user who is not an owner or member of 
-					## channel setup[4] and setup[5]
+	token = setup[3] ## token of accessing user who is not an owner of 
+					## channel setup[4] and setup[5], but is a member
 	channel_id = setup[5] ## channel_id of the public channel created by the user of token setup[2]
+	channel_join(token, channel_id) ## adding the token user to channel
 	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
-
+	print(all_channels_details)
 	## With the accessing authorised user not being an owner of the channel, there should be an AccessError:
 	with pytest.raises(AccessError):	
 		channel_addowner(token, channel_id, u_id)
@@ -343,9 +368,18 @@ def tests_channel_addowner_channel_nonexisting(setup):
 	with pytest.raises(ValueError):	
 		channel_addowner(token, channel_id, u_id)
 
+def tests_channel_addowner_u_id_invalid(setup):
+	channel_id = setup[4] ## doesnt matter
+	token = setup[2] ## doesnt matter
+	u_id = -1
+
+	## Due to an invalid u_id being provided, there should be a ValueError. 
+	with pytest.raises(ValueError):
+		channel_addowner(token, channel_id, u_id)
+
 def tests_channel_addowner_token_invalid(setup):	
 	channel_id = setup[4]
-	token = 'InvalidTokenString' ## token of accessing user
+	token = -1 ## invalid token
 	u_id = setup[1] ## token of user who is not owner of channel setup[4] or setup[5]
 
 	## The token passed into the function does not correspond to any accessing 
@@ -407,6 +441,18 @@ def tests_channel_removeowner_provided_user_not_owner(setup):
 	with pytest.raises(ValueError):	
 		channel_removeowner(token, channel_id_public, u_id)
 
+def tests_channel_removeowner_accessing_user_not_owner(setup):
+	token = setup[3] ## token of accessing user who is not an owner of channel setup[4] or setup[5]
+	channel_id_private = setup[4]  
+	channel_id_public = setup[5] 
+	u_id = setup[0] ## id of user who is an owner or member of channel setup[4] or setup[5]
+	
+	## With the accessing token not being an owner of either channel already, there should be an AcessError:
+	with pytest.raises(AccessError):	
+		channel_removeowner(token, channel_id_private, u_id)
+	with pytest.raises(AccessError):	
+		channel_removeowner(token, channel_id_public, u_id)
+
 def tests_channel_removeowner_channel_nonexisting(setup):
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
 	channel_id = -1 
@@ -414,6 +460,15 @@ def tests_channel_removeowner_channel_nonexisting(setup):
 
 	## Given a channel id that does not exist, there should be a ValueError:
 	with pytest.raises(ValueError):	
+		channel_removeowner(token, channel_id, u_id)
+
+def tests_channel_removeowner_u_id_invalid(setup):
+	channel_id = setup[4] ## doesnt matter
+	token = setup[2] ## doesnt matter
+	u_id = -1
+
+	## Due to an invalid u_id being provided, there should be a ValueError. 
+	with pytest.raises(ValueError):
 		channel_removeowner(token, channel_id, u_id)
 
 def tests_channel_removeowner_token_invalid(setup):	

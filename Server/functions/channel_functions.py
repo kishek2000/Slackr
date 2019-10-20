@@ -65,11 +65,11 @@ def channel_messages(token, channel_id, start):
                     increment = messages['total_messages']
                     if messages['total_messages'] == 0:
                         return {'messages': [], 'start': start, 'end': end}
-                    if start == increment:
+                    if start == increment - 1:
                         return {'messages': [messages['messages'][start]], 'start': start, 'end': end}
                 else:
                     end = start + increment
-                return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
+                return {'messages': messages['messages'][start:start+increment-1], 'start': start, 'end': end}
 
 #======================================= channel/leave [POST] =======================================#
 def channel_leave(token, channel_id):
@@ -100,7 +100,6 @@ def channel_join(token, channel_id):
     
     ## This function specifically lets all members to join publics, but only admins to join private 
     ## channel ids that are given as a destination
-
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
@@ -111,11 +110,13 @@ def channel_join(token, channel_id):
                 if get_user_permission(get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
-                    new_user_dict = get_user_details(get_user_from_token(token))
+                    new_user_dict = get_user_details(token)
                     channels['owner_members'].append(new_user_dict)
             else: 
-                new_user_dict = get_user_details(get_user_from_token(token))
+                new_user_dict = get_user_details(token)
                 channels['all_members'].append(new_user_dict)
+                print({'append:': new_user_dict})
+                break
 
 #===================================== channel/addowner [POST] ======================================#
 def channel_addowner(token, channel_id, u_id):
@@ -126,11 +127,11 @@ def channel_addowner(token, channel_id, u_id):
         raise ValueError 
     if check_valid_token(token) == False:
         raise AccessError
-    if get_user_permission(get_user_from_token(token)) != 1:
-        raise AccessError ## accessing user's permission not owner status
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError ## accessing user's token not in channel
-
+    if get_user_permission(get_user_from_token(token)) != 1:
+        raise AccessError ## accessing user's permission not owner status
+    
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['owner_members']:
@@ -167,12 +168,10 @@ def channel_removeowner(token, channel_id, u_id):
                 print (users)
                 if check_token_matches_user(users['u_id'], token) == True:
                     token_owner_of_channel = True
-                    if user_owner_of_channel == True:
-                        break
                 if u_id == users['u_id']:
                     user_owner_of_channel = True
-                    if token_owner_of_channel == True:
-                        break            
+                if user_owner_of_channel == True and token_owner_of_channel == True:
+                    break
     if user_owner_of_channel == False:
         raise ValueError ## because user given to remove is not an owner of the channel currently
     if token_owner_of_channel == False:
@@ -196,8 +195,6 @@ def channels_list(token):
             if users['u_id'] == u_id:
                 returning_list.append({'channel_id': channels['channel_id'], 'name': channels['name']})
                 break
-            else:
-                continue
     print("Returning list is this:")
     print(returning_list)
     return returning_list
