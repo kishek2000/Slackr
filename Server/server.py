@@ -27,7 +27,7 @@ def echo2():
 #=================================     AUTH     ================================#
 #===============================================================================#
 
-@APP.route('auth/login', methods=['POST'])
+@APP.route('/auth/login', methods=['POST'])
 def login_user():
         
     email = request.form.get('Email')
@@ -43,7 +43,7 @@ def login_user():
         return {'error': error}
         
 
-@APP.route('auth/logout', methods=['POST'])
+@APP.route('/auth/logout', methods=['POST'])
 def logout_user():
     
     token = request.form.get('Token')
@@ -53,29 +53,32 @@ def logout_user():
     else:
         return dumps({"Action": "Failure"})
         
-        
-@APP.route('auth/register', methods=['POST'])
+     
+@APP.route('/auth/register', methods=['POST'])
 def create_user():
 
-    email = request.form.get('Email')
-    password = request.form.get('Password')
-    name_first = request.form.get('First Name')
-    name_last = request.form.get('Last Name')
-        
+    name_first = request.form.get('name_first')
+    name_last = request.form.get('name_last')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    
+            
     try:
     
         user_details = auth_register(email, password, name_first, name_last)
-        return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
         
     except ValueError as error:
         
         return {'error': error}
 
+    
+    return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
 
-@APP.route('auth/passwordreset/request', methods=['POST'])
+
+@APP.route('/auth/passwordreset/request', methods=['POST'])
 def request_password_reset():
 
-    email = request.form.get('Email')
+    email = request.form.get('email')
 
     try:
     
@@ -87,11 +90,11 @@ def request_password_reset():
         return {'error': error}
 
 
-@APP.route('auth/passwordreset/reset', methods=['POST'])
+@APP.route('/auth/passwordreset/reset', methods=['POST'])
 def reset_password():
 
-    reset_code = request.form.get('Reset Code')
-    new_password = request.form.get('New Password')
+    reset_code = request.form.get('reset_code')
+    new_password = request.form.get('new_password')
 
     try:
     
