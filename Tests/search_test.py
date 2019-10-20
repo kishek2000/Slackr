@@ -1,7 +1,17 @@
 import pytest
+import sys
+sys.path.insert(1, '../Server/functions/')
+from search_function import *
+from auth_functions import auth_register
+from channel_functions import channels_create
+from helper_functions import reset_data
+from Errors import *
+
+
 @pytest.fixture
 def register_account():
-    returned_dict = auth_register('example@gmail.com', '12345', 'dan', 'man')
+    reset_data()
+    returned_dict = auth_register('example@gmail.com', 'Go0dPa>sword', 'dan', 'man')
     channel_id = channels_create(returned_dict['token'], "Channel A", False)
     return [returned_dict, channel_id]
 
@@ -14,7 +24,7 @@ def register_account():
 #The returned value from the function should be a dictionary
 def test_search_correct_return_type(register_account):
     token = register_account['token']
-    assert type(search(token,'hello')) = type({})
+    assert type(search(token,'hello')) == type([])
 
 #The function should raise an error as there is no query_str    
 def test_search_no_input(register_account):
