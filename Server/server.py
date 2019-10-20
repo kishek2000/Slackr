@@ -53,7 +53,7 @@ def logout_user():
     else:
         return dumps({"Action": "Failure"})
         
-     
+
 @APP.route('/auth/register', methods=['POST'])
 def create_user():
 

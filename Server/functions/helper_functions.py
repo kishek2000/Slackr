@@ -29,7 +29,7 @@ number_of_users = 1
 def get_user_details(token):
     for user in list_of_users:
         if user['token'] == token:
-            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str']}
+            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email']}
     return {}
 
 def generate_token(email):   
@@ -187,6 +187,7 @@ number_of_channels = 1
 def reset_channel_data():
     global number_of_channels
     number_of_channels = 0
+    number_of_messages = 0
     all_channels_details.clear()
     all_channels_messages.clear()
 
@@ -214,13 +215,23 @@ def check_user_in_channel(u_id, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
-                print("MORE DEBUG ====== checktokeninchannel HELPER ========")
-                print(users)
+               #print("MORE DEBUG ====== checktokeninchannel HELPER ========")
+               #print(users)
                 if users['u_id'] == u_id:
                     return True
             break
     return False
-                
+
+def get_total_channel_messages(channel_id):
+    for channels in all_channels_messages:
+        if channel_id == channels['channel_id']:
+            return channels['total_messages']
+
+def get_channel_id_from_name(name):
+    for channels in all_channels_details:
+        if channels['name'] == name:
+            return channels['channel_id']
+
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
@@ -230,6 +241,8 @@ number_of_messages = 1
 
 # Return None if message does not exist
 def find_message_info(message_id):
+    if number_of_messages == 0:
+        return None
     for channel in all_channel_messages:
         for message in channel["messages"]:
             if message["message_id"] == message_id:

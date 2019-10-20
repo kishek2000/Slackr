@@ -1,5 +1,7 @@
 from helper_functions import *
 from Errors import AccessError
+import datetime
+import time
 
 # Helper Functions to write: get_channel_from_message_id
 # user_reacted_to_react_id, message_is_pinned
@@ -21,15 +23,14 @@ def message_send(token, channel_id, message):
     for channel in all_channels_messages:
         if channel["channel_id"] == channel_id:
             channel["total_messages"] += 1
-            channel["messages"].insert(1, {
+            channel["messages"].insert(0, {
                 "message_id": message_id,
                 "u_id": uid,
                 "message": message,
-                "time_created": time(),
+                "time_created": datetime.datetime.now(),
                 "reacts": [],
                 "is_pinned": False
             })
-    
     return message_id
 
 def message_send_later(token, channel_id, message, time_sent):
@@ -45,9 +46,10 @@ def message_send_later(token, channel_id, message, time_sent):
         raise AccessError("Token not in channel")
     if len(message) <= 0 or message.isspace() == True:
         raise ValueError("Message must contain a nonspace character")
-    if time_sent < time():
+    # This is a hack solution to enable the case where time_sent = current time
+    if time_sent < time.time():
         raise ValueError("Time is invalid")
-    sleep(time_sent - time())
+    time.sleep(time_sent - time.time())
     message_id = message_send(token, channel_id, message)
     return message_id
     

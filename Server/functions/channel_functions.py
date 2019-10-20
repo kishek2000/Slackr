@@ -3,10 +3,10 @@ from Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
 def channel_invite(token, channel_id, u_id):
-    print("======+DEBUG - CHANNELS/INVITE =========")
-    print("given token is")
-    print(token)
-    print("END OF DUMP")
+   #print("======+DEBUG - CHANNELS/INVITE =========")
+   #print("given token is")
+   #print(token)
+   #print("END OF DUMP")
     ## First make sure the given channel id, u_id and token are existing, and token is member of channel 
     if check_valid_channel_id(channel_id) == False:
         raise ValueError
@@ -51,8 +51,7 @@ def channel_messages(token, channel_id, start):
         raise AccessError
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError ## because token user not actually in requested channel id's channel
-    
-    total_messages = 0
+        
     for messages in all_channels_messages:
         if channel_id == messages['channel_id']:
             if start > messages['total_messages']:
@@ -61,13 +60,15 @@ def channel_messages(token, channel_id, start):
                 ## Let us assume for now that the messages will be sorted correctly by time of sending, 
                 ## and that the first index (0) will be the most recent message
                 increment = 50
-                if start + increment == total_messages or total_messages < increment:
+                if start + increment == messages['total_messages'] or messages['total_messages'] < increment:
                     end = -1
-                    increment = total_messages
+                    increment = messages['total_messages']
+                    if messages['total_messages'] == 0:
+                        return {'messages': [], 'start': start, 'end': end}
+                    if start == increment:
+                        return {'messages': [messages['messages'][start]], 'start': start, 'end': end}
                 else:
                     end = start + increment
-                print("this is the return dict:")
-                print({messages['messages'][start:start+increment]})
                 return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
 
 #======================================= channel/leave [POST] =======================================#
@@ -213,6 +214,8 @@ def channels_listall(token):
 
 #=================================== channels/create [POST] ==================================#
 def channels_create(token, name, is_public):
+    if check_valid_token(token) == False:
+        raise AccessError
     channel_id = generate_channel_id()
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
@@ -221,4 +224,5 @@ def channels_create(token, name, is_public):
     name_last = full_name['name_last']
     u_id = get_user_from_token(token)
     all_channels_details.append({'channel_id': channel_id, 'name': name, 'owner_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'is_public': is_public})
+    all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'messages': []})
     return channel_id

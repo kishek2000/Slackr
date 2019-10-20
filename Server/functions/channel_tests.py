@@ -1,5 +1,5 @@
 import pytest
-from channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall, reset_data, reset_channel_data, get_name_from_token, all_channels_details, list_of_users, change_user_permission, get_user_from_token 
+from channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall, reset_data, reset_channel_data, get_name_from_token, all_channels_details, list_of_users, change_user_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name 
 from auth_functions import auth_register
 from message_functions import message_send
 from Errors import AccessError
@@ -101,7 +101,9 @@ def tests_channel_details_valid(setup):
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
 
 	## These are valid values, and hence should not produce errors:
-	name_first, name_last = get_name_from_token(token)
+	full_name = get_name_from_token(token)
+	name_first = full_name['name_first']
+	name_last = full_name['name_last']
 	assert channel_details(token, channel_id_private) == {'name': 'Channel A', 'owner_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}], 'all_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}]}
 	assert channel_details(token, channel_id_public) == {'name': 'Channel B', 'owner_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}], 'all_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}]}
 
@@ -161,12 +163,11 @@ def tests_channel_messages_valid(setup, add_messages_to_channel):
 	all_messages = channel_messages(token, channel_id_public, start)
 	print("all messages:")
 	print(all_messages)
-	assert all_messages == [{'message_id': 1, 'u_id': 1, 'message': 'Hello here is a message.', 'time_created': datetime.datetime(2019,10,15,19,30), 'is_unread': False, 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]
-
+	assert all_messages == {'messages': {'message_id': 2, 'u_id': 1, 'message': 'Hello here is a message.', 'time_created': datetime.datetime(2019,10,15,19,30), 'reacts': [], 'is_pinned': False}, 'start': 0, 'end': -1}
 def tests_channel_messages_channel_nonexisting(setup):
 	channel_id = -1
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
-	start = message_start_index()
+	start = 0 ## doesnt matter
 
 	## This should produce a ValueError as the channel_id does not exist:
 	with pytest.raises(ValueError):
@@ -175,8 +176,7 @@ def tests_channel_messages_channel_nonexisting(setup):
 def tests_channel_messages_start_invalid(setup):
 	channel_id = setup[4]
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
-	start = message_start_index() + total_channel_messages() + 1 ## So no matter what start index a user enters, 
-																## this will still be above the total messages 													
+	start = get_total_channel_messages(channel_id) + 1 
 	## This should produce a ValueError as start > total messages in channel:
 	with pytest.raises(ValueError):
 		channel_messages(token, channel_id, start)
@@ -185,7 +185,7 @@ def tests_channel_messages_user_not_member(setup):
 	channel_id = setup[4]
 	token = setup[3] ## token of accessing user who is not an owner or member of 
 					## channel setup[4] or setup[5]
-	start = message_start_index()
+	start = 4 ## doesnt matter
 
 	## This should produce an AccessError as the authorised user is not a member 
 	## of the channel:
@@ -194,8 +194,8 @@ def tests_channel_messages_user_not_member(setup):
 
 def tests_channel_messages_token_invalid(setup):
 	channel_id = setup[4]
-	token = 'InvalidTokenString' 
-	start = message_start_index()
+	token = -1 
+	start = 0 ## doesnt matter
 
 	## The token passed into the function does not correspond to any accessing 
 	## user, and hence AccessError should occur;
@@ -483,29 +483,23 @@ def tests_channels_listall_token_invalid(setup):
 ##                           TESTING channels_create                           ##
 #################################################################################
 '''
-	For channels_create, assume there is some function/functionality within channels_create()
-	that prompts users for an input of some channel name, called get_channel_name(), and some 
-	function/functionality that prompts users for an input of 'Yes' or 'No' for the option of 
-	making a public or private channel, called get_public_status() (it returns True or False)
-
-	Let us also assume that within get_public_status(), there will be a test to make sure a 
-	valid input is provided - otherwise it will reprompt the user to try again and provide
-	better input. 
+	For channels_create, we will have the name and ispublic come in from flask. 
+	The error checking for these can be done within flask but are also done 
+	in the functions already. As for the values they have, we can therefore just
+	use values that we come up with down here, for testing. 
 '''
 
 def tests_channels_create_valid(setup):
-	is_public = get_public_status() ## Can be True or False -> we assume valid input comes through.
-	name = get_channel_name() ## Assume this is always giving a valid name (less than total messages)
-	token_user_1 = setup[2]
-	token_user_2 = setup[3]
+	is_public = True ## Can be True or False -> we assume valid input comes through. 
+	name_one = 'Channel Z'
+	token_user_1 = setup[2] 
 
 	## This should produce no errors:
-	channels_create(token_user_1, name, is_public)
-	channels_create(token_user_2, name, is_public)
+	assert channels_create(token_user_1, name_one, is_public) == get_channel_id_from_name(name_one) 
 
 def tests_channels_create_name_over_twenty(setup):
-	is_public = get_public_status()
-	name = get_channel_name() + "IloveHaydenAndHayden!" ## adding on a 21 character string
+	is_public = True ## doesnt matter
+	name = 'x'*21 ## adding on a 21 character string
 	token = setup[2]
 
 	## This should produce a ValueError as name is above 20 chars long:
@@ -513,9 +507,9 @@ def tests_channels_create_name_over_twenty(setup):
 		channels_create(token, name, is_public)
 
 def tests_channels_create_token_invalid(setup):
-	token = 'InvalidTokenString'
-	name = get_channel_name()
-	is_public = get_public_status()
+	token = -1
+	name = 'Anything'
+	is_public = True ## doesnt matter
 
 	## The token passed into the function does not correspond to any accessing user, and hence AccessError should occur;
 	with pytest.raises(AccessError):
