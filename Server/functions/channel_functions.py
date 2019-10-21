@@ -1,4 +1,4 @@
-from .helper_functions import *
+from helper_functions import *
 from Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
