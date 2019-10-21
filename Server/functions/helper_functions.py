@@ -235,15 +235,14 @@ def get_channel_id_from_name(name):
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
-# Helper Functions to write: find_message_info, has_user_reacted
 global number_of_messages
-number_of_messages = 1
+global valid_reacts
+valid_reacts = [1,2,3]
+number_of_messages = 0
 
 # Return None if message does not exist
 def find_message_info(message_id):
-    if number_of_messages == 0:
-        return None
-    for channel in all_channel_messages:
+    for channel in all_channels_messages:
         for message in channel["messages"]:
             if message["message_id"] == message_id:
                 return {"channel_id": channel["channel_id"], "message": message}
@@ -261,6 +260,16 @@ def generate_message_id():
     global number_of_messages
     number_of_messages += 1
     return number_of_messages
+    
+def remove_message_from_channel(message_id, channel_id):
+    for channel in all_channels_messages:
+        if channel["channel_id"] == channel_id:
+            for message in channel["messages"]:
+                if message["message_id"] == message_id:
+                    channel["messages"].remove(message)
+                    channel["total_messages"] -= 1
+            break
+    return None
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
