@@ -69,7 +69,7 @@ def channel_messages(token, channel_id, start):
                         return {'messages': [messages['messages'][start]], 'start': start, 'end': end}
                 else:
                     end = start + increment
-                return {'messages': messages['messages'][start:start+increment-1], 'start': start, 'end': end}
+                return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
 
 #======================================= channel/leave [POST] =======================================#
 def channel_leave(token, channel_id):

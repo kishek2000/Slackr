@@ -1,4 +1,4 @@
-from helper_functions import *
+from helper_functions import check_valid_token, check_valid_channel_id, check_token_in_channel, generate_message_id, get_user_from_token, all_channels_messages, remove_message_from_channel, find_message_info, get_user_permission, has_user_reacted, valid_reacts
 
 from Errors import AccessError
 import datetime
@@ -67,27 +67,27 @@ def message_remove(token, message_id):
     uid = get_user_from_token(token)
     if message["u_id"] != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission")
-    all_channel_messages[channel_id]["messages"].remove(message)
+    remove_message_from_channel(message_id, channel_id)
     
-def message_edit(token, message_id, message):
+def message_edit(token, message_id, new_message):
     message_info = find_message_info(message_id)
     if message_info == None:
         raise ValueError("Message ID is invalid")
     channel_id = message_info["channel_id"]
     message = message_info["message"]
-    if len(message) > 1000:
+    if len(new_message) > 1000:
         raise ValueError("Message must be 1000 characters or less")
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError("Token not in channel")
-    if len(message) <= 0 or message.isspace() == True:
+    if len(new_message) <= 0 or new_message.isspace() == True:
         raise ValueError("Message must contain a nonspace character")
     uid = get_user_from_token(token)
     if message["u_id"] != uid and get_user_permission(uid) == 3:
         raise AccessError("Do not have permission")
-    message["message"] = message
-    
+    message["message"] = new_message
+
 def message_react(token, message_id, react_id):
     message_info = find_message_info(message_id)
     if message_info == None:
@@ -99,21 +99,20 @@ def message_react(token, message_id, react_id):
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if message["u_id"] != uid and get_user_permission(uid) == 3:
-        raise AccessError("Do not have permission")
     if react_id not in valid_reacts:
         raise ValueError("Not a valid react_id")
     if has_user_reacted(uid, react_id, message):
         raise ValueError("Already reacted")
     for react in message['reacts']:
         if react["react_id"] == react_id:
-            react["u_ids"].add(uid)
+            react["u_ids"].append(uid)
             return
     # is_this_user_reacted reacted doesn't make much sense to me
     # Paticularly why we need it, and who the mysterious "Authorised User" is
     message["reacts"].append({
         "react_id": react_id,
-        "u_ids": [uid]
+        "u_ids": [uid],
+        "is_this_user_reacted": True
     })
     
 def message_unreact(token, message_id, react_id):
@@ -127,8 +126,6 @@ def message_unreact(token, message_id, react_id):
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if message["u_id"] != uid and get_user_permission(uid) == 3:
-        raise AccessError("Do not have permission") 
     if react_id not in valid_reacts:
         raise ValueError("Not a valid react_id")
     if not has_user_reacted(uid, react_id, message):
