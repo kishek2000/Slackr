@@ -1,4 +1,6 @@
 import pytest
+import sys
+sys.path.insert(1, '../Server/functions')
 from channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall, reset_data, reset_channel_data, get_name_from_token, all_channels_details, list_of_users, change_user_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name 
 from auth_functions import auth_register
 from message_functions import message_send
