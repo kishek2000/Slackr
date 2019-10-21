@@ -75,7 +75,7 @@ def auth_register(email, password, name_first, name_last):
     list_of_users.append({"handle_str": handle, "email" : email, "password": password, "u_id": None,
                           "token" : None, "reset_code": None , 
                           "name_first": name_first, "name_last": name_last, 'permission_id': None})
-                          
+    
     #Assign token and u_id
     for user in list_of_users:
         if user["email"] == email:
@@ -87,9 +87,8 @@ def auth_register(email, password, name_first, name_last):
                 user["permission_id"] = 1
             else:
                 user["permission_id"] = 3
-            
-            
-            return {'u_id' : user["u_id"], 'token': user["token"]}
+            break        
+    return {'u_id' : user["u_id"], 'token': user["token"]}
     
 def auth_passwordreset_request(reset_email):
 

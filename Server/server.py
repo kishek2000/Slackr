@@ -41,7 +41,6 @@ def login_user():
         return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
         
     except ValueError as error:
-        
         return {'error': error}
         
 
@@ -58,19 +57,19 @@ def logout_user():
 
 @APP.route('/auth/register', methods=['POST'])
 def create_user():
-    register_data = request.get_json()
-
-    name_first = register_data['name_first']
-    name_last = register_data['name_last']
-    email = register_data['email']
-    password = register_data['password']
-    
+    name_first = request.form.get('name_first')
+    name_last = request.form.get('name_last')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    print({name_last, name_first, email, password})
+    # data = request.get_json()    
     try:
-        user_details = auth_register(email, password, name_first, name_last)
+        return dumps(auth_register(email, password, name_first, name_last))
+        # user_details = auth_register(email, password, name_first, name_last)
+        # return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
     except ValueError as error:
-        return {'error': error}
-    
-    return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
+        return {'error': error, 'statement': "hello there how are you doing today fsdfhsadfklj"}
+
 
 
 @APP.route('/auth/passwordreset/request', methods=['POST'])
