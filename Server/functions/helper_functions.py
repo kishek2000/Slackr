@@ -99,12 +99,6 @@ def email_matches_password(registered_email, password):
     
     return False
 
-def reset_data():
-    global number_of_users 
-
-    list_of_users.clear()
-    number_of_users = 0
-
 def get_name_from_token(token):
     for user in list_of_users:
         if token == user['token']:
@@ -123,7 +117,7 @@ def valid_email(email):
 
     regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' 
     
-    if re.search(regex,email) is None:
+    if re.search(regex, email) is None:
         return False
     else:
         return True
@@ -166,7 +160,7 @@ def valid_password(password):
     
 def generate_reset_code():
     reset_code = random.randint(1,10000000)   
-    return reset_code
+    return str(reset_code)
   
   
 def get_reset_code_from_user(email):
@@ -184,13 +178,6 @@ all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'messages':[{'m
 
 global number_of_channels
 number_of_channels = 1
-
-def reset_channel_data():
-    global number_of_channels
-    number_of_channels = 0
-    number_of_messages = 0
-    all_channels_details.clear()
-    all_channels_messages.clear()
 
 def check_valid_channel_id(channel_id):
     for channel in all_channels_details:
@@ -270,3 +257,12 @@ def change_user_permission(u_id, permission_id):
         if u_id == user['u_id']:
             user['permission_id'] = permission_id
             break
+
+def reset_data():
+    global number_of_users 
+    global number_of_channels
+    all_channels_details.clear()
+    all_channels_messages.clear()
+    list_of_users.clear()
+    number_of_users = 0
+    number_of_channels = 0

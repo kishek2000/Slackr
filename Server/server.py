@@ -8,10 +8,6 @@ from functions.auth_functions import *
 APP = Flask(__name__)
 CORS(APP)
 
-@APP.route('/auth/register', methods=['POST'])
-def echo4():
-    pass
-
 @APP.route('/echo/get', methods=['GET'])
 def echo1():
     """ Description of function """
@@ -33,13 +29,12 @@ def echo2():
 @APP.route('/auth/login', methods=['POST'])
 def login_user():
         
-    email = request.form.get('Email')
-    password = request.form.get('Password')
+    email = request.form.get('email')
+    password = request.form.get('password')
         
     try:
         user_details = auth_login(email, password)
         return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
-        
     except ValueError as error:
         return {'error': error}
         
@@ -47,7 +42,7 @@ def login_user():
 @APP.route('/auth/logout', methods=['POST'])
 def logout_user():
     
-    token = request.form.get('Token')
+    token = request.form.get('token')
     
     if auth_logout(token):
         return dumps({"Action": "Success"})
@@ -61,16 +56,10 @@ def create_user():
     name_last = request.form.get('name_last')
     email = request.form.get('email')
     password = request.form.get('password')
-    print({name_last, name_first, email, password})
-    # data = request.get_json()    
     try:
         return dumps(auth_register(email, password, name_first, name_last))
-        # user_details = auth_register(email, password, name_first, name_last)
-        # return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
     except ValueError as error:
-        return {'error': error, 'statement': "hello there how are you doing today fsdfhsadfklj"}
-
-
+        return {'error': error}
 
 @APP.route('/auth/passwordreset/request', methods=['POST'])
 def request_password_reset():
@@ -78,7 +67,6 @@ def request_password_reset():
     email = request.form.get('email')
 
     try:
-    
         auth_passwordreset_request(email)
         return dumps({"Action": "Success"})
         
@@ -105,7 +93,7 @@ def reset_password():
 
 
 if __name__ == '__main__':
-    APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 5000))
+    APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 6000))
     
     
     

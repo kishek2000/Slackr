@@ -23,7 +23,7 @@ def auth_login(email, password):
     for user in list_of_users:
         if user["email"] == email:
             user["token"] = generate_token(email)
-            return {user["u_id"], user["token"]}
+            return {'u_id': user["u_id"], 'token': user["token"]}
     
 def auth_logout(token):
     
@@ -106,7 +106,7 @@ def auth_passwordreset_request(reset_email):
         if user["email"] == reset_email:
             user["reset_code"] = reset_code
     
-    message = "Reset Code " + str(reset_code)
+    message = "Reset Code " + reset_code
     
 
     print("Starting to send")
@@ -115,7 +115,8 @@ def auth_passwordreset_request(reset_email):
         server.login("teamhdslackr@gmail.com", "V@lidPassword123")
         server.sendmail("teamhdslackr@gmail.com", reset_email, message)
         
-    print("Email Sent")     
+    print("Email Sent")   
+    # reset_code_timer(reset_email)  
     
 def auth_passwordreset_reset(reset_code, new_password):
 
@@ -126,14 +127,11 @@ def auth_passwordreset_reset(reset_code, new_password):
             continue
     
         if user['reset_code'] == reset_code and valid_password(new_password):
-            
             user['reset_code'] = None
             user['password'] = new_password
             return
-        else:
-            raise ValueError("Invalid Password")
-            
-    
+        # else:
+        #     raise ValueError("Invalid Password")
     raise ValueError("Invalid Reset Code")
 
       
@@ -144,7 +142,12 @@ def auth_passwordreset_reset(reset_code, new_password):
 #auth_logout(generate_token("santaIsRipped@gmail.com")) 
 #auth_passwordreset_request("shoandesai@gmail.com")
  
- 
+# def reset_code_timer(reset_email):
+#     sleep(24*60*60)
+#     for user in list_of_users:
+#         if user['email'] == reset_email:
+#             if user['reset_code'] != None:
+#                 user['reset_code'] == None
 
 #################################################################################
 ##                              AUTH TESTS                                     ##
