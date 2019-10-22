@@ -183,8 +183,11 @@ def get_channels_list():
 
 @APP.route('/channels/listall', methods=['GET'])
 def get_channels_listall():
-    token = request.args.get('token')
-
+    print("current users list:")
+    print (list_of_users)
+    token = str.encode(request.args.get('token'))
+    print("token received:")
+    print (token)
     try: 
         returning_listall_dictionary = channels_listall(token)
         return dumps(returning_listall_dictionary)
@@ -194,7 +197,7 @@ def get_channels_listall():
 @APP.route('/channels/create', methods=['POST'])
 def create_channel():
     token = request.form.get('token')
-    name = request.form.get('channel_name')
+    name = request.form.get('name')
     is_public = request.form.get('is_public')
     try:
         new_channel_id = channels_create(token, name, is_public)
