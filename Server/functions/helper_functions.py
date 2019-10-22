@@ -55,6 +55,7 @@ def check_valid_token(token):
     if token == -1:
         return False
     for user in list_of_users:
+        print({'token': token, 'usertoken': user['token']})
         if token == user['token']:
             return True
     return False 
