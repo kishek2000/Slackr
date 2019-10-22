@@ -175,7 +175,7 @@ def get_reset_code_from_user(email):
 
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'isPublic': True}]
-all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'standup_active' : False, 'standup_buffer' : '',
+all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'standup_active': False, 'standup_buffer': '',
  'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime.datetime(2019,10,15,19,30), 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
 
 global number_of_channels
