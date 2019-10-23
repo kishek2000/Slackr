@@ -1,12 +1,19 @@
 from functions.Errors import AccessError
 from .helper_functions import *
 import datetime
+import time
 
 def standup_start(token, channel_id):
     
     #Check if valid channel
     if check_valid_channel_id(channel_id) == False:
         raise ValueError("Invalid Channel")
+        
+    #Check if user is in the channel
+    
+    if check_token_in_channel(token, channel_id) == False:
+    
+        raise AccessError("User Not In Channel")    
         
   	#Check if another standup is active
     for channel in all_channels_messages:
@@ -24,7 +31,7 @@ def standup_start(token, channel_id):
 	
             channel['standup_active'] = False
     
-    return datetime.datetime.now()        		
+            return datetime.datetime.now()        		
     
         		
 def standup_send(token, channel_id, message):
