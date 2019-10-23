@@ -1,5 +1,5 @@
 from functions.Errors import AccessError
-from functions.helper_functions import *
+from .helper_functions import *
 import datetime
 
 def standup_start(token, channel_id):
