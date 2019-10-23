@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TIMER_INACTIVE_VALUE = -1;
 
-function AddMessage({ channel_id = '' }) {
+function AddMessage({ channel_id = '', onAdd = () => {} }) {
   const classes = useStyles();
   const [currentMessage, setCurrentMessage] = React.useState('');
   const [currentTimer, setCurrentTimer] = React.useState(TIMER_INACTIVE_VALUE);
@@ -77,6 +77,7 @@ function AddMessage({ channel_id = '' }) {
       })
         .then(({ data }) => {
           console.log(data);
+          onAdd();
         })
         .catch((err) => {
           console.error(err);
