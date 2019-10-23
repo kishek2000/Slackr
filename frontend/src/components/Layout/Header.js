@@ -14,6 +14,7 @@ import { Link, Redirect } from 'react-router-dom';
 import AuthContext from '../../AuthContext';
 import { drawerWidth } from '../../utils/constants';
 import PollToggle from '../PollToggle';
+import Admin from '../Admin';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -80,6 +81,7 @@ function Header({ handleMenuToggle = () => {} }) {
         </div>
         <div style={{display:'flex'}}>
           <PollToggle />
+          <Admin />
           <Button
             color="inherit"
             className={classes.logoutButton}
