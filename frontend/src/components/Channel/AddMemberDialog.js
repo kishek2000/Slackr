@@ -25,11 +25,11 @@ function AddMemberDialog({ channel_id, ...props }) {
   }
   function handleSubmit(event) {
     event.preventDefault();
-    const user_id = event.target[0].value;
+    const u_id = event.target[0].value;
 
-    if (!user_id) return;
+    if (!u_id) return;
 
-    axios.post(`/channel/invite`, { token, user_id, channel_id })
+    axios.post(`/channel/invite`, { token, u_id, channel_id })
       .then((response) => {
         console.log(response);
       })
@@ -57,9 +57,9 @@ function AddMemberDialog({ channel_id, ...props }) {
             <TextField
               autoFocus
               margin="dense"
-              id="user_id"
+              id="u_id"
               label="User ID"
-              name="user_id"
+              name="u_id"
               fullWidth
             />
           </DialogContent>
