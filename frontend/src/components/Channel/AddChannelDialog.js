@@ -42,6 +42,7 @@ function AddChannelDialog({ ...props }) {
       .post(`/channels/create`, { token, name, is_public })
       .then(response => {
         console.log(response);
+        props.callback();
       })
       .catch(err => {
         console.error(err);
