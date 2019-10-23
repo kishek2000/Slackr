@@ -21,6 +21,8 @@ import AddMemberDialog from './AddMemberDialog';
 import ChannelMessages from './ChannelMessages';
 import AuthContext from '../../AuthContext';
 import { extractUId } from '../../utils/token';
+import { useInterval } from '../../utils';
+import { pollingInterval, getIsPolling, subscribeToStep, unsubscribeToStep } from '../../utils/update';
 
 function Channel({ channel_id, ...props }) {
   const [name, setName] = React.useState('');
@@ -29,7 +31,7 @@ function Channel({ channel_id, ...props }) {
   const token = React.useContext(AuthContext);
   const u_id = extractUId(token);
 
-  function fetchChannelData(channel_id, token) {
+  function fetchChannelData() {
     axios
       .get('/channel/details', {
         params: {
@@ -38,7 +40,6 @@ function Channel({ channel_id, ...props }) {
         },
       })
       .then(({ data }) => {
-        console.log(data);
         const { name, owner_members, all_members } = data;
         // assumes members of form [{ u_id, name_first, name_last }]
         setMembers(all_members);
@@ -52,8 +53,15 @@ function Channel({ channel_id, ...props }) {
   }
 
   React.useEffect(() => {
-    fetchChannelData(channel_id, token);
-  }, [channel_id, token]);
+    fetchChannelData();
+    subscribeToStep(fetchChannelData);
+    return () => unsubscribeToStep(fetchChannelData);
+  }, [channel_id, token])
+
+  useInterval(() => {
+    if (getIsPolling()) fetchChannelData();
+  }, pollingInterval * 2);
+
 
   function joinChannel(channel_id, token) {
     axios
@@ -118,14 +126,15 @@ function Channel({ channel_id, ...props }) {
   }
 
   function userIsMember(members) {
-    console.log(members);
-    return members.find((member) => member.u_id === u_id) !== undefined;
+    return members.find((member) => parseInt(member.u_id,10) === parseInt(u_id,10)) !== undefined;
   }
 
   function userIsOwner(owners, u_id) {
-    return owners.find((owner) => owner.u_id === u_id) !== undefined;
+    return owners.find((owner) => parseInt(owner.u_id,10) === parseInt(u_id,10)) !== undefined;
   }
+
   const viewerIsOwner = userIsOwner(owners, u_id);
+
   return (
     <>
       <Typography variant="h4">{name.toUpperCase()}</Typography>
