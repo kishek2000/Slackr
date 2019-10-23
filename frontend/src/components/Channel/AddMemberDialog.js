@@ -11,8 +11,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import AuthContext from '../../AuthContext';
-import { toast } from 'react-toastify';
-import { DEFAULT_ERROR_TEXT } from '../../utils/text';
 
 function AddMemberDialog({ channel_id, ...props }) {
   const [open, setOpen] = React.useState(false);
@@ -33,10 +31,7 @@ function AddMemberDialog({ channel_id, ...props }) {
       .then((response) => {
         console.log(response);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
   return (
     <div>

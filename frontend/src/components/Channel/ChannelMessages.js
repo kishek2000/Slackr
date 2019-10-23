@@ -5,8 +5,6 @@ import { List, ListSubheader, Button } from '@material-ui/core';
 import { pollingInterval, getIsPolling, subscribeToStep, unsubscribeToStep } from '../../utils/update';
 import Message from '../Message';
 import AuthContext from '../../AuthContext';
-import { toast } from 'react-toastify';
-import { CHANNEL_ERROR_TEXT } from '../../utils/text';
 import AddMessage from '../Message/AddMessage';
 import { useInterval } from '../../utils';
 
@@ -14,7 +12,7 @@ function ChannelMessages({ channel_id = '' }) {
   const [messages, setMessages] = React.useState([]);
   const [currentStart, setCurrentStart] = React.useState(0);
   const token = React.useContext(AuthContext);
-  
+
   const fetchChannelMessages = () => axios
   .get('/channel/messages', {
     params: {
@@ -28,10 +26,7 @@ function ChannelMessages({ channel_id = '' }) {
     setCurrentStart(end); // TODO: add/remove problems
     setMessages(messages.concat(newMessages));
   })
-  .catch((err) => {
-    console.error(err);
-    toast.error(CHANNEL_ERROR_TEXT);
-  });
+  .catch((err) => {});
 
   const resetChannelMessages = () => axios
   .get('/channel/messages', {
@@ -46,10 +41,7 @@ function ChannelMessages({ channel_id = '' }) {
     setCurrentStart(end); // TODO: add/remove problems
     setMessages(newMessages);
   })
-  .catch((err) => {
-    console.error(err);
-    toast.error(CHANNEL_ERROR_TEXT);
-  });
+  .catch((err) => {});
 
   React.useEffect(() => {
     fetchChannelMessages();
@@ -61,7 +53,7 @@ function ChannelMessages({ channel_id = '' }) {
     <>
       <hr />
       {
-        (currentStart != -1 && 
+        (currentStart != -1 &&
           <Button
             variant="outlined"
             color="secondary"

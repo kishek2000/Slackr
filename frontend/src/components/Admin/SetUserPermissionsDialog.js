@@ -14,8 +14,6 @@ import {
   Radio,
 } from "@material-ui/core";
 import AuthContext from "../../AuthContext";
-import { toast } from "react-toastify";
-import { DEFAULT_ERROR_TEXT } from "../../utils/text";
 import { PERMISSION_IDS } from "../../utils/constants";
 
 function SetUserPermissionsDialog({ children, ...props }) {
@@ -52,10 +50,7 @@ function SetUserPermissionsDialog({ children, ...props }) {
         .then(response => {
             console.log(response);
         })
-        .catch(err => {
-            console.error(err);
-            toast.error(DEFAULT_ERROR_TEXT);
-        });
+        .catch(err => {});
     }
 
     return <>
