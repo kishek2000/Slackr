@@ -76,7 +76,7 @@ function ChannelMessages({ channel_id = '' }) {
         style={{ width: '100%' }}
       >
         {messages.slice().reverse().map((message) => (
-          <Message {...message} />
+          <Message key={message.message_id} {...message} />
         ))}
       </List>
       <AddMessage onAdd={resetChannelMessages} channel_id={channel_id} />
