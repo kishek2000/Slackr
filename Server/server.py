@@ -205,6 +205,66 @@ def create_channel():
     except ValueError as error:
         return {'error': error}
 
+#===============================================================================#
+#=================================     USER     ================================#
+#===============================================================================#
+
+@APP.route('/user/profile', methods=['GET'])
+def get_user_profile():
+        
+    token = request.args.get('token')
+    channel_id = request.args.get('channel_id') 
+    try:
+        returning_dict = user_profile(token, channel_id)
+        return dumps(returning_dict)
+    except ValueError as error:
+        return {'error': error}
+        
+@APP.route("/user/profile/setname", methods=['PUT'])
+def put_user_setname():
+    token = request.form.get('token')
+    name_first = request.form.get('name_first')
+    name_last = request.form.get('name_last')
+    try:
+        user_profile_setname(token, name_first, name_last)
+    except ValueError as error:
+        return {'error': error} 
+        
+@APP.route("/user/profile/setemail", methods=['PUT'])
+def put_user_setemail():
+    token = request.form.get('token')
+    email = request.form.get('email')
+    try:
+        user_profile_setemail(token, email)
+    except ValueError as error:
+        return {'error': error} 
+        
+@APP.route("/user/profile/sethandle", methods=['PUT'])
+def put_user_setemail():
+    token = request.form.get('token')
+    handle_str = request.form.get('handle_str')
+    try:
+        user_profile_sethandle(token, handle_str)
+    except ValueError as error:
+        return {'error': error} 
+        
+@APP.route('/user/profiles/uploadphoto', methods=['POST'])
+def post_user_uploadphoto():
+    token = request.form.get('token')
+    img_url = request.form.get('img_url')
+    x_start = request.form.get('x_start')
+    y_start = request.form.get('y_start')
+    x_end = request.form.get('x_end')
+    y_end = request.form.get('y_end')
+    try:
+        user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+    except ValueError as error:
+        return {'error': error}
+
+#===============================================================================#
+#=================================     MAIN     ================================#
+#===============================================================================#
+
 if __name__ == '__main__':
     APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 6000))
     
