@@ -15,8 +15,6 @@ import PersonAdd from '@material-ui/icons/PersonAdd';
 import PersonAddDisabled from '@material-ui/icons/PersonAddDisabled';
 import axios from 'axios';
 import React from 'react';
-import { toast } from 'react-toastify';
-import { CHANNEL_ERROR_TEXT, DEFAULT_ERROR_TEXT } from '../../utils/text';
 import AddMemberDialog from './AddMemberDialog';
 import ChannelMessages from './ChannelMessages';
 import AuthContext from '../../AuthContext';
@@ -46,10 +44,7 @@ function Channel({ channel_id, ...props }) {
         setOwners(owner_members);
         setName(name);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(CHANNEL_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
 
   React.useEffect(() => {
@@ -72,10 +67,7 @@ function Channel({ channel_id, ...props }) {
       .then(() => {
         fetchChannelData(channel_id, token);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
 
   function leaveChannel(channel_id, token) {
@@ -87,10 +79,7 @@ function Channel({ channel_id, ...props }) {
       .then(() => {
         fetchChannelData(channel_id, token);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
 
   function addOwner(u_id) {
@@ -103,10 +92,7 @@ function Channel({ channel_id, ...props }) {
       .then(() => {
         fetchChannelData(channel_id, token);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
 
   function removeOwner(u_id) {
@@ -119,10 +105,7 @@ function Channel({ channel_id, ...props }) {
       .then(() => {
         fetchChannelData(channel_id, token);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
 
   function userIsMember(members) {
