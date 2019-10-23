@@ -22,6 +22,7 @@ A video describing this project and the background here can be found here.
 * 17/10/2019: Clarification added to "permissions" by providing examples to explain the difference more between general permissions and channel permissions
 * 18/10/2019: "note: this is not requried to be completed until iteration 3" added to uploadphoto
 * 24/10/2019: "exactly members" in the data types updated to say "ends in members"
+* 24/10/2019: Helpful example of how to use python datetime numerically
 
 ## Overview
 
@@ -184,7 +185,7 @@ Details will be released in week 7
 |contains substring **name**|string|
 |contains substring **code**|string|
 |has prefix **is_**|boolean|
-|has prefix **time_**|datetime|
+|has prefix **time_**|datetime (you'll probably want to convert it to something numerical, like a (unix timestamp)[https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp]|
 |has suffix **_id**|integer|
 |has suffix **_url**|string|
 |has suffix **_str**|string|
