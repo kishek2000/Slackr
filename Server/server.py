@@ -177,19 +177,19 @@ def get_channels_list():
 
     try: 
         returning_list_dictionary = channels_list(token)
+        print("list:")
+        print(returning_list_dictionary)
         return dumps(returning_list_dictionary)
     except ValueError as error:
         return {'error': error}
 
 @APP.route('/channels/listall', methods=['GET'])
 def get_channels_listall():
-    print("current users list:")
-    print (list_of_users)
-    token = str.encode(request.args.get('token'))
-    print("token received:")
-    print (token)
+    token = request.args.get('token')
     try: 
         returning_listall_dictionary = channels_listall(token)
+        print("list:")
+        print(returning_listall_dictionary)
         return dumps(returning_listall_dictionary)
     except ValueError as error:
         return {'error': error}
@@ -201,7 +201,7 @@ def create_channel():
     is_public = request.form.get('is_public')
     try:
         new_channel_id = channels_create(token, name, is_public)
-        return dumps({new_channel_id})
+        return dumps(new_channel_id)
     except ValueError as error:
         return {'error': error}
 
