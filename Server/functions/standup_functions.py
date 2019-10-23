@@ -22,12 +22,12 @@ def standup_start(token, channel_id):
             raise ValueError("Channel Standup Already Active")
       		
             #If no errors raised then start the startup
-
+        elif channel_id == channel['channel_id'] and channel['standup_active'] == False:
             channel['standup_active'] = True
 	
             #Wait for 15 minutes then end the startup
 
-            sleep(15*60)
+            time.sleep(10)
 	
             channel['standup_active'] = False
     
