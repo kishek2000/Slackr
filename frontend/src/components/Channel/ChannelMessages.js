@@ -45,7 +45,7 @@ function ChannelMessages({ channel_id = '' }) {
 
   React.useEffect(() => {
     fetchChannelMessages();
-    subscribeToStep(fetchChannelMessages);
+    subscribeToStep(resetChannelMessages);
     return () => unsubscribeToStep(fetchChannelMessages);
   }, [channel_id])
 
