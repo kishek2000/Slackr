@@ -716,11 +716,11 @@ def test_message_unreact_two_reacts_same_order(setup):
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     
-def test_message_unreact_two_reacts_same_order(setup):
+def test_message_unreact_two_reacts_different_order(setup):
     # Testing unreacting twice, for two different reacts, in the opposite order to what it was reacted to
     message_id = message_send(setup["token_a"], setup["channel_a"], "Who's down to clown?")
-    message_react(setup["token_a"], message_id, 1)
     message_react(setup["token_a"], message_id, 2)
+    message_react(setup["token_a"], message_id, 1)
     message_unreact(setup["token_a"], message_id, 2)
     assert(len(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["reacts"]) == 1)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["reacts"][0]["react_id"] == 1)
