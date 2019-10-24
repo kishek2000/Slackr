@@ -1,8 +1,8 @@
 import pytest
 import sys
-sys.path.append('../Server/')
+sys.path.append('Server/')
 from functions.channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall
-from functions.helper_functions import reset_data, get_name_from_token, all_channels_details, list_of_users, change_user_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name 
+from functions.helper_functions import reset_data, get_name_from_token, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions 
 from functions.auth_functions import auth_register
 from functions.message_functions import message_send
 from functions.Errors import AccessError
@@ -281,7 +281,7 @@ def tests_channel_join_valid(setup):
 	channel_id_public = setup[5]
 	token = setup[3] ## token of accessing user who is not owner of channel setup[4] and setup[5]
 	## Let us give this user a permission id of admin meaning they can join both channels:
-	change_user_permission(get_user_from_token(token), 2)
+	change_user_app_permission(get_user_from_token(token), 1)
 
 	## This should produce no errors as all values are valid:
 	channel_join(token, channel_id_public)
@@ -354,9 +354,7 @@ def tests_channel_addowner_access_user_not_owner(setup):
 	token = setup[3] ## token of accessing user who is not an owner of 
 					## channel setup[4] and setup[5], but is a member
 	channel_id = setup[5] ## channel_id of the public channel created by the user of token setup[2]
-	channel_join(token, channel_id) ## adding the token user to channel
 	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
-	print(all_channels_details)
 	## With the accessing authorised user not being an owner of the channel, there should be an AccessError:
 	with pytest.raises(AccessError):	
 		channel_addowner(token, channel_id, u_id)
@@ -404,32 +402,19 @@ def tests_channel_removeowner_valid(setup):
 	c_user_id = c_user_details['u_id']
 	c_token = c_user_details['token']
 	## These will now add user C as a member and owner of channels setup[4] and setup[5]:
-	print("This is what our channels lookin like before adding C")
-	print(all_channels_details)
-	print('\n\n\n')
+
 	channel_addowner(token, setup[4], c_user_id) 
 	channel_addowner(token, setup[5], c_user_id) 
-
+	print("new permissions:")
+	print(all_channels_permissions)
 	token = c_token ## token of accessing user who is an owner of channel setup[4] and setup[5]
 	channel_id_private = setup[4]  
 	channel_id_public = setup[5] 
 	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
-	print('\n\n\n')
-	print("This is what our channels lookin like after adding C")
-	print(all_channels_details)
 
 	## With all valid values, this should produce no errors:
 	channel_removeowner(token, channel_id_public, u_id)
 	channel_removeowner(token, channel_id_private, u_id)
-
-def tests_channel_removeowner_access_user_not_owner(setup):
-	token = setup[3] ## token of accessing user who is not an owner or member of channel setup[4] and setup[5]
-	channel_id = setup[4]
-	u_id = setup[0] ## token of user who is an owner of channel setup[4] or setup[5]
-
-	## Given an authorised accessing user that is not an owner, there should be a AccessError:
-	with pytest.raises(AccessError):	
-		channel_removeowner(token, channel_id, u_id)
 
 def tests_channel_removeowner_provided_user_not_owner(setup):
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
@@ -448,7 +433,7 @@ def tests_channel_removeowner_accessing_user_not_owner(setup):
 	channel_id_private = setup[4]  
 	channel_id_public = setup[5] 
 	u_id = setup[0] ## id of user who is an owner or member of channel setup[4] or setup[5]
-	
+
 	## With the accessing token not being an owner of either channel already, there should be an AcessError:
 	with pytest.raises(AccessError):	
 		channel_removeowner(token, channel_id_private, u_id)

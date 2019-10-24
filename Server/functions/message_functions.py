@@ -1,5 +1,7 @@
-from helper_functions import check_valid_token, check_valid_channel_id, check_token_in_channel, generate_message_id, get_user_from_token, all_channels_messages, remove_message_from_channel, find_message_info, get_user_app_permission, has_user_reacted, valid_reacts
-from Errors import AccessError
+import sys
+sys.path.append("/Server/functions/")
+from functions.helper_functions import check_valid_token, check_valid_channel_id, check_token_in_channel, generate_message_id, get_user_from_token, all_channels_messages, remove_message_from_channel, find_message_info, get_user_app_permission, has_user_reacted, valid_reacts
+from functions.Errors import AccessError
 import datetime
 import time
 import threading

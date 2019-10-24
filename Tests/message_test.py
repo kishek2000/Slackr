@@ -7,12 +7,11 @@ import pytest
 import sys
 from datetime import date, time, datetime
 import time
-sys.path.append('Server/functions/')
-'''../'''
-from message_functions import *
-from auth_functions import auth_register
-from channel_functions import channel_messages, channels_create, channel_invite, channel_join, channel_leave
-from helper_functions import get_total_channel_messages, reset_data, all_channels_details
+sys.path.append('Server/')
+from functions.message_functions import *
+from functions.auth_functions import auth_register
+from functions.channel_functions import channel_messages, channels_create, channel_invite, channel_join, channel_leave
+from functions.helper_functions import get_total_channel_messages, reset_data, all_channels_details
 
 @pytest.fixture()
 def setup():

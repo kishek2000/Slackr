@@ -1,4 +1,6 @@
-from functions.helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, change_user_permission, all_channels_messages, all_channels_details, get_token_from_user, get_name_from_token, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions
+import sys
+sys.path.append("/Server/functions/")
+from .helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, all_channels_messages, all_channels_details, get_token_from_user, get_name_from_token, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions, change_user_channel_permission
 from functions.Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
@@ -21,6 +23,7 @@ def channel_invite(token, channel_id, u_id):
                 if users['u_id'] == get_user_from_token(token):
                     new_user_dict = get_user_details(get_token_from_user(u_id))
                     channels['all_members'].append(new_user_dict)
+                    change_user_channel_permission(u_id, 3, channel_id)
                     break
 #======================================= channel/details [GET] =======================================#
 def channel_details(token, channel_id):
@@ -37,7 +40,6 @@ def channel_details(token, channel_id):
             for users in channels['all_members']:
                 if check_token_matches_user(users['u_id'], token) == True:
                     return {'name': channels['name'], 'owner_members': channels['owner_members'], 'all_members': channels['all_members']}
-    return {'name': None, 'owner_members': [], 'all_members': []}
 #======================================= channel/messages [GET] =======================================#
 def channel_messages(token, channel_id, start):
     ## First make sure the token is actually in the channel, and the channel id also is valid
@@ -81,14 +83,14 @@ def channel_leave(token, channel_id):
             for member in channels['all_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
                     channels['all_members'].remove(member)
-                    return
+
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for member in channels['owner_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
                     channels['owner_members'].remove(member)
                     return
-    print({'channels after': all_channels_details})
+    # print({'channels after': all_channels_details})
 
 #======================================= channel/join [POST] ========================================#
 def channel_join(token, channel_id):
@@ -105,14 +107,18 @@ def channel_join(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
-                if get_user_channel_permission(channel_id, get_user_from_token(token)) > 2:
+                if get_user_app_permission(get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
                     new_user_dict = get_user_details(token)
                     channels['owner_members'].append(new_user_dict)
+                    u_id = get_user_from_token(token)
+                    change_user_channel_permission(u_id, 1, channel_id)
             else: 
                 new_user_dict = get_user_details(token)
-                channels['all_members'].append(new_user_dict)                
+                channels['all_members'].append(new_user_dict)    
+                u_id = get_user_from_token(token)
+                change_user_channel_permission(u_id, 3, channel_id)
                 break
 
 #===================================== channel/addowner [POST] ======================================#
@@ -124,8 +130,6 @@ def channel_addowner(token, channel_id, u_id):
         raise ValueError 
     if check_valid_token(token) == False:
         raise AccessError
-    if check_token_in_channel(token, channel_id) == False:
-        raise AccessError ## accessing user's token not in channel
     if get_user_app_permission(get_user_from_token(token)) != 1 and get_user_channel_permission(channel_id, get_user_from_token(token)) != 1:
         raise AccessError ## accessing user's permission not owner status of app, or owner status in channel
     
@@ -137,6 +141,7 @@ def channel_addowner(token, channel_id, u_id):
                 elif check_token_matches_user(users['u_id'], token) == True: ## implies token must be owner of channel
                     new_user_dict = get_user_details(get_token_from_user(u_id))
                     channels['owner_members'].append({'u_id': new_user_dict['u_id'], 'name_first': new_user_dict['name_first'], 'name_last': new_user_dict['name_last']})
+                    change_user_channel_permission(u_id, 1, channel_id)
                     break
     
 #==================================== channel/removeowner [POST] ====================================#
@@ -150,6 +155,8 @@ def channel_removeowner(token, channel_id, u_id):
         raise AccessError
     if get_user_app_permission(get_user_from_token(token)) != 1 and get_user_channel_permission(channel_id, get_user_from_token(token)) != 1:
         raise AccessError ## accessing user's permission not owner status of app, or owner status in channel     
+    if get_user_channel_permission(channel_id, u_id) != 1:
+        raise ValueError ## user given to remove is not owner of channel currently.
 
     ## check to make sure that both the token user and user id given are both owners of the channel
     token_owner_of_channel = False
@@ -163,24 +170,15 @@ def channel_removeowner(token, channel_id, u_id):
                     user_owner_of_channel = True
                 if user_owner_of_channel == True and token_owner_of_channel == True:
                     break
-    if user_owner_of_channel == False:
-        raise ValueError ## because user given to remove is not an owner of the channel currently
-    if token_owner_of_channel == False:
-        raise ValueError ## because token user accessing remove is not owner of channel currently
 
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['owner_members']:
                 if u_id == users['u_id']:
                     channels['owner_members'].remove(users)
-                    removePermission = True
+                    change_user_channel_permission(u_id, 3, channel_id)
                     break 
 
-    if removePermission == True:
-        for users in all_channels_permissions:
-            if channel_id == users['channel_id']:
-                users['permission_id'] = 3
-                break
 
 #==================================== channels/list [GET] ====================================#
 def channels_list(token):
@@ -219,5 +217,5 @@ def channels_create(token, name, is_public):
     u_id = get_user_from_token(token)
     all_channels_details.append({'channel_id': channel_id, 'name': name, 'owner_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'is_public': is_public})
     all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'standup_active': False, 'standup_buffer': '', 'messages': []})
-    all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
+    change_user_channel_permission(u_id, 1, channel_id,)
     return channel_id

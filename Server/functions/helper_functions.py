@@ -55,7 +55,6 @@ def check_valid_token(token):
     if token == -1:
         return False
     for user in list_of_users:
-        print({'token': token, 'usertoken': user['token']})
         if token == user['token']:
             return True
     return False 
@@ -79,6 +78,9 @@ def get_token_from_user(u_id):
             return user['token']
 
 def get_user_app_permission(u_id):
+    print("\n u_id received: \n")
+    print(u_id)
+    print("\n")
     for user in list_of_users:
         if u_id == user['u_id']:
             return user['app_permission_id']
@@ -182,7 +184,6 @@ global number_of_channels
 number_of_channels = 1
 
 def check_valid_channel_id(channel_id):
-    print({'given id': channel_id, 'current channels': all_channels_details})
     for channel in all_channels_details:
         if channel_id == channel['channel_id']:
             return True
@@ -224,9 +225,14 @@ def get_channel_id_from_name(name):
             return channels['channel_id']
 
 def get_user_channel_permission(channel_id, u_id):
+    print("\n getuserchann :")
+    print({'channel_id': channel_id, 'u_id': u_id})
+    print("\n")
     for users in all_channels_permissions:
         if users['channel_id'] == channel_id:
             if users['u_id'] == u_id:
+                print("returning:")
+                print(users['channel_permission_id'])
                 return users['channel_permission_id']
 
 #===============================================================================#
@@ -270,11 +276,23 @@ def remove_message_from_channel(message_id, channel_id):
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
-def change_user_permission(u_id, permission_id):
+def change_user_app_permission(u_id, permission_id):
     for user in list_of_users:
         if u_id == user['u_id']:
-            user['permission_id'] = permission_id
+            user['app_permission_id'] = permission_id
             break
+
+def change_user_channel_permission(u_id, permission_id, channel_id):
+    addedPerson = False
+    for user in all_channels_permissions:
+        if u_id == user['u_id']:
+            if channel_id == user['channel_id']:
+                user['channel_permission_id'] = permission_id
+                addedPerson = True
+                return {'added_id': u_id, 'changed_permission': permission_id}
+    if addedPerson == False:
+        all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
+    
 
 def reset_data():
     global number_of_users 
@@ -282,6 +300,7 @@ def reset_data():
     all_channels_details.clear()
     all_channels_messages.clear()
     list_of_users.clear()
+    all_channels_permissions.clear()
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0

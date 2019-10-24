@@ -4,6 +4,9 @@
 
 import pytest
 from datetime import datetime
+import sys
+sys.path.append("Server/")
+from functions.standup_functions import *
 
 @pytest.fixture
 def registered_user_1():

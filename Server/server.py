@@ -3,6 +3,7 @@ import sys
 from flask_cors import CORS
 from json import dumps
 from flask import Flask, request
+sys.path.append('/Server/functions')
 from functions.auth_functions import *
 from functions.channel_functions import *
 from functions.user_functions import *
