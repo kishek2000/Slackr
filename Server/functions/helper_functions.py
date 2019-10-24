@@ -63,8 +63,7 @@ def check_token_matches_user(u_id, token):
     if token == -1:
         return False
     for user in list_of_users:
-        if u_id == user['u_id']:
-            if token == user['token']:
+        if u_id == user['u_id'] and token == user['token']:
                 return True
     return False
 
@@ -275,3 +274,4 @@ def reset_data():
     list_of_users.clear()
     number_of_users = 0
     number_of_channels = 0
+    number_of_messages = 0

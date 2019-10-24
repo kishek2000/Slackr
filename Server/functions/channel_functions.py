@@ -85,9 +85,12 @@ def channel_leave(token, channel_id):
         if channel_id == channels['channel_id']:
             for member in channels['all_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
-                    del member
-                    break
-
+                    print(member)
+                    print("\n\n\n")
+                    channels['all_members'].remove(member)
+                    print(all_channels_details)
+                    return
+    #print("Please don't get here")
 #======================================= channel/join [POST] ========================================#
 def channel_join(token, channel_id):
     ## First make sure the token is not actually in the channel, and the channel id also is valid
@@ -103,10 +106,10 @@ def channel_join(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
-                print("This here is the list of users:")
-                print(list_of_users)
-                print("Now, here is what get user permission tells us:")
-                print({'u_id': get_user_from_token(token), 'permission_id': get_user_permission(get_user_from_token(token))})
+                #print("This here is the list of users:")
+                #print(list_of_users)
+                #print("Now, here is what get user permission tells us:")
+                #print({'u_id': get_user_from_token(token), 'permission_id': get_user_permission(get_user_from_token(token))})
                 if get_user_permission(get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
@@ -115,7 +118,7 @@ def channel_join(token, channel_id):
             else: 
                 new_user_dict = get_user_details(token)
                 channels['all_members'].append(new_user_dict)
-                print({'append:': new_user_dict})
+                #print({'append:': new_user_dict})
                 break
 
 #===================================== channel/addowner [POST] ======================================#

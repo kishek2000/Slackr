@@ -1,7 +1,7 @@
 import re 
 import smtplib
 import ssl
-from .helper_functions import *
+from helper_functions import *
 import pytest
     
 def auth_login(email, password):
