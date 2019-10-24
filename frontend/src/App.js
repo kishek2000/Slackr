@@ -13,14 +13,16 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/Layout/ProtectedRoute';
 
 import { AuthProvider } from './AuthContext';
+import './axios';
 
 function App() {
   const [authDetails, setAuthDetails] = React.useState(
     localStorage.getItem('token')
   );
 
-  function setAuth(token) {
+  function setAuth(token, u_id) {
     localStorage.setItem('token', token);
+    localStorage.setItem('u_id', u_id);
     setAuthDetails(token);
   }
   return (

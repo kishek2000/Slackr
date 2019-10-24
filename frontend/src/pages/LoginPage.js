@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   Avatar,
   Box,
@@ -10,11 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import * as routecall from '../utils/routecall';
 import React from 'react';
-import { toast } from 'react-toastify';
-import { url } from '../utils/constants';
-import { DEFAULT_ERROR_TEXT } from '../utils/text';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -45,17 +42,14 @@ function LoginPage({ setAuth, ...props }) {
     if (!email || !password) return;
 
     // Send to backend
-    routecall.post(`${url}/auth/login`, { email, password })
+    axios.post(`/auth/login`, { email, password })
       .then((response) => {
         console.log(response);
         const data = response.data;
-        setAuth(data.token);
+        setAuth(data.token, data.u_id);
         props.history.push('/');
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
   }
 
   const classes = useStyles();

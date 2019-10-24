@@ -1,6 +1,6 @@
 import React from 'react';
-import * as routecall from '../../utils/routecall';
 import timeago from 'epoch-timeago';
+import axios from 'axios';
 
 import {
   Avatar,
@@ -10,12 +10,11 @@ import {
 } from '@material-ui/core';
 
 
-import { url } from '../../utils/constants';
-
 import AuthContext from '../../AuthContext';
 import MessagePin from './MessagePin';
 import MessageReact from './MessageReact';
 import MessageRemove from './MessageRemove';
+import MessageEdit from './MessageEdit';
 
 
 function Message({
@@ -34,8 +33,8 @@ function Message({
   React.useEffect(() => {
     setName();
     setInitials();
-    routecall
-      .get(`${url}/user/profile`, {
+    axios
+      .get(`/user/profile`, {
         params: {
           token,
           u_id,
@@ -55,14 +54,6 @@ function Message({
         console.error(err);
       });
   }, [message_id, token, u_id]);
-
-  const messageRemove = () => {
-    routecall.post(`${url}/message/remove`, {
-      token,
-      message_id,
-    });
-  };
-
 
   return (
     <ListItem key={message_id} style={{ width: '100%' }}>
@@ -99,6 +90,9 @@ function Message({
               <MessagePin
                 message_id={message_id}
                 is_pinned={is_pinned}
+              />
+              <MessageEdit
+                message_id={message_id}
               />
               <MessageRemove
                 message_id={message_id}

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   AppBar,
   Button,
@@ -8,12 +9,12 @@ import {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import MenuIcon from '@material-ui/icons/Menu';
-import * as routecall from '../../utils/routecall';
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import AuthContext from '../../AuthContext';
-import { drawerWidth, url } from '../../utils/constants';
+import { drawerWidth } from '../../utils/constants';
 import PollToggle from '../PollToggle';
+import Admin from '../Admin';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -41,15 +42,13 @@ function Header({ handleMenuToggle = () => {} }) {
   const [loggedOut, setLoggedOut] = React.useState(false);
 
   if (loggedOut) {
-    routecall.post(`${url}/auth/logout`, { token })
+    axios.post(`/auth/logout`, { token })
       .then((response) => {
         console.log(response);
       })
-      .catch((err) => {
-        console.error(err);
-        // toast.error(DEFAULT_ERROR_TEXT);
-      });
+      .catch((err) => {});
     localStorage.removeItem('token');
+    localStorage.removeItem('u_id');
     return <Redirect to="/login" />;
   }
 
@@ -79,6 +78,7 @@ function Header({ handleMenuToggle = () => {} }) {
         </div>
         <div style={{display:'flex'}}>
           <PollToggle />
+          <Admin />
           <Button
             color="inherit"
             className={classes.logoutButton}

@@ -8,17 +8,18 @@ import {
 import axios from 'axios';
 import React from 'react';
 import AuthContext from '../../AuthContext';
-import { url } from '../../utils/constants';
 import { extractUId } from '../../utils/token';
 import EditableFields from './EditableFields';
 
-function Profile({ profile, ...props }) {
+function Profile({ profile }) {
+
   const [profileDetails, setProfileDetails] = React.useState({});
   const token = React.useContext(AuthContext);
-  const currUser = extractUId(token);
+  const u_id = extractUId(token);
+
   React.useEffect(() => {
     axios
-      .get(`${url}/user/profile`, { params: { token, profile } })
+      .get(`/user/profile`, { params: { token, u_id: profile } })
       .then(({ data }) => {
         console.log(data);
         setProfileDetails(data);
@@ -30,7 +31,7 @@ function Profile({ profile, ...props }) {
 
   function updateName(name_last, name_first) {
     axios
-      .put(`${url}/user/profile/setname`, { token, name_first, name_last })
+      .put(`/user/profile/setname`, { token, name_first, name_last })
       .then(() => {
         console.log('all good');
       })
@@ -41,7 +42,7 @@ function Profile({ profile, ...props }) {
 
   function updateEmail(email) {
     axios
-      .put(`${url}/user/profile/setemail`, { token, email })
+      .put(`/user/profile/setemail`, { token, email })
       .then(() => {
         console.log('all good');
       })
@@ -50,9 +51,9 @@ function Profile({ profile, ...props }) {
       });
   }
 
-  function updateHandle(handle) {
+  function updateHandle(handle_str) {
     axios
-      .put(`${url}/user/profile/sethandle`, { token, handle })
+      .put(`/user/profile/sethandle`, { token, handle_str })
       .then(() => {
         console.log('all good');
       })
@@ -61,7 +62,8 @@ function Profile({ profile, ...props }) {
       });
   }
 
-  const editable = currUser.toString() === profile;
+  const editable = u_id.toString() === profile;
+
   return (
     <>
       <Typography variant="h4">Profile</Typography>
@@ -69,8 +71,8 @@ function Profile({ profile, ...props }) {
         <ListItem key={'name'}>
           <EditableFields
             editable={editable}
-            masterValue={profileDetails.last_name}
-            slaveValues={[profileDetails.first_name]}
+            masterValue={profileDetails.name_last}
+            slaveValues={[profileDetails.name_first]}
             master={(passed_props) => (
               <TextField label={'Last Name'} {...passed_props} />
             )}
@@ -95,7 +97,7 @@ function Profile({ profile, ...props }) {
         <ListItem key={'handle'}>
           <EditableFields
             editable={editable}
-            masterValue={'phlips'}
+            masterValue={profileDetails.handle_str}
             master={(passed_props) => (
               <TextField label={'Handle'} {...passed_props} />
             )}

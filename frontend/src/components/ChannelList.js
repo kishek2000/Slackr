@@ -1,5 +1,4 @@
 import React from 'react';
-import * as routecall from '../utils/routecall';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -13,36 +12,26 @@ import {
 
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import { url } from '../utils/constants';
 import AuthContext from '../AuthContext';
 import AddChannelDialog from './Channel/AddChannelDialog';
+
+import { useInterval } from '../utils';
+import { pollingInterval, getIsPolling, subscribeToStep, unsubscribeToStep } from '../utils/update';
 
 function ChannelList({ channel_id: curr_channel_id }) {
   const [myChannels, setMyChannels] = React.useState([]);
   const [allChannels, setAllChannels] = React.useState([]);
 
   const token = React.useContext(AuthContext);
-  React.useEffect(() => {
-    // fetch channels data
-    const getMyChannels = () => {
-      return routecall.get(`${url}/channels/list`, {
-        params: {
-          token,
-        },
-      });
-    };
 
-    const getAllChannels = () => {
-      return routecall.get(`${url}/channels/listall`, {
-        params: {
-          token,
-        },
-      });
-    };
-    axios.all([getMyChannels(), getAllChannels()]).then(
+  const fetchChannelsData = () => {
+    // fetch channels data
+    const getMyChannels = axios.get('/channels/list', { params: { token } });
+    const getAllChannels = axios.get('/channels/listall', { params: { token } });
+
+    axios.all([getMyChannels, getAllChannels]).then(
       axios.spread((myChannelResponse, allChannelResponse) => {
         const myChannelData = myChannelResponse.data.channels;
-        console.log(myChannelData);
         const allChannelData = allChannelResponse.data.channels;
         const filteredChannels = allChannelData.filter((channel) => {
           return (
@@ -50,12 +39,21 @@ function ChannelList({ channel_id: curr_channel_id }) {
             undefined
           );
         });
-        console.log(filteredChannels);
         setMyChannels(myChannelData);
         setAllChannels(filteredChannels);
       })
     );
-  }, []);
+  };
+
+  React.useEffect(() => {
+    fetchChannelsData();
+    subscribeToStep(fetchChannelsData);
+    return () => unsubscribeToStep(fetchChannelsData);
+  }, [])
+
+  useInterval(() => {
+    if (getIsPolling()) fetchChannelsData();
+  }, pollingInterval * 2);
 
   return (
     <>
@@ -63,7 +61,7 @@ function ChannelList({ channel_id: curr_channel_id }) {
         subheader={
           <ListSubheader style={{ display: 'flex' }}>
             <span style={{ flex: 1 }}>My Channels</span>
-            <AddChannelDialog />
+            <AddChannelDialog callback={fetchChannelsData} />
           </ListSubheader>
         }
       >

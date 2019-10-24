@@ -1,12 +1,8 @@
-from helper_functions import *
-from Errors import AccessError
+from functions.helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, change_user_permission, all_channels_messages, all_channels_details, get_token_from_user, get_name_from_token, get_user_from_token, get_user_permission, get_user_details, generate_channel_id, list_of_users
+from functions.Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
 def channel_invite(token, channel_id, u_id):
-   #print("======+DEBUG - CHANNELS/INVITE =========")
-   #print("given token is")
-   #print(token)
-   #print("END OF DUMP")
     ## First make sure the given channel id, u_id and token are existing, and token is member of channel 
     if check_valid_channel_id(channel_id) == False:
         raise ValueError
@@ -85,12 +81,9 @@ def channel_leave(token, channel_id):
         if channel_id == channels['channel_id']:
             for member in channels['all_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
-                    print(member)
-                    print("\n\n\n")
                     channels['all_members'].remove(member)
-                    print(all_channels_details)
                     return
-    #print("Please don't get here")
+
 #======================================= channel/join [POST] ========================================#
 def channel_join(token, channel_id):
     ## First make sure the token is not actually in the channel, and the channel id also is valid
@@ -106,10 +99,6 @@ def channel_join(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
-                #print("This here is the list of users:")
-                #print(list_of_users)
-                #print("Now, here is what get user permission tells us:")
-                #print({'u_id': get_user_from_token(token), 'permission_id': get_user_permission(get_user_from_token(token))})
                 if get_user_permission(get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
@@ -118,7 +107,6 @@ def channel_join(token, channel_id):
             else: 
                 new_user_dict = get_user_details(token)
                 channels['all_members'].append(new_user_dict)
-                #print({'append:': new_user_dict})
                 break
 
 #===================================== channel/addowner [POST] ======================================#
@@ -156,8 +144,6 @@ def channel_removeowner(token, channel_id, u_id):
     if check_valid_token(token) == False:
         raise AccessError
     if check_token_in_channel(token, channel_id) == False: 
-        print("failed to find token in channel:")
-        print(token, channel_id)
 
     ## or get_user_permission(get_user_from_token(token)) > 1:
         raise AccessError ## accessing user's token is not member of channel or owner of Slackr
@@ -168,7 +154,6 @@ def channel_removeowner(token, channel_id, u_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['owner_members']:
-                print (users)
                 if check_token_matches_user(users['u_id'], token) == True:
                     token_owner_of_channel = True
                 if u_id == users['u_id']:
@@ -184,7 +169,8 @@ def channel_removeowner(token, channel_id, u_id):
         if channel_id == channels['channel_id']:
             for users in channels['owner_members']:
                 if u_id == users['u_id']:
-                    del users 
+                    del users
+                    break 
 
 #==================================== channels/list [GET] ====================================#
 def channels_list(token):
@@ -198,8 +184,6 @@ def channels_list(token):
             if users['u_id'] == u_id:
                 returning_list.append({'channel_id': channels['channel_id'], 'name': channels['name']})
                 break
-    print("Returning list is this:")
-    print(returning_list)
     return returning_list
 
 #=================================== channels/listall [GET] ==================================#
@@ -214,6 +198,8 @@ def channels_listall(token):
 
 #=================================== channels/create [POST] ==================================#
 def channels_create(token, name, is_public):
+    print("received name")
+    print(name)
     if check_valid_token(token) == False:
         raise AccessError
     channel_id = generate_channel_id()
@@ -224,5 +210,5 @@ def channels_create(token, name, is_public):
     name_last = full_name['name_last']
     u_id = get_user_from_token(token)
     all_channels_details.append({'channel_id': channel_id, 'name': name, 'owner_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'is_public': is_public})
-    all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'messages': []})
+    all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'standup_active': False, 'standup_buffer': '', 'messages': []})
     return channel_id
