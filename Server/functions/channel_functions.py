@@ -80,16 +80,15 @@ def channel_leave(token, channel_id):
         if channel_id == channels['channel_id']:
             for member in channels['all_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
-                    del member                        
-                    break
-    
+                    channels['all_members'].remove(member)
+                    return
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for member in channels['owner_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
-                    del member
-                    break
-    print({'channels after': all_channels_details})    
+                    channels['owner_members'].remove(member)
+                    return
+    print({'channels after': all_channels_details})
 
 #======================================= channel/join [POST] ========================================#
 def channel_join(token, channel_id):
@@ -174,7 +173,7 @@ def channel_removeowner(token, channel_id, u_id):
         if channel_id == channels['channel_id']:
             for users in channels['owner_members']:
                 if u_id == users['u_id']:
-                    del users
+                    channels['owner_members'].remove(users)
                     break 
 
 #==================================== channels/list [GET] ====================================#
