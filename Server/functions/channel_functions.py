@@ -137,7 +137,6 @@ def channel_addowner(token, channel_id, u_id):
                 elif check_token_matches_user(users['u_id'], token) == True: ## implies token must be owner of channel
                     new_user_dict = get_user_details(get_token_from_user(u_id))
                     channels['owner_members'].append({'u_id': new_user_dict['u_id'], 'name_first': new_user_dict['name_first'], 'name_last': new_user_dict['name_last']})
-                    channels['all_members'].append({'u_id': new_user_dict['u_id'], 'name_first': new_user_dict['name_first'], 'name_last': new_user_dict['name_last']})
                     break
     
 #==================================== channel/removeowner [POST] ====================================#
@@ -174,7 +173,14 @@ def channel_removeowner(token, channel_id, u_id):
             for users in channels['owner_members']:
                 if u_id == users['u_id']:
                     channels['owner_members'].remove(users)
+                    removePermission = True
                     break 
+
+    if removePermission == True:
+        for users in all_channels_permissions:
+            if channel_id == users['channel_id']:
+                users['permission_id'] = 3
+                break
 
 #==================================== channels/list [GET] ====================================#
 def channels_list(token):
