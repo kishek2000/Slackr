@@ -129,7 +129,7 @@ def test_message_send_disaster(setup):
 def test_message_send_later_max_length(setup):
     # Testing message of maximum length delivered on time
     message_send_later(setup["token_a"], setup["channel_a"], "x"*1000, time.time()+5)
-    time.sleep(5)
+    time.sleep(6)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "x"*1000)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["u_id"] == setup["a_id"])
     #assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["time_created"] == time.time())
@@ -185,7 +185,7 @@ def test_message_send_later_intermediate_messages(setup):
     assert(channel_is_empty(setup["channel_dead"]))
     message_send(setup["token_a"], setup["channel_a"], "a")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
-    time.sleep(5)
+    time.sleep(6)
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][1]["message"] == "a")
     assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "b")
     time.sleep(5)
@@ -353,7 +353,8 @@ def test_message_remove_nonexistant(setup):
 def test_message_remove_send_later(setup):
     # Testing removal of a message that hasn't been sent yet
     message_id = message_send_later(setup["token_a"], setup["channel_a"], "Hello", time.time()+5)
-    message_remove(setup["token_a"], message_id)
+    with pytest.raises(ValueError):
+        message_remove(setup["token_a"], message_id)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     time.sleep(6)
@@ -473,7 +474,8 @@ def test_message_edit_send_later(setup):
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     time.sleep(6)
-    assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "Hello")
+    message_edit(setup["token_a"], message_id, "There")
+    assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "There")
     message_remove(setup["token_a"], message_id)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))  
