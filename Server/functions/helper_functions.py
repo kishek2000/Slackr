@@ -9,7 +9,7 @@ import sys
 #  list_of_users = [{'rajeshkumar@gmail.com':{'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None}}]
 
 ## Adi new version for more general use:
-list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'permission_id': 1}]
+list_of_users = [{'handle_str': '@Rajesh', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'app_permission_id': 1}]
 
 ## Addition of a permissions list:
 '''
@@ -79,10 +79,10 @@ def get_token_from_user(u_id):
         if u_id == user['u_id']:
             return user['token']
 
-def get_user_permission(u_id):
+def get_user_app_permission(u_id):
     for user in list_of_users:
         if u_id == user['u_id']:
-            return user['permission_id']
+            return user['app_permission_id']
 
 def email_registered(email):
 
@@ -174,14 +174,16 @@ def get_reset_code_from_user(email):
 #===============================================================================#
 
 #================= data storage for channels =================#
-all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'isPublic': True}]
+all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'is_public': True}]
 all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'standup_active': False, 'standup_buffer': '',
- 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': datetime.datetime(2019,10,15,19,30), 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
+ 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': int(datetime.datetime.now().strftime('%s')), 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
+all_channels_permissions = [{'channel_id': 1, 'u_id': 1, 'channel_permission_id': 1}] ## 1 = owner, 2 = admin, 3 = just member
 
 global number_of_channels
 number_of_channels = 1
 
 def check_valid_channel_id(channel_id):
+    print({'given id': channel_id, 'current channels': all_channels_details})
     for channel in all_channels_details:
         if channel_id == channel['channel_id']:
             return True
@@ -221,6 +223,12 @@ def get_channel_id_from_name(name):
     for channels in all_channels_details:
         if channels['name'] == name:
             return channels['channel_id']
+
+def get_user_channel_permission(channel_id, u_id):
+    for users in all_channels_permissions:
+        if users['channel_id'] == channel_id:
+            if users['u_id'] == u_id:
+                return users['channel_permission_id']
 
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#

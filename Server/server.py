@@ -5,6 +5,7 @@ from json import dumps
 from flask import Flask, request
 from functions.auth_functions import *
 from functions.channel_functions import *
+from functions.user_functions import *
 
 APP = Flask(__name__)
 CORS(APP)
@@ -98,18 +99,19 @@ def reset_password():
 @APP.route('/channel/invite', methods=['POST'])
 def invite_to_channel():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
-    u_id = request.form.get('u_id')
+    channel_id = int(request.form.get('channel_id'))
+    u_id = int(request.form.get('u_id'))
 
     try:
         channel_invite(token, channel_id, u_id)
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
 @APP.route('/channel/details', methods=['GET'])
 def get_channel_details():
     token = request.args.get('token')
-    channel_id = request.args.get('channel_id')
+    channel_id = int(request.args.get('channel_id'))
 
     try:
         returning_dict = channel_details(token, channel_id)
@@ -120,8 +122,8 @@ def get_channel_details():
 @APP.route('/channel/messages', methods=['GET'])
 def get_channel_messages():
     token = request.args.get('token')
-    channel_id = request.args.get('channel_id')
-    start = request.args.get('start')
+    channel_id = int(request.args.get('channel_id'))
+    start = int(request.args.get('start'))
 
     try: 
         returning_messages = channel_messages(token, channel_id, start)
@@ -132,42 +134,45 @@ def get_channel_messages():
 @APP.route('/channel/leave', methods=['POST'])
 def leave_channel():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
+    channel_id = int(request.form.get('channel_id'))
     
     try:
         channel_leave(token, channel_id)
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
 @APP.route('/channel/join', methods=['POST'])
 def join_channel():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
-
+    channel_id = int(request.form.get('channel_id'))
     try:
         channel_join(token, channel_id)
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
 @APP.route('/channel/addowner', methods=['POST'])
 def add_owner_to_channel():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
-    u_id = request.form.get('u_id')
+    channel_id = int(request.form.get('channel_id'))
+    u_id = int(request.form.get('u_id'))
 
     try:
         channel_addowner(token, channel_id, u_id)
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
 @APP.route('/channel/removeowner', methods=['POST'])
 def remover_owner_from_channel():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
-    u_id = request.form.get('u_id')
+    channel_id = int(request.form.get('channel_id'))
+    u_id = int(request.form.get('u_id'))
 
     try:
         channel_removeowner(token, channel_id, u_id)
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
@@ -177,9 +182,7 @@ def get_channels_list():
 
     try: 
         returning_list_dictionary = channels_list(token)
-        print("list:")
-        print(returning_list_dictionary)
-        return dumps(returning_list_dictionary)
+        return dumps({'channels': returning_list_dictionary})
     except ValueError as error:
         return {'error': error}
 
@@ -188,9 +191,7 @@ def get_channels_listall():
     token = request.args.get('token')
     try: 
         returning_listall_dictionary = channels_listall(token)
-        print("list:")
-        print(returning_listall_dictionary)
-        return dumps(returning_listall_dictionary)
+        return dumps({'channels': returning_listall_dictionary})
     except ValueError as error:
         return {'error': error}
 
@@ -201,7 +202,7 @@ def create_channel():
     is_public = request.form.get('is_public')
     try:
         new_channel_id = channels_create(token, name, is_public)
-        return dumps(new_channel_id)
+        return dumps({'channel_id': new_channel_id})
     except ValueError as error:
         return {'error': error}
 
@@ -213,7 +214,7 @@ def create_channel():
 def get_user_profile():
         
     token = request.args.get('token')
-    channel_id = request.args.get('channel_id') 
+    channel_id = int(request.args.get('channel_id') )
     try:
         returning_dict = user_profile(token, channel_id)
         return dumps(returning_dict)
@@ -227,6 +228,7 @@ def put_user_setname():
     name_last = request.form.get('name_last')
     try:
         user_profile_setname(token, name_first, name_last)
+        return dumps({})
     except ValueError as error:
         return {'error': error} 
         
@@ -236,15 +238,17 @@ def put_user_setemail():
     email = request.form.get('email')
     try:
         user_profile_setemail(token, email)
+        return dumps({})
     except ValueError as error:
         return {'error': error} 
         
 @APP.route("/user/profile/sethandle", methods=['PUT'])
-def put_user_setemail():
+def put_user_sethandle():
     token = request.form.get('token')
     handle_str = request.form.get('handle_str')
     try:
         user_profile_sethandle(token, handle_str)
+        return dumps({})
     except ValueError as error:
         return {'error': error} 
         
@@ -258,6 +262,7 @@ def post_user_uploadphoto():
     y_end = request.form.get('y_end')
     try:
         user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 

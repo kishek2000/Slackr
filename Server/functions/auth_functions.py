@@ -82,11 +82,11 @@ def auth_register(email, password, name_first, name_last):
             user["token"] = generate_token(email)
             user["u_id"] = generate_u_id()
             
-            #Assign default permission_id
+            #Assign default app permission_id
             if user['u_id'] == 1:
-                user["permission_id"] = 1
+                user["app_permission_id"] = 1
             else:
-                user["permission_id"] = 3
+                user["app_permission_id"] = 3
             break        
     return {'u_id' : user["u_id"], 'token': user["token"]}
     

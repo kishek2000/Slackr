@@ -1,7 +1,7 @@
-from .helper_functions import 
+from functions.helper_functions import *
 from PIL import Image
 import requests
-from Errors import AccessError
+from functions.Errors import AccessError
     
 
 def user_profile(token, u_id):

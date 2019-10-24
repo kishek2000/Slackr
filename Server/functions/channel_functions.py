@@ -1,4 +1,4 @@
-from functions.helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, change_user_permission, all_channels_messages, all_channels_details, get_token_from_user, get_name_from_token, get_user_from_token, get_user_permission, get_user_details, generate_channel_id, list_of_users
+from functions.helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, change_user_permission, all_channels_messages, all_channels_details, get_token_from_user, get_name_from_token, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions
 from functions.Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
@@ -37,7 +37,7 @@ def channel_details(token, channel_id):
             for users in channels['all_members']:
                 if check_token_matches_user(users['u_id'], token) == True:
                     return {'name': channels['name'], 'owner_members': channels['owner_members'], 'all_members': channels['all_members']}
-
+    return {'name': None, 'owner_members': [], 'all_members': []}
 #======================================= channel/messages [GET] =======================================#
 def channel_messages(token, channel_id, start):
     ## First make sure the token is actually in the channel, and the channel id also is valid
@@ -66,7 +66,6 @@ def channel_messages(token, channel_id, start):
                 else:
                     end = start + increment
                 return {'messages': messages['messages'][start:start+increment], 'start': start, 'end': end}
-
 #======================================= channel/leave [POST] =======================================#
 def channel_leave(token, channel_id):
     ## First make sure the token is actually in the channel, and the channel id also is valid
@@ -76,13 +75,21 @@ def channel_leave(token, channel_id):
         raise AccessError
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError ## because token user not actually in requested channel id's channel
-    
+    print({'channels before': all_channels_details})
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for member in channels['all_members']:
                 if check_token_matches_user(member['u_id'], token) == True:
                     del member                        
                     break
+    
+    for channels in all_channels_details:
+        if channel_id == channels['channel_id']:
+            for member in channels['owner_members']:
+                if check_token_matches_user(member['u_id'], token) == True:
+                    del member
+                    break
+    print({'channels after': all_channels_details})    
 
 #======================================= channel/join [POST] ========================================#
 def channel_join(token, channel_id):
@@ -93,20 +100,20 @@ def channel_join(token, channel_id):
         raise AccessError
     if check_token_in_channel(token, channel_id) == True:
         raise ValueError ## because token user already in the channel 
-    
+
     ## This function specifically lets all members to join publics, but only admins to join private 
     ## channel ids that are given as a destination
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if channels['is_public'] == False:
-                if get_user_permission(get_user_from_token(token)) > 2:
+                if get_user_channel_permission(channel_id, get_user_from_token(token)) > 2:
                     raise AccessError ## because token user is not an admin or owner
                 else:
                     new_user_dict = get_user_details(token)
                     channels['owner_members'].append(new_user_dict)
             else: 
                 new_user_dict = get_user_details(token)
-                channels['all_members'].append(new_user_dict)
+                channels['all_members'].append(new_user_dict)                
                 break
 
 #===================================== channel/addowner [POST] ======================================#
@@ -120,8 +127,8 @@ def channel_addowner(token, channel_id, u_id):
         raise AccessError
     if check_token_in_channel(token, channel_id) == False:
         raise AccessError ## accessing user's token not in channel
-    if get_user_permission(get_user_from_token(token)) != 1:
-        raise AccessError ## accessing user's permission not owner status
+    if get_user_app_permission(get_user_from_token(token)) != 1 and get_user_channel_permission(channel_id, get_user_from_token(token)) != 1:
+        raise AccessError ## accessing user's permission not owner status of app, or owner status in channel
     
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
@@ -143,10 +150,8 @@ def channel_removeowner(token, channel_id, u_id):
         raise ValueError 
     if check_valid_token(token) == False:
         raise AccessError
-    if check_token_in_channel(token, channel_id) == False: 
-
-    ## or get_user_permission(get_user_from_token(token)) > 1:
-        raise AccessError ## accessing user's token is not member of channel or owner of Slackr
+    if get_user_app_permission(get_user_from_token(token)) != 1 and get_user_channel_permission(channel_id, get_user_from_token(token)) != 1:
+        raise AccessError ## accessing user's permission not owner status of app, or owner status in channel     
 
     ## check to make sure that both the token user and user id given are both owners of the channel
     token_owner_of_channel = False
@@ -198,8 +203,6 @@ def channels_listall(token):
 
 #=================================== channels/create [POST] ==================================#
 def channels_create(token, name, is_public):
-    print("received name")
-    print(name)
     if check_valid_token(token) == False:
         raise AccessError
     channel_id = generate_channel_id()
@@ -211,4 +214,5 @@ def channels_create(token, name, is_public):
     u_id = get_user_from_token(token)
     all_channels_details.append({'channel_id': channel_id, 'name': name, 'owner_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'is_public': is_public})
     all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'standup_active': False, 'standup_buffer': '', 'messages': []})
+    all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
     return channel_id

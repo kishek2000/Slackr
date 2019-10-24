@@ -27,7 +27,7 @@ def message_send(token, channel_id, message):
                 "message_id": message_id,
                 "u_id": uid,
                 "message": message,
-                "time_created": datetime.datetime.now(),
+                "time_created": int(datetime.datetime.now().strftime('%s')),
                 "reacts": [],
                 "is_pinned": False
             })
