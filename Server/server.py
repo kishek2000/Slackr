@@ -8,6 +8,8 @@ from functions.auth_functions import *
 from functions.channel_functions import *
 from functions.user_functions import *
 from functions.Errors import *
+from functions.message_functions import *
+
 
 APP = Flask(__name__)
 CORS(APP)
@@ -303,6 +305,7 @@ def post_message_unpin():
 def get_user_profile():
         
     token = request.args.get('token')
+    u_id = request.args.get('u_id')
     channel_id = int(request.args.get('channel_id') )
     try:
         returning_dict = user_profile(token, channel_id)

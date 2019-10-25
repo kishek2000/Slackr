@@ -184,7 +184,7 @@ def get_reset_code_from_user(email):
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'is_public': True}]
 all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'standup_active': False, 'standup_buffer': '',
- 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': int(datetime.datetime.now().strftime('%s')), 'reacts': [{'react_id': 1, 'u_ids': [1], 'is_this_user_reacted': False}], 'is_pinned': False}]}]
+ 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': int(datetime.datetime.now().strftime('%s')), 'reacts': [{'react_id': 1, 'u_ids': [1]}], 'is_pinned': False}]}]
 all_channels_permissions = [{'channel_id': 1, 'u_id': 1, 'channel_permission_id': 1}] ## 1 = owner, 2 = admin, 3 = just member
 
 global number_of_channels
@@ -255,9 +255,9 @@ def find_message_info(message_id):
     for channel in all_channels_messages:
         for message in channel["messages"]:
             if message["message_id"] == message_id:
-                return {"channel_id": channel["channel_id"], "message": message}
+                return {"channel": channel, "message": message}
     return None
-    
+
 def has_user_reacted(uid, react_id, message):
     for react in message["reacts"]:
         if react_id == react["react_id"]:
@@ -270,16 +270,7 @@ def generate_message_id():
     global number_of_messages
     number_of_messages += 1
     return number_of_messages
-    
-def remove_message_from_channel(message_id, channel_id):
-    for channel in all_channels_messages:
-        if channel["channel_id"] == channel_id:
-            for message in channel["messages"]:
-                if message["message_id"] == message_id:
-                    channel["messages"].remove(message)
-                    channel["total_messages"] -= 1
-            break
-    return None
+
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#

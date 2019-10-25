@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_channel_id, check_token_in_channel, generate_message_id, get_user_from_token, all_channels_messages, remove_message_from_channel, find_message_info, get_user_app_permission, has_user_reacted, valid_reacts
+from functions.helper_functions import check_valid_token, check_valid_channel_id, check_token_in_channel, generate_message_id, get_user_from_token, all_channels_messages, find_message_info, get_user_app_permission, has_user_reacted, valid_reacts
 from functions.Errors import AccessError
 import datetime
 import time
@@ -72,31 +72,32 @@ def message_sendlater(token, channel_id, message, time_sent):
     return message_id
     
 def message_remove(token, message_id):
-    message_info = find_message_info(message_id)
-    if message_info == None:
+    info = find_message_info(message_id)
+    if info == None:
         raise ValueError("Message ID is invalid")
-    channel_id = message_info["channel_id"]
-    message = message_info["message"]
+    message = info['message']
+    channel = info['channel']
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
-    if check_token_in_channel(token, channel_id) == False:
+    if check_token_in_channel(token, channel['channel_id']) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
     if message["u_id"] != uid and get_user_app_permission(uid) == 3:
         raise AccessError("Do not have permission")
-    remove_message_from_channel(message_id, channel_id)
+    channel["messages"].remove(message)
+    channel["total_messages"] -= 1
     
 def message_edit(token, message_id, new_message):
-    message_info = find_message_info(message_id)
-    if message_info == None:
+    info = find_message_info(message_id)
+    if info == None:
         raise ValueError("Message ID is invalid")
-    channel_id = message_info["channel_id"]
-    message = message_info["message"]
+    message = info['message']
+    channel = info['channel']
     if len(new_message) > 1000:
         raise ValueError("Message must be 1000 characters or less")
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
-    if check_token_in_channel(token, channel_id) == False:
+    if check_token_in_channel(token, channel['channel_id']) == False:
         raise AccessError("Token not in channel")
     if len(new_message) <= 0 or new_message.isspace() == True:
         raise ValueError("Message must contain a nonspace character")
@@ -106,14 +107,14 @@ def message_edit(token, message_id, new_message):
     message["message"] = new_message
 
 def message_react(token, message_id, react_id):
-    message_info = find_message_info(message_id)
-    if message_info == None:
+    info = find_message_info(message_id)
+    if info == None:
         raise ValueError("Message ID is invalid")
-    channel_id = message_info["channel_id"]
-    message = message_info["message"]
+    message = info['message']
+    channel = info['channel']
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
-    if check_token_in_channel(token, channel_id) == False:
+    if check_token_in_channel(token, channel['channel_id']) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
     if react_id not in valid_reacts:
@@ -124,45 +125,44 @@ def message_react(token, message_id, react_id):
         if react["react_id"] == react_id:
             react["u_ids"].append(uid)
             return
-    # is_this_user_reacted reacted doesn't make much sense to me
-    # Paticularly why we need it, and who the mysterious "Authorised User" is
     message["reacts"].append({
         "react_id": react_id,
-        "u_ids": [uid],
-        "is_this_user_reacted": True
+        "u_ids": [uid]
     })
     
 def message_unreact(token, message_id, react_id):
-    message_info = find_message_info(message_id)
-    if message_info == None:
+    info = find_message_info(message_id)
+    if info == None:
         raise ValueError("Message ID is invalid")
-    channel_id = message_info["channel_id"]
-    message = message_info["message"]
+    message = info['message']
+    channel = info['channel']
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
-    if check_token_in_channel(token, channel_id) == False:
+    if check_token_in_channel(token, channel['channel_id']) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
     if react_id not in valid_reacts:
         raise ValueError("Not a valid react_id")
-    if not has_user_reacted(uid, react_id, message):
-        raise ValueError("Haven't reacted")
     for react in message['reacts']:
         if react["react_id"] == react_id:
-            react["u_ids"].remove(uid)
-            if react["u_ids"] == []:
-                message["reacts"].remove(react)
-            return
+            for user in react["u_ids"]:
+                if user == uid:
+                    react["u_ids"].remove(uid)
+                    if react["u_ids"] == []:
+                        message["reacts"].remove(react)
+                    return
+            break
+    raise ValueError("Haven't reacted")
     
 def message_pin(token, message_id):
-    message_info = find_message_info(message_id)
-    if message_info == None:
+    info = find_message_info(message_id)
+    if info == None:
         raise ValueError("Message ID is invalid")
-    channel_id = message_info["channel_id"]
-    message = message_info["message"]
+    message = info['message']
+    channel = info['channel']
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
-    if check_token_in_channel(token, channel_id) == False:
+    if check_token_in_channel(token, channel['channel_id']) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
     if message["u_id"] != uid and get_user_app_permission(uid) == 3:
@@ -172,14 +172,14 @@ def message_pin(token, message_id):
     message["is_pinned"] = True
     
 def message_unpin(token, message_id):
-    message_info = find_message_info(message_id)
-    if message_info == None:
+    info = find_message_info(message_id)
+    if info == None:
         raise ValueError("Message ID is invalid")
-    channel_id = message_info["channel_id"]
-    message = message_info["message"]
+    message = info['message']
+    channel = info['channel']
     if check_valid_token(token) == False:
         raise AccessError("Token is invalid")
-    if check_token_in_channel(token, channel_id) == False:
+    if check_token_in_channel(token, channel['channel_id']) == False:
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
     if message["u_id"] != uid and get_user_app_permission(uid) == 3:
