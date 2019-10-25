@@ -84,7 +84,7 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     
     image = Image.open(requests.get(str(img_url), stream=True).raw)
     imgX = image.size[0]
-    imgX = image.size[1]
+    imgY = image.size[1]
     if x_start > imgX or x_end > imgX:
         raise ValueError("Invalid x_dimension")
     
