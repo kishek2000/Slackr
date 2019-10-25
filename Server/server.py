@@ -7,6 +7,8 @@ sys.path.append('/Server/functions')
 from functions.auth_functions import *
 from functions.channel_functions import *
 from functions.user_functions import *
+from functions.standup_functions import *
+from functions.search_function import *
 from functions.Errors import *
 from functions.message_functions import *
 
@@ -395,6 +397,22 @@ def start_send():
         
     except AccessError as error:
         return {'error': error}
+        
+#===============================================================================#
+#=================================    SEARCH    ================================#
+#===============================================================================#
+
+@APP.route('/search', methods=['GET'])
+def get_search():
+        
+    token = request.args.get('token')
+    query_str = request.args.get('query_str')
+    try:
+        returning_dict = search(token, query_str):
+        return dumps(returning_dict)
+    except ValueError as error:
+        print(error)
+        return {'error': error}        
     
 #===============================================================================#
 #=================================     MAIN     ================================#
