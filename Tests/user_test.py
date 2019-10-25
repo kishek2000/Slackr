@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.append('Server/')
+sys.path.append('Server/functions/')
 from functions.user_functions import *
 from functions.auth_functions import auth_register
 from functions.helper_functions import reset_data
