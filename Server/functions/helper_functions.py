@@ -111,6 +111,13 @@ def check_valid_handle(handle_str):
         if handle_str == user['handle_str']:
             return True
     return False 
+    
+def get_handler(email):
+    for user in list_of_users:
+        if user['email'] == email:
+            return user['handle_str']
+    
+    
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#

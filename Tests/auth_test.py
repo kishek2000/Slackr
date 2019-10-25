@@ -115,7 +115,8 @@ def test_auth_login_valid_u_id_generated(registered_user_1):
 #################################################################################        
 
 def test_auth_logout_active_token_provided(registered_user_1):
-
+    
+    
     user_token = registered_user_1['token']
     
     #Check if the token is valid
@@ -155,18 +156,30 @@ def test_auth_logout_inactive_token_provided(registered_user_2):
 #################################################################################    
 
 def test_auth_register_correct_details():
-
-    email = "AshKetchum1@yahoo.com"
-    password = "IWann@BeTheVeryBest123"
-    name_first = "Ash"
-    name_last = "Ketchum"
     
+    reset_data()
+    
+    email_1 = "AshKetchum1@yahoo.com"
+    password_1 = "IWann@BeTheVeryBest123"
+    name_first_1 = "Ash"
+    name_last_1 = "Ketchum"
+      
+    email_2 = "GaryOak@yahoo.com"
+    password_2 = "I@mTheVeryBest123"
+    name_first_2 = "Gary"
+    name_last_2 = "Oak"  
+       
     #Should produce no errors
-    auth_register(email, password, name_first, name_last)
+    user_details_1 = auth_register(email_1, password_1, name_first_1, name_last_1)
+    user_details_2 = auth_register(email_2, password_2, name_first_2, name_last_2)
     
+    assert(get_user_app_permission(user_details_1['u_id']) == 1)
+    assert(get_user_app_permission(user_details_2['u_id']) == 3)
     
 def test_auth_register_invalid_email():
-
+    
+    reset_data()
+    
     email = "AshKetchum2@yaheecom"
     password = "IWann@BeTheVeryBest123"
     name_first = "Ash"
@@ -178,7 +191,7 @@ def test_auth_register_invalid_email():
 
 
 def test_auth_register_email_already_used(registered_user_1):
-
+    
     email = "PokemonMaster@gmail.com"
     password = "IWann@BeTheVeryBest123"
     name_first = "Ash"
@@ -191,6 +204,8 @@ def test_auth_register_email_already_used(registered_user_1):
 
 def test_auth_register_invalid_password():
 
+    reset_data()
+    
     email = "AshKetchum3@yahoo.com"
     password = "ILoveGary"
     name_first = "Ash"
@@ -202,6 +217,8 @@ def test_auth_register_invalid_password():
 
 def test_auth_register_first_name_too_long():
 
+    reset_data()
+    
     email = "AshKetchum4@yahoo.com"
     password = "IWann@BeTheVeryBest123"
     name_first = "Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas Onyetenyevwe Ugwemubwem Ossas"
@@ -214,7 +231,9 @@ def test_auth_register_first_name_too_long():
 
 def test_auth_register_last_name_too_long():
 
-    email = "AshKetchum5@yaheecom"
+    reset_data()
+    
+    email = "AshKetchum5@gmail.com"
     password = "IWann@BeTheVeryBest123"
     name_first = "Ash"
     name_last = "supercalifragilisticexpialidocious supercalifragilisticexpialidocious"
@@ -226,7 +245,9 @@ def test_auth_register_last_name_too_long():
 
 def test_auth_register_first_and_last_name_too_long():
 
-    email = "AshKetchum6@yaheecom"
+    reset_data()
+    
+    email = "AshKetchum6@yahoo.com"
     password = "IWann@BeTheVeryBest123"
     name_first = "Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas Onyetenyevwe Ugwemubwem Ossas"
     name_last = "supercalifragilisticexpialidocious supercalifragilisticexpialidocious"
@@ -234,10 +255,61 @@ def test_auth_register_first_and_last_name_too_long():
     #Should produce ValueError as the first and last name are greater than 50 characters
     with pytest.raises(ValueError):
         auth_register(email, password, name_first, name_last) 
-        
+
+def test_auth_register_first_name_long_handler():
+
+    reset_data()
+    
+    email = "AshKetchum6@yahoo.com"
+    password = "IWann@BeTheVeryBest123"
+    name_first = "UvuvwevwevweOsassz"
+    name_last = "Super"
+      
+    user_details = auth_register(email, password, name_first, name_last)         
+    
+    #obtain handler             
+    handle_str = get_handler(email)
+            
+    assert(check_valid_handle(handle_str) == True)  
+
+
+def test_auth_register_last_name_long_handler():
+
+    reset_data()
+    
+    email = "AshKetchum6@yahoo.com"
+    password = "IWann@BeTheVeryBest123"
+    name_first = "Super"
+    name_last = "UvuvwevwevweOsasszkilo"
+      
+    user_details = auth_register(email, password, name_first, name_last)         
+    
+    #obtain handler             
+    handle_str = get_handler(email)
+            
+    assert(check_valid_handle(handle_str) == True)
+    
+def test_auth_register_first_and_last_name_long_handler():
+
+    reset_data()
+    
+    email = "AshKetchum6@yahoo.com"
+    password = "IWann@BeTheVeryBest123"
+    name_first = "Supercalifragilisticexpialidocious"
+    name_last = "UvuvwevwevweOsassz"
+      
+    user_details = auth_register(email, password, name_first, name_last)         
+    
+    #obtain handler             
+    handle_str = get_handler(email)
+            
+    assert(check_valid_handle(handle_str) == True)    
+
              
 def test_auth_register_valid_token_generated():
-    
+   
+    reset_data()
+     
     email = "AshKetchum7@yahoo.com"
     password = "IWann@BeTheVeryBest123"
     name_first = "Ash"
@@ -251,6 +323,8 @@ def test_auth_register_valid_token_generated():
     assert(check_valid_token(user_token) == True)    
  
 def test_auth_register_valid_u_id_generated():  
+    
+    reset_data()
     
     email = "AshKetchum8@yahoo.com"
     password = "IWann@BeTheVeryBest123"
