@@ -255,9 +255,9 @@ def find_message_info(message_id):
     for channel in all_channels_messages:
         for message in channel["messages"]:
             if message["message_id"] == message_id:
-                return {"channel_id": channel["channel_id"], "message": message}
+                return {"channel": channel, "message": message}
     return None
-    
+
 def has_user_reacted(uid, react_id, message):
     for react in message["reacts"]:
         if react_id == react["react_id"]:
@@ -270,16 +270,7 @@ def generate_message_id():
     global number_of_messages
     number_of_messages += 1
     return number_of_messages
-    
-def remove_message_from_channel(message_id, channel_id):
-    for channel in all_channels_messages:
-        if channel["channel_id"] == channel_id:
-            for message in channel["messages"]:
-                if message["message_id"] == message_id:
-                    channel["messages"].remove(message)
-                    channel["total_messages"] -= 1
-            break
-    return None
+
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
