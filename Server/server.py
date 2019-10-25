@@ -215,7 +215,7 @@ def create_channel():
 @APP.route('/message/send', methods=['POST'])
 def post_message_send():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
+    channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
     try:
         message_id = message_send(token, channel_id, message)
@@ -305,12 +305,12 @@ def post_message_unpin():
 def get_user_profile():
         
     token = request.args.get('token')
-    u_id = request.args.get('u_id')
-    channel_id = int(request.args.get('channel_id') )
+    u_id = int(request.args.get('u_id'))
     try:
-        returning_dict = user_profile(token, channel_id)
+        returning_dict = user_profile(token, u_id)
         return dumps(returning_dict)
     except ValueError as error:
+        print(error)
         return {'error': error}
         
 @APP.route("/user/profile/setname", methods=['PUT'])
