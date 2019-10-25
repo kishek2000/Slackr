@@ -1,10 +1,10 @@
 import pytest
 import sys
-sys.path.insert(1, '../Server/functions/')
-from user_functions import *
-from auth_functions import auth_register
-from helper_functions import reset_data
-from Errors import *
+sys.path.append('Server/')
+from functions.user_functions import *
+from functions.auth_functions import auth_register
+from functions.helper_functions import reset_data
+from functions.Errors import *
 
 
 @pytest.fixture
@@ -185,10 +185,11 @@ def test_user_profile_sethandle_no_input(register_account):
 
 #This tests to see if the user handle already exists
 def test_user_profile_sethandle_already_exists(register_account):
+    list_of_users.append({'handle_str': 'RajeshKumar', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'app_permission_id': 2})
     token = register_account['token']
     #Should raise an error as we cannot have two of the same handles
     with pytest.raises(ValueError):
-        user_profile_sethandle(token, 'something that already exists')
+        user_profile_sethandle(token, 'RajeshKumar')
 
 #################################################################################
 ##                  TESTING user_profiles_uploadphoto                          ##
@@ -217,3 +218,15 @@ def test_user_profiles_uploadphoto_wrong_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
         user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 2864, 1861, 0, 0)
+        
+# This function passes x coordinates that are larger than the photo
+def test_user_profiles_uploadphoto_larger_X_dimensions(register_account):
+    token = register_account['token']
+    with pytest.raises(ValueError):
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 2865, 0, 2867, 1861)
+
+# This function passes y coordinates that are larger than the photo
+def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
+    token = register_account['token']
+    with pytest.raises(ValueError):
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 1862, 2864, 1865)

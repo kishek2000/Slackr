@@ -72,6 +72,9 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
 
     if not check_valid_token(token):
         raise AccessError("Invalid token")
+    
+    if x_start > x_end or y_start > y_end:
+        raise ValueError("Invalid dimensions")
 
     # https://auth0.com/blog/image-processing-in-python-with-pillow/
     #need to handle if image doesnt exist
