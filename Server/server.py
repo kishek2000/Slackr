@@ -226,7 +226,7 @@ def post_message_send():
 @APP.route('/message/sendlater', methods=['POST'])
 def post_message_sendlater():
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
+    channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
     time_sent = request.form.get('time_sent')
     try:
@@ -238,7 +238,7 @@ def post_message_sendlater():
 @APP.route('/message/remove', methods=['DELETE'])
 def post_message_remove():
     token = request.form.get('token')
-    message_id = request.form.get('message_id')
+    message_id = int(request.form.get('message_id'))
     try:
         message_remove(token, message_id)
         return dumps({})
@@ -248,7 +248,7 @@ def post_message_remove():
 @APP.route('/message/edit', methods=['PUT'])
 def put_message_edit():
     token = request.form.get('token')
-    message_id = request.form.get('message_id')
+    message_id = int(request.form.get('message_id'))
     message = request.form.get('message')
     try:
         message_edit(token, message_id, message)
@@ -259,8 +259,8 @@ def put_message_edit():
 @APP.route('/message/react', methods=['POST'])
 def post_message_react():
     token = request.form.get('token')
-    message_id = request.form.get('message_id')
-    react_id = request.form.get('react_id')
+    message_id = int(request.form.get('message_id'))
+    react_id = int(request.form.get('react_id'))
     try:
         message_react(token, message_id, react_id)
         return dumps({})
@@ -270,8 +270,8 @@ def post_message_react():
 @APP.route('/message/unreact', methods=['POST'])
 def post_message_unreact():
     token = request.form.get('token')
-    message_id = request.form.get('message_id')
-    react_id = request.form.get('react_id')
+    message_id = int(request.form.get('message_id'))
+    react_id = int(request.form.get('react_id'))
     try:
         message_unreact(token, message_id, react_id)
         return dumps({})
@@ -281,7 +281,7 @@ def post_message_unreact():
 @APP.route('/message/pin', methods=['POST'])
 def post_message_pin():
     token = request.form.get('token')
-    message_id = request.form.get('message_id')
+    message_id = int(request.form.get('message_id'))
     try:
         message_pin(token, message_id)
         return dumps({})
@@ -291,7 +291,7 @@ def post_message_pin():
 @APP.route('/message/unpin', methods=['POST'])
 def post_message_unpin():
     token = request.form.get('token')
-    message_id = request.form.get('message_id')
+    message_id = int(request.form.get('message_id'))
     try:
         message_unpin(token, message_id)
         return dumps({})
