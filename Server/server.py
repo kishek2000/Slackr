@@ -7,7 +7,9 @@ sys.path.append('/Server/functions')
 from functions.auth_functions import *
 from functions.channel_functions import *
 from functions.user_functions import *
+from functions.Errors import *
 from functions.message_functions import *
+
 
 APP = Flask(__name__)
 CORS(APP)
@@ -355,7 +357,44 @@ def post_user_uploadphoto():
         return dumps({})
     except ValueError as error:
         return {'error': error}
+        
+#===============================================================================#
+#=================================   STANDUP    ================================#
+#===============================================================================#
 
+@APP.route('/standup/start', methods=['POST'])
+def start_standup():
+    
+    token = request.form.get('token')
+    channel_id = request.form.get('channel_id')
+        
+    try:
+        standup_end_time = standup_start(token, channel_id)
+        return dumps({'time_finish' : standup_end_time})
+        
+    except ValueError as error:
+        return {'error': error}
+        
+    except AccessError as error:
+        return {'error': error}
+
+@APP.route('/standup/send', methods=['POST'])
+def start_send():
+    
+    token = request.form.get('token')
+    channel_id = request.form.get('channel_id')
+    message = request.form.get('message')
+    
+    try:
+        standup_start(token, channel_id, message)
+        return dumps({})
+        
+    except ValueError as error:
+        return {'error': error}
+        
+    except AccessError as error:
+        return {'error': error}
+    
 #===============================================================================#
 #=================================     MAIN     ================================#
 #===============================================================================#
