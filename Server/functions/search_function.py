@@ -1,8 +1,10 @@
+import sys
+sys.path.append("/Server/functions/")
 from functions.helper_functions import *
 
 def search(token, query_str):
     
-    foundMessages = []
+    foundMessages = {"messages": []}
     #Checking for valid query_str
     if query_str == '':
         raise ValueError("Invalid query_str")
@@ -17,6 +19,6 @@ def search(token, query_str):
                             message_list = message_channel_id['messages']
                             for message in message_list:
                                 if query_str in message['message']:
-                                    foundMessages.append({"channel_id": current_channel_id, "message_id": message['message_id'], "message": message['message']})
+                                    foundMessages['messages'].append(message['message'])
     return foundMessages
 
