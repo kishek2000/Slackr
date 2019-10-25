@@ -228,11 +228,12 @@ def post_message_sendlater():
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
-    time_sent = request.form.get('time_sent')
+    time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
     try:
         message_id = message_sendlater(token, channel_id, message, time_sent)
         return dumps({'message_id': message_id})
     except ValueError as error:
+        print(error)
         return {'error': error}
 
 @APP.route('/message/remove', methods=['DELETE'])
@@ -305,12 +306,12 @@ def post_message_unpin():
 def get_user_profile():
         
     token = request.args.get('token')
-    u_id = request.args.get('u_id')
-    channel_id = int(request.args.get('channel_id') )
+    u_id = int(request.args.get('u_id'))
     try:
-        returning_dict = user_profile(token, channel_id)
+        returning_dict = user_profile(token, u_id)
         return dumps(returning_dict)
     except ValueError as error:
+        print(error)
         return {'error': error}
         
 @APP.route("/user/profile/setname", methods=['PUT'])
