@@ -303,6 +303,7 @@ def post_message_unpin():
 def get_user_profile():
         
     token = request.args.get('token')
+    u_id = request.args.get('u_id')
     channel_id = int(request.args.get('channel_id') )
     try:
         returning_dict = user_profile(token, channel_id)
