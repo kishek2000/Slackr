@@ -36,7 +36,7 @@ def message_send(token, channel_id, message):
             })
     return message_id
 
-def message_send_later_send_message(token, channel_id, message, message_id):
+def message_sendlater_send_message(token, channel_id, message, message_id):
     uid = get_user_from_token(token)
     for channel in all_channels_messages:
         if channel["channel_id"] == channel_id:
@@ -50,7 +50,7 @@ def message_send_later_send_message(token, channel_id, message, message_id):
                 "is_pinned": False
             })
 
-def message_send_later(token, channel_id, message, time_sent):
+def message_sendlater(token, channel_id, message, time_sent):
     # Might remove all these checks (keeping the time one)
     # Because they just get done in the message_function
     if len(message) > 1000:
@@ -67,7 +67,7 @@ def message_send_later(token, channel_id, message, time_sent):
     if time_sent < time.time():
         raise ValueError("Time is invalid")
     message_id = generate_message_id()
-    t = threading.Timer(time_sent - time.time(), message_send_later_send_message, [token, channel_id, message, message_id])
+    t = threading.Timer(time_sent - time.time(), message_sendlater_send_message, [token, channel_id, message, message_id])
     t.start()
     return message_id
     

@@ -206,7 +206,94 @@ def create_channel():
         return dumps({'channel_id': new_channel_id})
     except ValueError as error:
         return {'error': error}
+#===============================================================================#
+#===============================     MESSAGES     ==============================#
+#===============================================================================#
+@APP.route('/message/send', methods=['POST'])
+def post_message_send():
+    token = request.form.get('token')
+    channel_id = request.form.get('channel_id')
+    message = request.form.get('message')
+    try:
+        message_id = message_send(token, channel_id, message)
+        return dumps({'message_id': message_id})
+    except ValueError as error:
+        return {'error': error}
 
+@APP.route('/message/sendlater', methods=['POST'])
+def post_message_sendlater():
+    token = request.form.get('token')
+    channel_id = request.form.get('channel_id')
+    message = request.form.get('message')
+    time_sent = request.form.get('time_sent')
+    try:
+        message_id = message_sendlater(token, channel_id, message, time_sent)
+        return dumps({'message_id': message_id})
+    except ValueError as error:
+        return {'error': error}
+
+@APP.route('/message/remove', methods=['DELETE'])
+def post_message_remove():
+    token = request.form.get('token')
+    message_id = request.form.get('message_id')
+    try:
+        message_remove(token, message_id)
+        return dumps({})
+    except ValueError as error:
+        return {'error': error}
+        
+@APP.route('/message/edit', methods=['PUT'])
+def put_message_edit():
+    token = request.form.get('token')
+    message_id = request.form.get('message_id')
+    message = request.form.get('message')
+    try:
+        message_edit(token, message_id, message)
+        return dumps({})
+    except ValueError as error:
+        return {'error': error}
+
+@APP.route('/message/react', methods=['POST'])
+def post_message_react():
+    token = request.form.get('token')
+    message_id = request.form.get('message_id')
+    react_id = request.form.get('react_id')
+    try:
+        message_react(token, message_id, react_id)
+        return dumps({})
+    except ValueError as error:
+        return {'error': error}
+
+@APP.route('/message/unreact', methods=['POST'])
+def post_message_unreact():
+    token = request.form.get('token')
+    message_id = request.form.get('message_id')
+    react_id = request.form.get('react_id')
+    try:
+        message_unreact(token, message_id, react_id)
+        return dumps({})
+    except ValueError as error:
+        return {'error': error}
+
+@APP.route('/message/pin', methods=['POST'])
+def post_message_pin():
+    token = request.form.get('token')
+    message_id = request.form.get('message_id')
+    try:
+        message_pin(token, message_id)
+        return dumps({})
+    except ValueError as error:
+        return {'error': error}
+
+@APP.route('/message/unpin', methods=['POST'])
+def post_message_unpin():
+    token = request.form.get('token')
+    message_id = request.form.get('message_id')
+    try:
+        message_unpin(token, message_id)
+        return dumps({})
+    except ValueError as error:
+        return {'error': error}
 #===============================================================================#
 #=================================     USER     ================================#
 #===============================================================================#
