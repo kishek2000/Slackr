@@ -89,19 +89,8 @@ def auth_register(email, password, name_first, name_last):
         list_of_users[-1]["app_permission_id"] = 1
     else:
         list_of_users[-1]["app_permission_id"] = 3
-    '''
-    for user in list_of_users:
-        if user["email"] == email:
-            user["token"] = generate_token(email)
-            user["u_id"] = generate_u_id()
-            
-            #Assign default app permission_id
-            if user['u_id'] == 1:
-                user["app_permission_id"] = 1
-            else:
-                user["app_permission_id"] = 3
-            break 
-            '''       
+
+    
     return {'u_id' : list_of_users[-1]["u_id"], 'token': list_of_users[-1]["token"]}
     
 def auth_passwordreset_request(reset_email):
@@ -148,16 +137,3 @@ def auth_passwordreset_reset(reset_code, new_password):
     raise ValueError("Invalid Reset Code")
 
       
-#auth_login("rajeshkumar@gmail.com", "V@lidPassword123") 
-#auth_register("shoandesai@gmail.com", "V@lidPassword123", "Shoan", "Desai")      
-#auth_register("santaIsRipped@gmail.com", "V@lidPassword123", "Santa", "Claus")    
-#auth_login("santaIsRipped@gmail.com", "V@lidPassword123")   
-#auth_logout(generate_token("santaIsRipped@gmail.com")) 
-#auth_passwordreset_request("shoandesai@gmail.com")
- 
-# def reset_code_timer(reset_email):
-#     sleep(24*60*60)
-#     for user in list_of_users:
-#         if user['email'] == reset_email:
-#             if user['reset_code'] != None:
-#                 user['reset_code'] == None

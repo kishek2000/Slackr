@@ -30,7 +30,7 @@ number_of_users = 1
 def get_user_details(token):
     for user in list_of_users:
         if user['token'] == token:
-            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email']}
+            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code']}
     return {}
 
 def generate_token(email):   
@@ -52,8 +52,6 @@ def check_valid_u_id(u_id):
     return False
 
 def check_valid_token(token):
-    if token == -1:
-        return False
     for user in list_of_users:
         if token == user['token']:
             return True
@@ -171,11 +169,7 @@ def generate_reset_code():
     reset_code = random.randint(1,10000000)   
     return str(reset_code)
   
-  
-def get_reset_code_from_user(email):
-    for user in list_of_users:
-        if email == user['email']:
-            return user['reset_code']    
+
     
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#

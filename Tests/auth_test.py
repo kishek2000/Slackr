@@ -338,6 +338,11 @@ def test_auth_register_valid_u_id_generated():
     
     assert(check_valid_u_id(user_u_id) == True)       
 
+def test_auth_register_invalid_u_id_generated():  
+       
+    #There are no negative   
+    assert(check_valid_u_id(-1) == False)  
+ 
     
 #################################################################################
 ##                    TESTING auth_passwordreset_request                       ##
@@ -378,7 +383,7 @@ def test_auth_passwordreset_reset_correct_details(registered_user_1):
     #Registered user requests a reset code
     auth_passwordreset_request("PokemonMaster@gmail.com")
 
-    reset_code = get_reset_code_from_user("PokemonMaster@gmail.com")
+    reset_code = get_user_details(registered_user_1['token'])['reset_code']
     
     new_password = "ThisIsAV@lidNewPassword123"
     
@@ -405,7 +410,7 @@ def test_auth_passwordreset_reset_invalid_password(registered_user_1):
     #Registered user requests a reset code
     auth_passwordreset_request("PokemonMaster@gmail.com")
 
-    reset_code = get_reset_code_from_user("PokemonMaster@gmail.com")
+    reset_code = get_user_details(registered_user_1['token'])['reset_code']
     
     new_password = "password"
     
