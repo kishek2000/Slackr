@@ -304,3 +304,41 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
+    
+#===============================================================================#
+#=============================== STANDUP HELPERS ===============================#
+#===============================================================================#  
+
+def check_standup_active(channel_id):
+
+    for channel in all_channels_messages:
+        if channel_id == channel['channel_id']:
+            if channel['standup_active'] == True:
+                return True
+                
+    return False
+    
+    
+def start_standup(channel_id):
+
+    for channel in all_channels_messages:
+        if channel_id == channel['channel_id']:
+            if channel['standup_active'] == False:
+                channel['standup_active'] = True
+                    
+def end_standup(channel_id):
+
+    for channel in all_channels_messages:
+        if channel_id == channel['channel_id']:
+            if channel['standup_active'] == True:
+                channel['standup_active'] = False    
+                
+                
+def add_to_standup_queue(channel_id, message):
+
+    for channel in all_channels_messages:
+        if channel_id == channel['channel_id']:
+            channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
+            
+            
+                           

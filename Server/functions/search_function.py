@@ -12,3 +12,4 @@ def search(token, query_str):
                         if query_str in message["message"]:
                             foundMessages.append({"channel_id": channel["channel_id"], "message_id": message["message_id"], "message": message}
     return foundMessages
+

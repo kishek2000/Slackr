@@ -17,22 +17,19 @@ def standup_start(token, channel_id):
         raise AccessError("User Not In Channel")    
         
   	#Check if another standup is active
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id'] and channel['standup_active'] == True:
-            
-            raise ValueError("Channel Standup Already Active")
-      		
-            #If no errors raised then start the startup
-        elif channel_id == channel['channel_id'] and channel['standup_active'] == False:
-            
-            channel['standup_active'] = True
-	
-            #Wait for 15 minutes then end the startup
-            t = threading.Timer(60, end_standup_timer, [channel_id])
-            t.start()
-    
-            return datetime.datetime.now() + datetime.timedelta(minutes = 1)     		
-    
+  	
+    if check_standup_active(channel_id) == True:
+        raise ValueError("Channel Standup Already Active")
+  	    
+  	#If no errors raised then start the startup
+    start_standup(channel_id)    
+  	
+  	#Wait for 15 minutes then end the startup
+    t = threading.Timer(60, end_standup, [channel_id])
+    t.start()
+
+    return datetime.datetime.now() + datetime.timedelta(minutes = 1)     		
+ 
         		
 def standup_send(token, channel_id, message):
 
@@ -46,10 +43,8 @@ def standup_send(token, channel_id, message):
     
     #Check if standup is active in the channel
     
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            if channel['standup_active'] == False:
-                raise ValueError("Channel Standup Inactive")
+    if check_standup_active(channel_id) == False:
+        raise ValueError("Channel Standup Inactive")
     
     #Check if user is in the channel
     
@@ -59,14 +54,9 @@ def standup_send(token, channel_id, message):
       
     #Otherwise queue message to a standup buffer 
     
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
-            
-def end_standup_timer(channel_id):
+    add_to_standup_queue(channel_id, message)
+        
     
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            channel['standup_active'] = False
-     
+          
+
             
