@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+var BACKEND_PORT = 5002;
+=======
+var BACKEND_PORT = 5001;
+
+>>>>>>> 38579f2360d3199b6d6b903615a960cde2550fce

@@ -7,6 +7,7 @@ sys.path.append('/Server/functions')
 from functions.auth_functions import *
 from functions.channel_functions import *
 from functions.user_functions import *
+from functions.message_functions import *
 
 APP = Flask(__name__)
 CORS(APP)

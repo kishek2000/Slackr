@@ -128,8 +128,7 @@ def message_react(token, message_id, react_id):
     # Paticularly why we need it, and who the mysterious "Authorised User" is
     message["reacts"].append({
         "react_id": react_id,
-        "u_ids": [uid],
-        "is_this_user_reacted": True
+        "u_ids": [uid]
     })
     
 def message_unreact(token, message_id, react_id):
@@ -145,14 +144,16 @@ def message_unreact(token, message_id, react_id):
     uid = get_user_from_token(token)
     if react_id not in valid_reacts:
         raise ValueError("Not a valid react_id")
-    if not has_user_reacted(uid, react_id, message):
-        raise ValueError("Haven't reacted")
     for react in message['reacts']:
         if react["react_id"] == react_id:
-            react["u_ids"].remove(uid)
-            if react["u_ids"] == []:
-                message["reacts"].remove(react)
-            return
+            for user in react["u_ids"]:
+                if user == uid:
+                    react["u_ids"].remove(uid)
+                    if react["u_ids"] == []:
+                        message["reacts"].remove(react)
+                    return
+            break
+    raise ValueError("Haven't reacted")
     
 def message_pin(token, message_id):
     message_info = find_message_info(message_id)

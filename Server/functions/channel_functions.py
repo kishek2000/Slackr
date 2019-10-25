@@ -58,6 +58,13 @@ def channel_messages(token, channel_id, start):
                 ## Let us assume for now that the messages will be sorted correctly by time of sending, 
                 ## and that the first index (0) will be the most recent message
                 increment = 50
+                uid = get_user_from_token(token)
+                for message in messages["messages"][start:start+increment]:
+                    for react in message['reacts']:
+                        if uid in react["u_ids"]:
+                            react["is_this_user_reacted"] = True
+                        else:
+                            react["is_this_user_reacted"] = False
                 if start + increment == messages['total_messages'] or messages['total_messages'] < increment:
                     end = -1
                     increment = messages['total_messages']
