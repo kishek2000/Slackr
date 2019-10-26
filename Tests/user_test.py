@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.append('Server/functions/')
+sys.path.append('Server/')
 from functions.user_functions import *
 from functions.auth_functions import auth_register
 from functions.helper_functions import reset_data
@@ -10,6 +10,7 @@ from functions.Errors import *
 @pytest.fixture
 def register_account():
     reset_data()
+    auth_register('example2@gmail.com', 'P@ssword123', 'Epic', 'Style')
     return auth_register('example@gmail.com', 'Go0dPa>sword', 'dan', 'man')
     
 #################################################################################
@@ -202,6 +203,11 @@ def test_user_profiles_uploadphoto_no_return(register_account):
     token = register_account['token']
     assert user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 0, 2864, 1861) == None
 '''
+# This function tests that the code throws no errors
+def test_user_profiles_uploadphoto_no_errors(register_account):
+    token = register_account['token']
+    user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 0, 2864, 1861)
+    
 def test_user_profiles_upload_photo_invalid_token(register_account):
     token = 'wrong token'
     with pytest.raises(AccessError):
@@ -230,3 +236,5 @@ def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
         user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 1862, 2864, 1865)
+
+reset_data()

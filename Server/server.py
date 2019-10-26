@@ -7,6 +7,9 @@ sys.path.append('/Server/functions')
 from functions.auth_functions import *
 from functions.channel_functions import *
 from functions.user_functions import *
+from functions.standup_functions import *
+from functions.search_function import *
+from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
 
@@ -228,11 +231,13 @@ def post_message_sendlater():
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
-    time_sent = request.form.get('time_sent')
+    #time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
+    time_sent = int(request.form.get('time_sent'))/1000.0
     try:
         message_id = message_sendlater(token, channel_id, message, time_sent)
         return dumps({'message_id': message_id})
     except ValueError as error:
+        print(error)
         return {'error': error}
 
 @APP.route('/message/remove', methods=['DELETE'])
@@ -305,12 +310,12 @@ def post_message_unpin():
 def get_user_profile():
         
     token = request.args.get('token')
-    u_id = request.args.get('u_id')
-    channel_id = int(request.args.get('channel_id') )
+    u_id = int(request.args.get('u_id'))
     try:
-        returning_dict = user_profile(token, channel_id)
+        returning_dict = user_profile(token, u_id)
         return dumps(returning_dict)
     except ValueError as error:
+        print(error)
         return {'error': error}
         
 @APP.route("/user/profile/setname", methods=['PUT'])
@@ -394,6 +399,41 @@ def start_send():
         
     except AccessError as error:
         return {'error': error}
+        
+#===============================================================================#
+#=================================    SEARCH    ================================#
+#===============================================================================#
+
+@APP.route('/search', methods=['GET'])
+def get_search():
+        
+    token = request.args.get('token')
+    query_str = request.args.get('query_str')
+    try:
+        returning_dict = search(token, query_str)
+        return dumps(returning_dict)
+    except ValueError as error:
+        print(error)
+        return {'error': error}   
+        
+#===============================================================================#
+#=================================    ADMIN     ================================#
+#===============================================================================#
+
+@APP.route('/admin/userpermission/change', methods=['POST'])
+def post_admin_userpermission_change():
+        
+    
+    token = request.form.get('token')
+    u_id = request.form.get('u_id')
+    permission_id = request.form.get('permission_id')
+        
+    try:
+        returnedDict = admin_userpermission_change(token, u_id, permission_id)
+        return dumps({})
+        
+    except ValueError as error:
+        return {'error': error}     
     
 #===============================================================================#
 #=================================     MAIN     ================================#
