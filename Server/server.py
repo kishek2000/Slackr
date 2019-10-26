@@ -9,6 +9,7 @@ from functions.channel_functions import *
 from functions.user_functions import *
 from functions.standup_functions import *
 from functions.search_function import *
+from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
 
@@ -413,7 +414,26 @@ def get_search():
         return dumps(returning_dict)
     except ValueError as error:
         print(error)
-        return {'error': error}        
+        return {'error': error}   
+        
+#===============================================================================#
+#=================================    ADMIN     ================================#
+#===============================================================================#
+
+@APP.route('/admin/userpermission/change', methods=['POST'])
+def post_admin_userpermission_change():
+        
+    
+    token = request.form.get('token')
+    u_id = request.form.get('u_id')
+    permission_id = request.form.get('permission_id')
+        
+    try:
+        returnedDict = admin_userpermission_change(token, u_id, permission_id)
+        return dumps({})
+        
+    except ValueError as error:
+        return {'error': error}     
     
 #===============================================================================#
 #=================================     MAIN     ================================#
