@@ -60,3 +60,5 @@ def test_search_returned_value_after_remove(register_account):
     message_remove(token, message_id)
     returned_search = search(token, 'hello')
     assert len(returned_search['messages']) == 0
+
+reset_data()
