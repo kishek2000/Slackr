@@ -30,7 +30,7 @@ number_of_users = 1
 def get_user_details(token):
     for user in list_of_users:
         if user['token'] == token:
-            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code']}
+            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id']}
     return {}
 
 def generate_token(email):   
