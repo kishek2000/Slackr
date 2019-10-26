@@ -3,9 +3,8 @@ import sys
 sys.path.append('Server/')
 from functions.user_functions import *
 from functions.auth_functions import auth_register
-from functions.helper_functions import reset_data
+from functions.helper_functions import reset_data, get_user_details
 from functions.Errors import *
-
 
 @pytest.fixture
 def register_account():
@@ -35,6 +34,10 @@ def test_user_profile_incorrect_return(register_account):
     u_id = register_account['u_id']
     dictionary = user_profile(token, u_id)
     assert dictionary['handle_str'] != 'dantheman'
+
+def test_user_profile_token_nonexistent(register_account):
+    returning_dictionary = get_user_details(-1)
+    assert returning_dictionary == {}
 
 #This tests that that u_id is incorrect
 def test_user_profile_invalid_id(register_account):

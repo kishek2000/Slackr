@@ -2,7 +2,7 @@ import pytest
 import sys
 sys.path.append('Server/')
 from functions.channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall
-from functions.helper_functions import reset_data, get_name_from_token, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions 
+from functions.helper_functions import reset_data, get_name_from_token, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions, check_token_in_channel, check_user_in_channel, change_user_channels_permission 
 from functions.auth_functions import auth_register
 from functions.message_functions import message_send
 from functions.Errors import AccessError
@@ -34,6 +34,10 @@ def tests_channel_invite_valid(setup):
 	## These are valid values, and hence should not produce errors:
 	channel_invite(token, channel_id_private, u_id)
 	channel_invite(token, channel_id_public, u_id)
+
+def tests_check_token_or_user_in_channel_fails(setup):
+	assert check_token_in_channel(setup[2], -1) == False
+	assert check_user_in_channel(setup[2], -1) == False
 
 def tests_channel_invite_channel_nonexisting(setup):
 	u_id = setup[1] ## u_id that is being invited to channel
@@ -81,7 +85,7 @@ def tests_channel_invite_token_invalid(setup):
 	u_id = setup[0] ## u_id that is being invited to channel
 	channel_id = setup[4]
 	token = -1
-
+	
 	## The token passed into the function does not correspond to any accessing user, 
 	## hence AccessError should occur;
 	with pytest.raises(AccessError):
@@ -165,9 +169,11 @@ def tests_channel_messages_valid(setup, add_messages_to_channel):
  
 	## This should produce no errors as all valid values:
 	returning_messages = channel_messages(token, channel_id_public, start)
-	for message in returning_messages['messages']:
-		if add_messages_to_channel[0] == message['message_id']:
-			assert message['message'] == "Hello here is a message."
+	assert returning_messages['messages'][0]['message'] == "Hello here is a message." 
+	assert returning_messages['messages'][1]['message'] == "Hello here is a second message." 
+
+def tests_channel_messages_total_invalid(setup):
+	assert get_total_channel_messages(-1) == {}
 
 def tests_channel_messages_empty(setup):
 	channel_id_public = setup[5] ## valid channel id
@@ -183,12 +189,10 @@ def tests_channel_messages_single_message(setup):
 	token = setup[2] ## valid token of member in channel
 	start = 0 ## only valid start index for a single message channel
 	
-	message_id = message_send(token, channel_id_public, "Hello here is a message.")
+	message_send(token, channel_id_public, "Hello here is a message.")
 	## This should produce no errors:
 	returning_messages = channel_messages(token, channel_id_public, start)
-	for message in returning_messages['messages']:
-		if message_id == message['message_id']:
-			assert message['message'] == "Hello here is a message."
+	assert returning_messages['messages'][0]['message'] == "Hello here is a message." 
 
 def tests_channel_messages_channel_nonexisting(setup):
 	channel_id = -1
@@ -539,6 +543,13 @@ def tests_channels_create_valid(setup):
 	## This should produce no errors:
 	assert channels_create(token_user_1, name_one, is_public) == get_channel_id_from_name(name_one) 
 
+def tests_channels_create_name(setup):
+	assert get_channel_id_from_name(-1) == {}
+
+def tests_channels_create_permissions_fail(setup):
+	assert change_user_app_permission(-1) == {}
+	assert change_user_channels_permission(-1) == {}
+
 def tests_channels_create_name_over_twenty(setup):
 	is_public = True ## doesnt matter
 	name = 'x'*21 ## adding on a 21 character string
@@ -558,3 +569,4 @@ def tests_channels_create_token_invalid(setup):
 		channels_create(token, name, is_public)
 
 ## END OF CHANNEL TESTS
+reset_data()
