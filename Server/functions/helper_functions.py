@@ -324,7 +324,8 @@ def end_standup(channel_id):
         if channel_id == channel['channel_id']:
             if channel['standup_active'] == True:
                 channel['standup_active'] = False    
-                
+    
+   return             
                 
 def add_to_standup_queue(channel_id, message):
 
@@ -332,5 +333,5 @@ def add_to_standup_queue(channel_id, message):
         if channel_id == channel['channel_id']:
             channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
             
-            
+    return     
                            
