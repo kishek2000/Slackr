@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/Server/functions/")
-from .helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, all_channels_messages, all_channels_details, get_token_from_user, get_name_from_token, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions, change_user_channel_permission
+from .helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, all_channels_messages, all_channels_details, get_token_from_user, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions, change_user_channel_permission
 from functions.Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#

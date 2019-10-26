@@ -2,7 +2,7 @@ import pytest
 import sys
 sys.path.append('Server/')
 from functions.channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall
-from functions.helper_functions import reset_data, get_name_from_token, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions, check_token_in_channel, check_user_in_channel, change_user_channels_permission 
+from functions.helper_functions import reset_data, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions, check_token_in_channel, check_user_in_channel, change_user_channels_permission 
 from functions.auth_functions import auth_register
 from functions.message_functions import message_send
 from functions.Errors import AccessError

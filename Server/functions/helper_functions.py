@@ -23,14 +23,14 @@ import pickle
 
 #list_of_user_permissions = [{'u_id': 1, }] 
 
-
+global number_of_users 
+number_of_users = 1
 
 #===============================================================================#
 #============================== PICKLING HELPERS ===============================#
 #===============================================================================#
 global number_of_channels
 global number_of_messages
-global number_of_users 
 def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages):
     pickle.dump(all_channels_details, open('Server/functions/data/all_channels_details.p', 'wb'))
     pickle.dump(all_channels_messages, open('Server/functions/data/all_channels_messages.p', 'wb'))
@@ -38,18 +38,6 @@ def pickle_data(all_channels_details, all_channels_messages, all_channels_permis
     pickle.dump(list_of_users, open('Server/functions/data/list_of_users.p', 'wb'))
     pickle.dump(number_of_channels, open('Server/functions/data/number_of_channels.p', 'wb'))
     pickle.dump(number_of_messages, open('Server/functions/data/number_of_messages.p', 'wb'))
-    pickle.dump(number_of_users, open('Server/functions/data/number_of_users.p', 'wb'))
-
-def reset_data():
-    global number_of_users 
-    global number_of_channels
-    all_channels_details.clear()
-    all_channels_messages.clear()
-    list_of_users.clear()
-    all_channels_permissions.clear()
-    number_of_users = 0
-    number_of_channels = 0
-    number_of_messages = 0
 
 
 all_channels_details = pickle.load(open("Server/functions/data/all_channels_details.p", "rb"))
@@ -58,7 +46,6 @@ all_channels_permissions = pickle.load(open("Server/functions/data/all_channels_
 list_of_users = pickle.load(open("Server/functions/data/list_of_users.p", "rb"))
 number_of_channels = pickle.load(open("Server/functions/data/number_of_channels.p", "rb"))
 number_of_messages = pickle.load(open("Server/functions/data/number_of_messages.p", "rb"))
-number_of_users = pickle.load(open("Server/functions/data/number_of_users.p", "rb"))
 '''
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'is_public': True}]
@@ -68,7 +55,6 @@ all_channels_permissions = [{'channel_id': 1, 'u_id': 1, 'channel_permission_id'
 list_of_users = [{'handle_str': 'RajeshKumar', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'app_permission_id': 1}]
 number_of_messages = 0
 number_of_channels = 1
-number_of_users = 1
 '''
 atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages)
 #===============================================================================#
@@ -308,6 +294,18 @@ def change_user_channel_permission(u_id, permission_id, channel_id):
         return {}
     if added_person == False:
         all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
+    
+
+def reset_data():
+    global number_of_users 
+    global number_of_channels
+    all_channels_details.clear()
+    all_channels_messages.clear()
+    list_of_users.clear()
+    all_channels_permissions.clear()
+    number_of_users = 0
+    number_of_channels = 0
+    number_of_messages = 0
     
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
