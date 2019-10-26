@@ -239,3 +239,5 @@ def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
         user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 1862, 2864, 1865)
+
+reset_data()

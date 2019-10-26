@@ -67,3 +67,5 @@ def test_admin_user_unauthorised(register_account):
             user['app_permission_id'] = 3 
     with pytest.raises(AccessError):
         admin_userpermission_change(token, u_id, 1)
+
+reset_data()
