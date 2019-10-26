@@ -218,9 +218,9 @@ def channels_create(token, name, is_public):
     channel_id = generate_channel_id()
     if len(name) > 20:
         raise ValueError ## can't be having names above 20 chars!!
-    full_name = get_name_from_token(token)
-    name_first = full_name['name_first']
-    name_last = full_name['name_last']
+    user_details = get_user_details(token)
+    name_first = user_details['name_first']
+    name_last = user_details['name_last']
     u_id = get_user_from_token(token)
     all_channels_details.append({'channel_id': channel_id, 'name': name, 'owner_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}], 'is_public': is_public})
     all_channels_messages.append({'channel_id': channel_id, 'total_messages': 0, 'standup_active': False, 'standup_buffer': '', 'messages': []})

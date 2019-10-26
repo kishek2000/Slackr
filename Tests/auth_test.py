@@ -267,8 +267,10 @@ def test_auth_register_first_name_long_handler():
       
     user_details = auth_register(email, password, name_first, name_last)         
     
-    #obtain handler             
-    handle_str = get_handler(email)
+    token = user_details['token']
+    #obtain handle             
+    get_handle = get_user_details(token)
+    handle_str = get_handle['handle_str']
             
     assert(check_valid_handle(handle_str) == True)  
 
@@ -283,9 +285,11 @@ def test_auth_register_last_name_long_handler():
     name_last = "UvuvwevwevweOsasszkilo"
       
     user_details = auth_register(email, password, name_first, name_last)         
-    
-    #obtain handler             
-    handle_str = get_handler(email)
+               
+    token = user_details['token']
+    #obtain handle             
+    get_handle = get_user_details(token)
+    handle_str = get_handle['handle_str']
             
     assert(check_valid_handle(handle_str) == True)
     
@@ -300,8 +304,10 @@ def test_auth_register_first_and_last_name_long_handler():
       
     user_details = auth_register(email, password, name_first, name_last)         
     
-    #obtain handler             
-    handle_str = get_handler(email)
+    token = user_details['token']
+    #obtain handle             
+    get_handle = get_user_details(token)
+    handle_str = get_handle['handle_str']
             
     assert(check_valid_handle(handle_str) == True)    
 

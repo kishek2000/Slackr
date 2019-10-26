@@ -1,10 +1,6 @@
 import pickle
-all_channels_details = []
-all_channels_messages = []
-all_channels_permissions = []
-list_of_users = []
-number_of_messages = 0
-number_of_channels = 0
+from ../helper_functions import *
+reset_data()
 
 pickle.dump(all_channels_details, open('all_channels_details.p', 'wb'))
 pickle.dump(all_channels_messages, open('all_channels_messages.p', 'wb'))

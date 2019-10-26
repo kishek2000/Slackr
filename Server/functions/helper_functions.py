@@ -23,14 +23,14 @@ import pickle
 
 #list_of_user_permissions = [{'u_id': 1, }] 
 
-global number_of_users 
-number_of_users = 1
+
 
 #===============================================================================#
 #============================== PICKLING HELPERS ===============================#
 #===============================================================================#
 global number_of_channels
 global number_of_messages
+global number_of_users 
 def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages):
     pickle.dump(all_channels_details, open('Server/functions/data/all_channels_details.p', 'wb'))
     pickle.dump(all_channels_messages, open('Server/functions/data/all_channels_messages.p', 'wb'))
@@ -38,6 +38,18 @@ def pickle_data(all_channels_details, all_channels_messages, all_channels_permis
     pickle.dump(list_of_users, open('Server/functions/data/list_of_users.p', 'wb'))
     pickle.dump(number_of_channels, open('Server/functions/data/number_of_channels.p', 'wb'))
     pickle.dump(number_of_messages, open('Server/functions/data/number_of_messages.p', 'wb'))
+    pickle.dump(number_of_users, open('Server/functions/data/number_of_users.p', 'wb'))
+
+def reset_data():
+    global number_of_users 
+    global number_of_channels
+    all_channels_details.clear()
+    all_channels_messages.clear()
+    list_of_users.clear()
+    all_channels_permissions.clear()
+    number_of_users = 0
+    number_of_channels = 0
+    number_of_messages = 0
 
 
 all_channels_details = pickle.load(open("Server/functions/data/all_channels_details.p", "rb"))
@@ -46,6 +58,7 @@ all_channels_permissions = pickle.load(open("Server/functions/data/all_channels_
 list_of_users = pickle.load(open("Server/functions/data/list_of_users.p", "rb"))
 number_of_channels = pickle.load(open("Server/functions/data/number_of_channels.p", "rb"))
 number_of_messages = pickle.load(open("Server/functions/data/number_of_messages.p", "rb"))
+number_of_users = pickle.load(open("Server/functions/data/number_of_users.p", "rb"))
 '''
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'is_public': True}]
@@ -55,17 +68,33 @@ all_channels_permissions = [{'channel_id': 1, 'u_id': 1, 'channel_permission_id'
 list_of_users = [{'handle_str': 'RajeshKumar', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'app_permission_id': 1}]
 number_of_messages = 0
 number_of_channels = 1
+number_of_users = 1
 '''
 atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages)
 #===============================================================================#
 #=============================== GENERAL HELPERS ===============================#
 #===============================================================================#
-def get_user_details(token):
+
+## GET FUNCTIONS
+def get_user_details(token_or_u_id):
     for user in list_of_users:
-        if user['token'] == token:
-            return {'u_id': user['u_id'], 'token': token, 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id']}
+        if user['token'] == token_or_u_id or user['u_id'] == token_or_u_id:
+            return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id']}
     return {}
 
+def get_user_from_token(token):
+    return_dict = get_user_details(token)
+    return return_dict['u_id']
+
+def get_token_from_user(u_id):
+    return_dict = get_user_details(u_id)
+    return return_dict['token']
+
+def get_user_app_permission(u_id):
+    return_dict = get_user_details(u_id)
+    return return_dict['app_permission_id']
+
+## GENERATE FUNCTIONS   
 def generate_token(email):   
     for user in list_of_users:
         if user['email'] == email:
@@ -78,6 +107,7 @@ def generate_u_id():
     number_of_users += 1
     return number_of_users
 
+## CHECK FUNCTIONS
 def check_valid_u_id(u_id):
     for user in list_of_users:
         if u_id == user['u_id']:
@@ -91,31 +121,23 @@ def check_valid_token(token):
     return False 
 
 def check_token_matches_user(u_id, token):
-    if token == -1:
-        return False
     for user in list_of_users:
         if u_id == user['u_id'] and token == user['token']:
                 return True
     return False
 
-def get_user_from_token(token):
+def check_valid_handle(handle_str):
     for user in list_of_users:
-        if token == user['token']:
-            return user['u_id']
+        if handle_str == user['handle_str']:
+            return True
+    return False 
+    
 
-def get_token_from_user(u_id):
-    for user in list_of_users:
-        if u_id == user['u_id']:
-            return user['token']
-
-def get_user_app_permission(u_id):
-    print("\n u_id received: \n")
-    print(u_id)
-    print("\n")
-    for user in list_of_users:
-        if u_id == user['u_id']:
-            return user['app_permission_id']
-
+    
+    
+#===============================================================================#
+#================================= AUTH HELPERS ================================#
+#===============================================================================#
 def email_registered(email):
 
     for user in list_of_users:
@@ -131,27 +153,6 @@ def email_matches_password(registered_email, password):
             return True 
     
     return False
-
-def get_name_from_token(token):
-    for user in list_of_users:
-        if token == user['token']:
-            return {'name_first': user['name_first'], 'name_last': user['name_last']}
-
-def check_valid_handle(handle_str):
-    for user in list_of_users:
-        if handle_str == user['handle_str']:
-            return True
-    return False 
-    
-def get_handler(email):
-    for user in list_of_users:
-        if user['email'] == email:
-            return user['handle_str']
-    
-    
-#===============================================================================#
-#================================= AUTH HELPERS ================================#
-#===============================================================================#
 
 def valid_email(email):
 
@@ -232,8 +233,6 @@ def check_user_in_channel(u_id, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
-               #print("MORE DEBUG ====== checktokeninchannel HELPER ========")
-               #print(users)
                 if users['u_id'] == u_id:
                     return True
             break
@@ -243,21 +242,18 @@ def get_total_channel_messages(channel_id):
     for channels in all_channels_messages:
         if channel_id == channels['channel_id']:
             return channels['total_messages']
+    return {}
 
 def get_channel_id_from_name(name):
     for channels in all_channels_details:
         if channels['name'] == name:
             return channels['channel_id']
+    return {}
 
 def get_user_channel_permission(channel_id, u_id):
-    print("\n getuserchann :")
-    print({'channel_id': channel_id, 'u_id': u_id})
-    print("\n")
     for users in all_channels_permissions:
         if users['channel_id'] == channel_id:
             if users['u_id'] == u_id:
-                print("returning:")
-                print(users['channel_permission_id'])
                 return users['channel_permission_id']
 
 #===============================================================================#
@@ -296,29 +292,22 @@ def change_user_app_permission(u_id, permission_id):
         if u_id == user['u_id']:
             user['app_permission_id'] = permission_id
             break
+    return {}
 
 def change_user_channel_permission(u_id, permission_id, channel_id):
-    addedPerson = False
+    added_person = False
+    user_found = False
     for user in all_channels_permissions:
         if u_id == user['u_id']:
+            user_found = True
             if channel_id == user['channel_id']:
                 user['channel_permission_id'] = permission_id
-                addedPerson = True
+                added_person = True
                 return {'added_id': u_id, 'changed_permission': permission_id}
-    if addedPerson == False:
+    if user_found == False:
+        return {}
+    if added_person == False:
         all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
-    
-
-def reset_data():
-    global number_of_users 
-    global number_of_channels
-    all_channels_details.clear()
-    all_channels_messages.clear()
-    list_of_users.clear()
-    all_channels_permissions.clear()
-    number_of_users = 0
-    number_of_channels = 0
-    number_of_messages = 0
     
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
@@ -338,23 +327,22 @@ def start_standup(channel_id):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            if channel['standup_active'] == False:
-                channel['standup_active'] = True
+            channel['standup_active'] = True
+    return {}
                     
 def end_standup(channel_id):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            if channel['standup_active'] == True:
-                channel['standup_active'] = False    
-    
-    return             
+            channel['standup_active'] = False    
+    return {}
+
                 
 def add_to_standup_queue(channel_id, message):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
             channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
+    return {}
             
-    return     
-                           
+                
