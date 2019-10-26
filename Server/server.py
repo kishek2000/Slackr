@@ -12,7 +12,7 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
-
+from datetime import timezone
 
 APP = Flask(__name__)
 CORS(APP)
@@ -371,11 +371,12 @@ def post_user_uploadphoto():
 def start_standup():
     
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
+    channel_id = int(request.form.get('channel_id'))
         
     try:
         standup_end_time = standup_start(token, channel_id)
-        return dumps({'time_finish' : standup_end_time})
+        timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
+        return dumps({'time_finish' : timestamp})
         
     except ValueError as error:
         return {'error': error}
@@ -387,11 +388,11 @@ def start_standup():
 def start_send():
     
     token = request.form.get('token')
-    channel_id = request.form.get('channel_id')
+    channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
     
     try:
-        standup_start(token, channel_id, message)
+        standup_send(token, channel_id, message)
         return dumps({})
         
     except ValueError as error:
