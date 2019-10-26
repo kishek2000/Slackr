@@ -41,7 +41,7 @@ def test_standup_start_correct_details(setup):
     standup_start(user_1_token, channel_id)
     
 def test_standup_invalid_helpers(setup):
-    assert check_standup_active(-1) == {}
+    assert check_standup_active(-1) == False
     assert start_standup(-1) == {}
     assert add_to_standup_queue(-1, "hi") == {}
  

@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/Server/functions/")
-from .helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, all_channels_messages, all_channels_details, get_token_from_user, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions, change_user_channel_permission
+from .helper_functions import check_token_in_channel, check_token_matches_user, check_user_in_channel, check_valid_channel_id, check_valid_token, check_valid_u_id, all_channels_messages, all_channels_details, get_token_from_user, get_user_from_token, get_user_app_permission, get_user_channel_permission, get_user_details, generate_channel_id, list_of_users, all_channels_permissions, change_user_channel_permission, get_user_details
 from functions.Errors import AccessError
 
 #====================================== channel/invite [POST] ======================================#
@@ -149,6 +149,7 @@ def channel_addowner(token, channel_id, u_id):
                     new_user_dict = get_user_details(get_token_from_user(u_id))
                     channels['owner_members'].append({'u_id': new_user_dict['u_id'], 'name_first': new_user_dict['name_first'], 'name_last': new_user_dict['name_last']})
                     change_user_channel_permission(u_id, 1, channel_id)
+                    print(all_channels_permissions)
                     break
     
 #==================================== channel/removeowner [POST] ====================================#
@@ -161,6 +162,7 @@ def channel_removeowner(token, channel_id, u_id):
     if check_valid_token(token) == False:
         raise AccessError
     if get_user_app_permission(get_user_from_token(token)) != 1 and get_user_channel_permission(channel_id, get_user_from_token(token)) != 1:
+        print({"getapp": get_user_app_permission(get_user_from_token(token)), "getchann": get_user_channel_permission(channel_id, get_user_from_token(token))})        
         raise AccessError ## accessing user's permission not owner status of app, or owner status in channel     
     if get_user_channel_permission(channel_id, u_id) != 1:
         raise ValueError ## user given to remove is not owner of channel currently.

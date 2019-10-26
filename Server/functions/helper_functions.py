@@ -283,6 +283,7 @@ def change_user_app_permission(u_id, permission_id):
 def change_user_channel_permission(u_id, permission_id, channel_id):
     added_person = False
     user_found = False
+    print({"u_id": u_id, "permission_id": permission_id, "channel_id": channel_id})
     for user in all_channels_permissions:
         if u_id == user['u_id']:
             user_found = True
@@ -290,9 +291,7 @@ def change_user_channel_permission(u_id, permission_id, channel_id):
                 user['channel_permission_id'] = permission_id
                 added_person = True
                 return {'added_id': u_id, 'changed_permission': permission_id}
-    if user_found == False:
-        return {}
-    if added_person == False:
+    if added_person == False or user_found == False:
         all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
     
 
