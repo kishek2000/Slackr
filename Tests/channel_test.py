@@ -2,7 +2,7 @@ import pytest
 import sys
 sys.path.append('Server/')
 from functions.channel_functions import channel_addowner, channel_details, channel_invite, channel_join, channel_leave, channel_messages, channel_removeowner, channels_create, channels_list, channels_listall
-from functions.helper_functions import reset_data, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions, check_token_in_channel, check_user_in_channel, change_user_channel_permission 
+from functions.helper_functions import reset_data, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions, check_token_in_channel, check_user_in_channel, change_user_channel_permission, get_user_details 
 from functions.auth_functions import auth_register
 from functions.message_functions import message_send
 from functions.Errors import AccessError
@@ -107,7 +107,7 @@ def tests_channel_details_valid(setup):
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
 
 	## These are valid values, and hence should not produce errors:
-	full_name = get_name_from_token(token)
+	full_name = get_user_details(token)
 	name_first = full_name['name_first']
 	name_last = full_name['name_last']
 	assert channel_details(token, channel_id_private) == {'name': 'Channel A', 'owner_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}], 'all_members': [{'u_id': setup[0], 'name_first': name_first, 'name_last': name_last}]}
@@ -165,12 +165,24 @@ def add_messages_to_channel(setup):
 def tests_channel_messages_valid(setup, add_messages_to_channel):
 	channel_id_public = setup[5]
 	token = setup[2] ## token of accessing user who is owner of channel setup[4] and setup[5]
-	start = 1 ## assume that message_start_index() is given an input of 0
+	start = 0 ## assume that message_start_index() is given an input of 0
  
 	## This should produce no errors as all valid values:
 	returning_messages = channel_messages(token, channel_id_public, start)
-	assert returning_messages['messages'][0]['message'] == "Hello here is a message." 
-	assert returning_messages['messages'][1]['message'] == "Hello here is a second message." 
+	assert returning_messages['messages'][1]['message'] == "Hello here is a message." 
+	assert returning_messages['messages'][0]['message'] == "Hello here is a second message." 
+
+def tests_channel_messages_above_fifty(setup):
+	channel_id_public = setup[5]
+	token = setup[2]
+	start = 0
+
+	for i in range(0, 53):
+		message_send(token, channel_id_public, "Hi this is spam")
+	
+	## This should produce no errors:
+	channel_messages(token, channel_id_public, start)
+	
 
 def tests_channel_messages_total_invalid(setup):
 	assert get_total_channel_messages(-1) == {}
@@ -547,8 +559,9 @@ def tests_channels_create_name(setup):
 	assert get_channel_id_from_name(-1) == {}
 
 def tests_channels_create_permissions_fail(setup):
-	assert change_user_app_permission(-1) == {}
-	assert change_user_channels_permission(-1) == {}
+	assert change_user_app_permission(-1, 1) == {}
+	## This should have no errors and satisfy coverage:
+	change_user_channel_permission(-1, 1, -1) 
 
 def tests_channels_create_name_over_twenty(setup):
 	is_public = True ## doesnt matter

@@ -3,6 +3,8 @@
 #################################################################################
 
 import pytest
+import sys
+sys.path.append('Server/')
 from functions.standup_functions import *
 from datetime import datetime
 from functions.helper_functions import *
