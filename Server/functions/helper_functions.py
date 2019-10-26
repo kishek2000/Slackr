@@ -3,6 +3,7 @@ import random
 import hashlib
 import datetime
 import sys
+import atexit
 
 #Dictionary with key as email as the corresponding values e.g.
 ## Shoan version for Auth
