@@ -51,8 +51,6 @@ def message_sendlater_send_message(token, channel_id, message, message_id):
             })
 
 def message_sendlater(token, channel_id, message, time_sent):
-    # Might remove all these checks (keeping the time one)
-    # Because they just get done in the message_function
     if len(message) > 1000:
         raise ValueError("Message must be 1000 characters or less")
     if check_valid_token(token) == False:
@@ -64,10 +62,12 @@ def message_sendlater(token, channel_id, message, time_sent):
     if len(message) <= 0 or message.isspace() == True:
         raise ValueError("Message must contain a nonspace character")
     # This is a hack solution to enable the case where time_sent = current time
-    if time_sent < datetime.datetime.now(timezone.utc):
+    #if time_sent < datetime.datetime.now(timezone.utc):
+    if time.time() > time_sent:
         raise ValueError("Time is invalid")
     message_id = generate_message_id()
-    t = threading.Timer(time_sent - datetime.datetime.now(), message_sendlater_send_message, [token, channel_id, message, message_id])
+    #t = threading.Timer(time_sent - datetime.datetime.now(), message_sendlater_send_message, [token, channel_id, message, message_id])
+    t = threading.Timer(time_sent - time.time(), message_sendlater_send_message, [token, channel_id, message, message_id])
     t.start()
     return message_id
     

@@ -230,7 +230,8 @@ def post_message_sendlater():
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
-    time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
+    #time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
+    time_sent = int(request.form.get('time_sent'))/1000.0
     try:
         message_id = message_sendlater(token, channel_id, message, time_sent)
         return dumps({'message_id': message_id})
@@ -408,7 +409,7 @@ def get_search():
     token = request.args.get('token')
     query_str = request.args.get('query_str')
     try:
-        returning_dict = search(token, query_str):
+        returning_dict = search(token, query_str)
         return dumps(returning_dict)
     except ValueError as error:
         print(error)
