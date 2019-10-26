@@ -1,6 +1,6 @@
 import sys
 import pytest
-sys.path.append("Server/")
+sys.path.append("server/")
 from functions.auth_functions import *
 from functions.helper_functions import *
 

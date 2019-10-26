@@ -7,7 +7,7 @@ import pytest
 import sys
 from datetime import date, time, datetime
 import time
-sys.path.append('Server/')
+sys.path.append('server/')
 from functions.message_functions import *
 from functions.auth_functions import auth_register
 from functions.channel_functions import channel_messages, channels_create, channel_invite, channel_join, channel_leave

@@ -1,2 +1,2 @@
 #!/bin/sh
-python3 Server/server.py $1
+python3 server/server.py $1

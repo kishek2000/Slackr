@@ -32,20 +32,20 @@ number_of_users = 1
 global number_of_channels
 global number_of_messages
 def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages):
-    pickle.dump(all_channels_details, open('Server/functions/data/all_channels_details.p', 'wb'))
-    pickle.dump(all_channels_messages, open('Server/functions/data/all_channels_messages.p', 'wb'))
-    pickle.dump(all_channels_permissions, open('Server/functions/data/all_channels_permissions.p', 'wb'))
-    pickle.dump(list_of_users, open('Server/functions/data/list_of_users.p', 'wb'))
-    pickle.dump(number_of_channels, open('Server/functions/data/number_of_channels.p', 'wb'))
-    pickle.dump(number_of_messages, open('Server/functions/data/number_of_messages.p', 'wb'))
+    pickle.dump(all_channels_details, open('server/functions/data/all_channels_details.p', 'wb'))
+    pickle.dump(all_channels_messages, open('server/functions/data/all_channels_messages.p', 'wb'))
+    pickle.dump(all_channels_permissions, open('server/functions/data/all_channels_permissions.p', 'wb'))
+    pickle.dump(list_of_users, open('server/functions/data/list_of_users.p', 'wb'))
+    pickle.dump(number_of_channels, open('server/functions/data/number_of_channels.p', 'wb'))
+    pickle.dump(number_of_messages, open('server/functions/data/number_of_messages.p', 'wb'))
 
 
-all_channels_details = pickle.load(open("Server/functions/data/all_channels_details.p", "rb"))
-all_channels_messages = pickle.load(open("Server/functions/data/all_channels_messages.p", "rb"))
-all_channels_permissions = pickle.load(open("Server/functions/data/all_channels_permissions.p", "rb"))
-list_of_users = pickle.load(open("Server/functions/data/list_of_users.p", "rb"))
-number_of_channels = pickle.load(open("Server/functions/data/number_of_channels.p", "rb"))
-number_of_messages = pickle.load(open("Server/functions/data/number_of_messages.p", "rb"))
+all_channels_details = pickle.load(open("server/functions/data/all_channels_details.p", "rb"))
+all_channels_messages = pickle.load(open("server/functions/data/all_channels_messages.p", "rb"))
+all_channels_permissions = pickle.load(open("server/functions/data/all_channels_permissions.p", "rb"))
+list_of_users = pickle.load(open("server/functions/data/list_of_users.p", "rb"))
+number_of_channels = pickle.load(open("server/functions/data/number_of_channels.p", "rb"))
+number_of_messages = pickle.load(open("server/functions/data/number_of_messages.p", "rb"))
 '''
 #================= data storage for channels =================#
 all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'is_public': True}]

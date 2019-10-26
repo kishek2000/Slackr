@@ -4,7 +4,7 @@
 
 import pytest
 import sys
-sys.path.append('Server/')
+sys.path.append('server/')
 from functions.standup_functions import *
 from datetime import datetime
 from functions.helper_functions import *
