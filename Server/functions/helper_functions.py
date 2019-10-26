@@ -348,7 +348,7 @@ def end_standup(channel_id):
             if channel['standup_active'] == True:
                 channel['standup_active'] = False    
     
-   return             
+    return             
                 
 def add_to_standup_queue(channel_id, message):
 
