@@ -109,7 +109,7 @@ def test_standup_start_correct_time_difference(setup):
     time_difference = time_finish - time_current 
     
     #Testing if time_finish has a 15 minute differnce in time from time_current 
-    assert((time_difference.seconds/60) == 1)
+    assert((time_difference.seconds/60) == 15)
 
 
 #################################################################################
@@ -199,7 +199,7 @@ def test_standup_send_standup_time_finished(setup):
     
     #Sleep 15 minutes
     
-    time.sleep(60)  
+    time.sleep(60 * 15)  
     
     #Standup time should be finished so now sending a message to the standup should produce
     #an AccessError even if the user sending a message to the standup belongs to the channel

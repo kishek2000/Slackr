@@ -96,6 +96,8 @@ def auth_register(email, password, name_first, name_last):
     
 def auth_passwordreset_request(reset_email):
 
+#Method for sending email obtained from https://www.youtube.com/watch?v=JRCJ6RtE3xU
+
     #Checking for valid email
     if not valid_email(reset_email):
         raise ValueError("Invalid Email") 
@@ -105,9 +107,14 @@ def auth_passwordreset_request(reset_email):
     
     for user in list_of_users:
         if user["email"] == reset_email:
+            
             user["reset_code"] = reset_code
-    
-            message = "Reset Code " + reset_code
+                
+            subject = "No Reply: Forgot Password Request"
+            
+            body = f"Hi {user['name_first']},\n\nYou recently requested that you forgot your password. Here is your reset code!\n\n" + reset_code
+            
+            message = f'Subject: {subject}\n\n{body}'
     
             print("Starting to send Email")
 
@@ -131,10 +138,9 @@ def auth_passwordreset_reset(reset_code, new_password):
        
         if user['reset_code'] == reset_code and valid_password(new_password):
             user['reset_code'] = None
-            user['password'] = new_password
+            user['password'] = password_hash(new_password)
             return
-        # else:
-        #     raise ValueError("Invalid Password")
+
     raise ValueError("Invalid Reset Code")
 
       

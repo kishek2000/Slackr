@@ -25,10 +25,10 @@ def standup_start(token, channel_id):
     start_standup(channel_id)    
   	
   	#Wait for 15 minutes then end the startup
-    t = threading.Timer(60, end_standup, [channel_id])
+    t = threading.Timer(60 * 15, end_standup, [channel_id])
     t.start()
 
-    return datetime.datetime.now() + datetime.timedelta(minutes = 1)     		
+    return datetime.datetime.now() + datetime.timedelta(minutes = 15)     		
  
         		
 def standup_send(token, channel_id, message):

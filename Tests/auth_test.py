@@ -396,6 +396,8 @@ def test_auth_passwordreset_reset_correct_details(registered_user_1):
     #Should produce no errors
     auth_passwordreset_reset(reset_code, new_password)    
     
+    #Test logging in which should produce no errors
+    auth_login("PokemonMaster@gmail.com", "ThisIsAV@lidNewPassword123")
         
 def test_auth_passwordreset_reset_incorrect_reset_code(registered_user_1):
 
@@ -409,7 +411,7 @@ def test_auth_passwordreset_reset_incorrect_reset_code(registered_user_1):
     #Should produce a ValueError as an incorrect reset_code is provided
     with pytest.raises(ValueError):
         auth_passwordreset_reset(reset_code, new_password)  
-
+    
 
 def test_auth_passwordreset_reset_invalid_password(registered_user_1):
 
