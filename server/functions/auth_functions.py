@@ -5,6 +5,7 @@ import sys
 sys.path.append('/Server/functions')
 from functions.helper_functions import *
 import pytest
+import hashlib    
     
 def auth_login(email, password):
     
@@ -19,7 +20,7 @@ def auth_login(email, password):
         if user["email"] == email:
             
             #Checking if password matches email
-            if not email_matches_password(email, password):
+            if not email_matches_password(email, password_hash(password)):
                 raise ValueError("Incorrect Password Entered")
             
             #Otherwise
@@ -76,9 +77,9 @@ def auth_register(email, password, name_first, name_last):
         handle = name_first + name_last
     
     
-    list_of_users.append({"handle_str": handle, "email" : email, "password": password, "u_id": None,
-                          "token" : None, "reset_code": None , 
-                          "name_first": name_first, "name_last": name_last, 'app_permission_id': None})
+    list_of_users.append({"handle_str": handle, "email" : email, "password": password_hash(password), "u_id": None,
+                          "token" : None, "reset_code": None , "name_first": name_first, "name_last": name_last,       
+                          'app_permission_id': None})
     
     #Assign token and u_id
     

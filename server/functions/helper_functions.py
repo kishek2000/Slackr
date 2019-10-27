@@ -142,6 +142,8 @@ def email_matches_password(registered_email, password):
 
 def valid_email(email):
 
+#To check whether an email is valid the method from https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/ was used
+
     regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' 
     
     if re.search(regex, email) is None:
@@ -169,6 +171,8 @@ def valid_password(password):
     
         if character.isdigit():
             no_of_numbers += 1
+
+#To check for special characters in a string the method from https://www.geeksforgeeks.org/python-program-check-string-contains-special-character/ was used
         
         regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
        
@@ -184,6 +188,10 @@ def valid_password(password):
         
     else:
         return False  
+ 
+#Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019 
+def password_hash(password):
+    return hashlib.sha256(password.encode()).hexdigest()
     
 def generate_reset_code():
     reset_code = random.randint(1,10000000)   

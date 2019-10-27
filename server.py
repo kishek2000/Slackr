@@ -375,6 +375,9 @@ def start_standup():
         
     try:
         standup_end_time = standup_start(token, channel_id)
+        
+#To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
+        
         timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
         return dumps({'time_finish' : timestamp})
         
@@ -383,6 +386,7 @@ def start_standup():
         
     except AccessError as error:
         return {'error': error}
+
 
 @APP.route('/standup/send', methods=['POST'])
 def start_send():
