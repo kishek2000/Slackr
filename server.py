@@ -430,8 +430,8 @@ def post_admin_userpermission_change():
         
     
     token = request.form.get('token')
-    u_id = request.form.get('u_id')
-    permission_id = request.form.get('permission_id')
+    u_id = int(request.form.get('u_id'))
+    permission_id = int(request.form.get('permission_id'))
         
     try:
         returnedDict = admin_userpermission_change(token, u_id, permission_id)
