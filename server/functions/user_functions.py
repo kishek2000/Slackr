@@ -1,8 +1,12 @@
 """ user_functions """
-from functions.helper_functions import *
+import sys
 from PIL import Image
 import requests
+
+sys.path.append("/Server/functions/")
+from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users
 from functions.Errors import AccessError
+
 
 def user_profile(token, u_id):
     """ user_profile function """
