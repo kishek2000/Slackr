@@ -1,7 +1,8 @@
 """Flask server"""
 import sys
-from flask_cors import CORS
 from json import dumps
+from datetime import timezone
+from flask_cors import CORS
 from flask import Flask, request
 sys.path.append('server/')
 from functions.auth_functions import *
@@ -12,7 +13,6 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
-from datetime import timezone
 
 APP = Flask(__name__)
 CORS(APP)
@@ -37,30 +37,33 @@ def echo2():
 
 @APP.route('/auth/login', methods=['POST'])
 def login_user():
-        
+    """ Description of function """
+
     email = request.form.get('email')
     password = request.form.get('password')
-        
+
     try:
         user_details = auth_login(email, password)
-        return dumps({'u_id' : user_details['u_id'] ,'token' : user_details['token']})
+        return dumps({'u_id' : user_details['u_id'], 'token' : user_details['token']})
     except ValueError as error:
         return {'error': error}
-        
+
 
 @APP.route('/auth/logout', methods=['POST'])
 def logout_user():
-    
+    """ Description of function """
+
     token = request.form.get('token')
-    
+
     if auth_logout(token):
         return dumps({"Action": "Success"})
-    else:
-        return dumps({"Action": "Failure"})
-        
+
+    return dumps({"Action": "Failure"})
+
 
 @APP.route('/auth/register', methods=['POST'])
 def create_user():
+    """ Description of function """
     name_first = request.form.get('name_first')
     name_last = request.form.get('name_last')
     email = request.form.get('email')
@@ -72,31 +75,32 @@ def create_user():
 
 @APP.route('/auth/passwordreset/request', methods=['POST'])
 def request_password_reset():
-
+    """ Description of function """
     email = request.form.get('email')
 
     try:
         auth_passwordreset_request(email)
         return dumps({"Action": "Success"})
-        
+
     except ValueError as error:
-        
+
         return {'error': error}
 
 
 @APP.route('/auth/passwordreset/reset', methods=['POST'])
 def reset_password():
+    """ Description of function """
 
     reset_code = request.form.get('reset_code')
     new_password = request.form.get('new_password')
 
     try:
-    
+
         auth_passwordreset_reset(reset_code, new_password)
         return dumps({"Action": "Success"})
-        
+
     except ValueError as error:
-        
+
         return {'error': error}
 
 
@@ -105,6 +109,7 @@ def reset_password():
 #===============================================================================#
 @APP.route('/channel/invite', methods=['POST'])
 def invite_to_channel():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     u_id = int(request.form.get('u_id'))
@@ -117,6 +122,7 @@ def invite_to_channel():
 
 @APP.route('/channel/details', methods=['GET'])
 def get_channel_details():
+    """ Description of function """
     token = request.args.get('token')
     channel_id = int(request.args.get('channel_id'))
 
@@ -128,11 +134,12 @@ def get_channel_details():
 
 @APP.route('/channel/messages', methods=['GET'])
 def get_channel_messages():
+    """ Description of function """
     token = request.args.get('token')
     channel_id = int(request.args.get('channel_id'))
     start = int(request.args.get('start'))
 
-    try: 
+    try:
         returning_messages = channel_messages(token, channel_id, start)
         return dumps(returning_messages)
     except ValueError as error:
@@ -140,9 +147,10 @@ def get_channel_messages():
 
 @APP.route('/channel/leave', methods=['POST'])
 def leave_channel():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
-    
+
     try:
         channel_leave(token, channel_id)
         return dumps({})
@@ -151,6 +159,7 @@ def leave_channel():
 
 @APP.route('/channel/join', methods=['POST'])
 def join_channel():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     try:
@@ -161,6 +170,7 @@ def join_channel():
 
 @APP.route('/channel/addowner', methods=['POST'])
 def add_owner_to_channel():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     u_id = int(request.form.get('u_id'))
@@ -173,6 +183,7 @@ def add_owner_to_channel():
 
 @APP.route('/channel/removeowner', methods=['POST'])
 def remover_owner_from_channel():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     u_id = int(request.form.get('u_id'))
@@ -185,9 +196,10 @@ def remover_owner_from_channel():
 
 @APP.route('/channels/list', methods=['GET'])
 def get_channels_list():
+    """ Description of function """
     token = request.args.get('token')
 
-    try: 
+    try:
         returning_list_dictionary = channels_list(token)
         return dumps({'channels': returning_list_dictionary})
     except ValueError as error:
@@ -195,8 +207,9 @@ def get_channels_list():
 
 @APP.route('/channels/listall', methods=['GET'])
 def get_channels_listall():
+    """ Description of function """
     token = request.args.get('token')
-    try: 
+    try:
         returning_listall_dictionary = channels_listall(token)
         return dumps({'channels': returning_listall_dictionary})
     except ValueError as error:
@@ -204,6 +217,7 @@ def get_channels_listall():
 
 @APP.route('/channels/create', methods=['POST'])
 def create_channel():
+    """ Description of function """
     token = request.form.get('token')
     name = request.form.get('name')
     is_public = request.form.get('is_public')
@@ -212,11 +226,13 @@ def create_channel():
         return dumps({'channel_id': new_channel_id})
     except ValueError as error:
         return {'error': error}
+
 #===============================================================================#
 #===============================     MESSAGES     ==============================#
 #===============================================================================#
 @APP.route('/message/send', methods=['POST'])
 def post_message_send():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
@@ -228,6 +244,7 @@ def post_message_send():
 
 @APP.route('/message/sendlater', methods=['POST'])
 def post_message_sendlater():
+    """ Description of function """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
@@ -242,6 +259,7 @@ def post_message_sendlater():
 
 @APP.route('/message/remove', methods=['DELETE'])
 def post_message_remove():
+    """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     try:
@@ -249,9 +267,10 @@ def post_message_remove():
         return dumps({})
     except ValueError as error:
         return {'error': error}
-        
+
 @APP.route('/message/edit', methods=['PUT'])
 def put_message_edit():
+    """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     message = request.form.get('message')
@@ -263,6 +282,7 @@ def put_message_edit():
 
 @APP.route('/message/react', methods=['POST'])
 def post_message_react():
+    """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
@@ -274,6 +294,7 @@ def post_message_react():
 
 @APP.route('/message/unreact', methods=['POST'])
 def post_message_unreact():
+    """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
@@ -285,6 +306,7 @@ def post_message_unreact():
 
 @APP.route('/message/pin', methods=['POST'])
 def post_message_pin():
+    """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     try:
@@ -295,6 +317,7 @@ def post_message_pin():
 
 @APP.route('/message/unpin', methods=['POST'])
 def post_message_unpin():
+    """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     try:
@@ -302,12 +325,14 @@ def post_message_unpin():
         return dumps({})
     except ValueError as error:
         return {'error': error}
+
 #===============================================================================#
 #=================================     USER     ================================#
 #===============================================================================#
 
 @APP.route('/user/profile', methods=['GET'])
 def get_user_profile():
+    """ Description of function """
     token = request.args.get('token')
     u_id = int(request.args.get('u_id'))
     try:
@@ -316,9 +341,10 @@ def get_user_profile():
     except ValueError as error:
         print(error)
         return {'error': error}
-        
+
 @APP.route("/user/profile/setname", methods=['PUT'])
 def put_user_setname():
+    """ Description of function """
     token = request.form.get('token')
     name_first = request.form.get('name_first')
     name_last = request.form.get('name_last')
@@ -326,30 +352,33 @@ def put_user_setname():
         user_profile_setname(token, name_first, name_last)
         return dumps({})
     except ValueError as error:
-        return {'error': error} 
-        
+        return {'error': error}
+
 @APP.route("/user/profile/setemail", methods=['PUT'])
 def put_user_setemail():
+    """ Description of function """
     token = request.form.get('token')
     email = request.form.get('email')
     try:
         user_profile_setemail(token, email)
         return dumps({})
     except ValueError as error:
-        return {'error': error} 
-        
+        return {'error': error}
+
 @APP.route("/user/profile/sethandle", methods=['PUT'])
 def put_user_sethandle():
+    """ Description of function """
     token = request.form.get('token')
     handle_str = request.form.get('handle_str')
     try:
         user_profile_sethandle(token, handle_str)
         return dumps({})
     except ValueError as error:
-        return {'error': error} 
-        
+        return {'error': error}
+
 @APP.route('/user/profiles/uploadphoto', methods=['POST'])
 def post_user_uploadphoto():
+    """ Description of function """
     token = request.form.get('token')
     img_url = request.form.get('img_url')
     x_start = request.form.get('x_start')
@@ -361,9 +390,10 @@ def post_user_uploadphoto():
         return dumps({})
     except ValueError as error:
         return {'error': error}
-        
+
 @APP.route('/users/all', methods=['GET'])
 def get_users_all():
+    """ Description of function """
     token = request.args.get('token')
     try:
         returning_dict = users_all(token)
@@ -371,56 +401,59 @@ def get_users_all():
     except ValueError as error:
         print(error)
         return {'error': error}
-        
+
 #===============================================================================#
 #=================================   STANDUP    ================================#
 #===============================================================================#
 
 @APP.route('/standup/start', methods=['POST'])
 def start_standup():
-    
+    """ Description of function """
+
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
-        
+
     try:
         standup_end_time = standup_start(token, channel_id)
-        
+
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
-        
+
         timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
         return dumps({'time_finish' : timestamp})
-        
+
     except ValueError as error:
         return {'error': error}
-        
+
     except AccessError as error:
         return {'error': error}
 
 
 @APP.route('/standup/send', methods=['POST'])
 def start_send():
-    
+    """ Description of function """
+
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
-    
+
     try:
         standup_send(token, channel_id, message)
         return dumps({})
-        
+
     except ValueError as error:
         return {'error': error}
-        
+
     except AccessError as error:
         return {'error': error}
-        
+
 #===============================================================================#
 #=================================    SEARCH    ================================#
 #===============================================================================#
 
 @APP.route('/search', methods=['GET'])
 def get_search():
-        
+    """ Description of function """
+
     token = request.args.get('token')
     query_str = request.args.get('query_str')
     try:
@@ -428,33 +461,33 @@ def get_search():
         return dumps(returning_dict)
     except ValueError as error:
         print(error)
-        return {'error': error}   
-        
+        return {'error': error}
+
 #===============================================================================#
 #=================================    ADMIN     ================================#
 #===============================================================================#
 
 @APP.route('/admin/userpermission/change', methods=['POST'])
 def post_admin_userpermission_change():
-        
-    
+    """ Description of function """
+
+
     token = request.form.get('token')
     u_id = int(request.form.get('u_id'))
     permission_id = int(request.form.get('permission_id'))
-        
+
     try:
-        returnedDict = admin_userpermission_change(token, u_id, permission_id)
+        admin_userpermission_change(token, u_id, permission_id)
         return dumps({})
-        
+
     except ValueError as error:
-        return {'error': error}     
-    
+        return {'error': error}
+
 #===============================================================================#
 #=================================     MAIN     ================================#
 #===============================================================================#
 
 if __name__ == '__main__':
     APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 6000))
-    
-    
-    
+
+    # End of server.py
