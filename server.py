@@ -308,7 +308,6 @@ def post_message_unpin():
 
 @APP.route('/user/profile', methods=['GET'])
 def get_user_profile():
-        
     token = request.args.get('token')
     u_id = int(request.args.get('u_id'))
     try:
@@ -361,6 +360,16 @@ def post_user_uploadphoto():
         user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
         return dumps({})
     except ValueError as error:
+        return {'error': error}
+        
+@APP.route('/users/all', methods=['GET'])
+def get_users_all():
+    token = request.args.get('token')
+    try:
+        returning_dict = users_all(token)
+        return dumps(returning_dict)
+    except ValueError as error:
+        print(error)
         return {'error': error}
         
 #===============================================================================#
