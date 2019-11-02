@@ -401,10 +401,7 @@ def test_message_edit_too_big(setup):
 def test_message_edit_empty_message(setup):
     # Testing editing an empty message
     message_id = message_send(setup["token_a"], setup["channel_a"], "a")
-    with pytest.raises(ValueError):
-        message_edit(setup["token_a"], message_id, "")
-    assert(channel_messages(setup["token_a"], setup["channel_a"], 0)["messages"][0]["message"] == "a")
-    message_remove(setup["token_a"], message_id)
+    message_edit(setup["token_a"], message_id, "")
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
     
