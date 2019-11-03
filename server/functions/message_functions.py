@@ -1,15 +1,33 @@
+'''
+message_functions written by Liam
+- message_send
+- message_sendlater
+    - message_sendlater_send_messsage
+- message_remove
+- message_edit
+- message_react
+- message_unreact
+- message_pin
+- message_unpint
+'''
+
 import sys
 import datetime
 import time
 import threading
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_channel_id, check_token_in_channel, generate_message_id, get_user_from_token, all_channels_messages, find_message_info, get_user_app_permission, has_user_reacted, valid_reacts
+from functions.helper_functions import check_valid_token, check_valid_channel_id
+from functions.helper_functions import check_token_in_channel, generate_message_id
+from functions.helper_functions import get_user_from_token, all_channels_messages
+from functions.helper_functions import find_message_info, get_user_app_permission
+from functions.helper_functions import has_user_reacted, VALID_REACTS
 from functions.Errors import AccessError
 
 # Helper Functions to write: get_channel_from_message_id
 # user_reacted_to_react_id, message_is_pinned
 
 def message_send(token, channel_id, message):
+    '''Add message to the list of messages in a channel'''
     # Need to somehow check for special characters (\n and the like)
     if len(message) > 1000:
         raise ValueError("Message must be 1000 characters or less")
@@ -37,6 +55,7 @@ def message_send(token, channel_id, message):
     return message_id
 
 def message_sendlater_send_message(token, channel_id, message, message_id):
+    '''Behaves like message_send, but does not generate its own message_id'''
     uid = get_user_from_token(token)
     for channel in all_channels_messages:
         if channel["channel_id"] == channel_id:
@@ -51,6 +70,7 @@ def message_sendlater_send_message(token, channel_id, message, message_id):
             })
 
 def message_sendlater(token, channel_id, message, time_sent):
+    '''Behaves like message_send, but only sends the message at the specified time'''
     if len(message) > 1000:
         raise ValueError("Message must be 1000 characters or less")
     if not check_valid_token(token):
@@ -66,11 +86,13 @@ def message_sendlater(token, channel_id, message, time_sent):
     if time.time() > time_sent:
         raise ValueError("Time is invalid")
     message_id = generate_message_id()
-    timer = threading.Timer(time_sent - time.time(), message_sendlater_send_message, [token, channel_id, message, message_id])
+    params = [token, channel_id, message, message_id]
+    timer = threading.Timer(time_sent - time.time(), message_sendlater_send_message, params)
     timer.start()
     return message_id
 
 def message_remove(token, message_id):
+    '''Removes the message from list of messages in channel'''
     info = find_message_info(message_id)
     if info is None:
         raise ValueError("Message ID is invalid")
@@ -87,6 +109,7 @@ def message_remove(token, message_id):
     channel["total_messages"] -= 1
 
 def message_edit(token, message_id, new_message):
+    '''Changes the string in the message, or removes it if new_message is ""'''
     info = find_message_info(message_id)
     if info is None:
         raise ValueError("Message ID is invalid")
@@ -110,6 +133,10 @@ def message_edit(token, message_id, new_message):
     message["message"] = new_message
 
 def message_react(token, message_id, react_id):
+    '''
+    Create a react entry for message if one doesn't exist,
+    otherwise appends uid to list of uids that have reacted to the message
+    '''
     info = find_message_info(message_id)
     if info is None:
         raise ValueError("Message ID is invalid")
@@ -120,7 +147,7 @@ def message_react(token, message_id, react_id):
     if not check_token_in_channel(token, channel['channel_id']):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if react_id not in valid_reacts:
+    if react_id not in VALID_REACTS:
         raise ValueError("Not a valid react_id")
     if has_user_reacted(uid, react_id, message):
         raise ValueError("Already reacted")
@@ -134,6 +161,10 @@ def message_react(token, message_id, react_id):
     })
 
 def message_unreact(token, message_id, react_id):
+    '''
+    Removes uid from list of uids reacted
+    Removes react entry if this was the only uid reacted to that message
+    '''
     info = find_message_info(message_id)
     if info is None:
         raise ValueError("Message ID is invalid")
@@ -144,7 +175,7 @@ def message_unreact(token, message_id, react_id):
     if not check_token_in_channel(token, channel['channel_id']):
         raise AccessError("Token not in channel")
     uid = get_user_from_token(token)
-    if react_id not in valid_reacts:
+    if react_id not in VALID_REACTS:
         raise ValueError("Not a valid react_id")
     for react in message['reacts']:
         if react["react_id"] == react_id:
@@ -158,6 +189,7 @@ def message_unreact(token, message_id, react_id):
     raise ValueError("Haven't reacted")
 
 def message_pin(token, message_id):
+    '''Sets message['is_pinned'] to True'''
     info = find_message_info(message_id)
     if info is None:
         raise ValueError("Message ID is invalid")
@@ -175,6 +207,7 @@ def message_pin(token, message_id):
     message["is_pinned"] = True
 
 def message_unpin(token, message_id):
+    '''Sets message['ispinned'] to False'''
     info = find_message_info(message_id)
     if info is None:
         raise ValueError("Message ID is invalid")

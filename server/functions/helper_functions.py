@@ -1,4 +1,4 @@
-import re 
+import re
 import random
 import hashlib
 import datetime
@@ -6,39 +6,26 @@ import sys
 import atexit
 import pickle
 
-#Dictionary with key as email as the corresponding values e.g.
-## Shoan version for Auth
-#  list_of_users = [{'rajeshkumar@gmail.com':{'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None}}]
-
-## Adi new version for more general use:
-
-
-## Addition of a permissions list:
 '''
     Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
-    1 and 2 have same permissions but 2 cannot change the privileges that 1 has. 
+    1 and 2 have same permissions but 2 cannot change the privileges that 1 has.
     First member that is added to Slackr has owner permission. Only other owners could then
-    change this. 
+    change this.
 '''
-
-#list_of_user_permissions = [{'u_id': 1, }] 
-
-global number_of_users 
-number_of_users = 1
 
 #===============================================================================#
 #============================== PICKLING HELPERS ===============================#
 #===============================================================================#
-global number_of_channels
-global number_of_messages
+
 def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages):
+    '''Pickles data at end of runtime'''
     pickle.dump(all_channels_details, open('server/functions/data/all_channels_details.p', 'wb'))
     pickle.dump(all_channels_messages, open('server/functions/data/all_channels_messages.p', 'wb'))
     pickle.dump(all_channels_permissions, open('server/functions/data/all_channels_permissions.p', 'wb'))
     pickle.dump(list_of_users, open('server/functions/data/list_of_users.p', 'wb'))
     pickle.dump(number_of_channels, open('server/functions/data/number_of_channels.p', 'wb'))
     pickle.dump(number_of_messages, open('server/functions/data/number_of_messages.p', 'wb'))
-
+    pickle.dump(number_of_users, open('server/functions/data/number_of_messages.p', 'wb'))
 
 all_channels_details = pickle.load(open("server/functions/data/all_channels_details.p", "rb"))
 all_channels_messages = pickle.load(open("server/functions/data/all_channels_messages.p", "rb"))
@@ -46,17 +33,10 @@ all_channels_permissions = pickle.load(open("server/functions/data/all_channels_
 list_of_users = pickle.load(open("server/functions/data/list_of_users.p", "rb"))
 number_of_channels = pickle.load(open("server/functions/data/number_of_channels.p", "rb"))
 number_of_messages = pickle.load(open("server/functions/data/number_of_messages.p", "rb"))
-'''
-#================= data storage for channels =================#
-all_channels_details = [{'channel_id': 1, 'name': 'Channel A', 'owner_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'all_members':[{'u_id': 1, 'name_first': 'Rajesh', 'name_last': 'Kumar'}], 'is_public': True}]
-all_channels_messages = [{'channel_id': 1, 'total_messages': 55, 'standup_active': False, 'standup_buffer': '',
- 'messages':[{'message_id': 1, 'u_id': 1, 'message': 'Hello', 'time_created': int(datetime.datetime.now().strftime('%s')), 'reacts': [{'react_id': 1, 'u_ids': [1]}], 'is_pinned': False}]}]
-all_channels_permissions = [{'channel_id': 1, 'u_id': 1, 'channel_permission_id': 1}] ## 1 = owner, 2 = admin, 3 = just member
-list_of_users = [{'handle_str': 'RajeshKumar', 'email': 'rajeshkumar@gmail.com', 'password': 'V@lidPassword123', 'u_id': 1, 'token' : 12345, 'reset_code': None, 'name_first': 'Rajesh', 'name_last': 'Kumar', 'app_permission_id': 1}]
-number_of_messages = 0
-number_of_channels = 1
-'''
+number_of_users = pickle.load(open("server/functions/data/number_of_users.p", "rb"))
+
 atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages)
+
 #===============================================================================#
 #=============================== GENERAL HELPERS ===============================#
 #===============================================================================#
@@ -253,12 +233,10 @@ def get_user_channel_permission(channel_id, u_id):
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
-global valid_reacts
-valid_reacts = [1,2,3]
+VALID_REACTS = [1,2,3]
 
-
-# Return None if message does not exist
 def find_message_info(message_id):
+    '''Returns pointer to message item in all_channels_messages, or none if not found'''
     for channel in all_channels_messages:
         for message in channel["messages"]:
             if message["message_id"] == message_id:
@@ -266,15 +244,16 @@ def find_message_info(message_id):
     return None
 
 def has_user_reacted(uid, react_id, message):
+    '''Returns true if user has reacted, false otherwise'''
     for react in message["reacts"]:
         if react_id == react["react_id"]:
             if uid in react["u_ids"]:
                 return True
-            else:
-                return False
-            
+            return False
+    return False
+
 def generate_message_id():
-    global number_of_messages
+    '''Creates a new message id by starting at 1 and adding one for each message'''
     number_of_messages += 1
     return number_of_messages
 
