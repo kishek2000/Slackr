@@ -1,11 +1,11 @@
 """ user_functions """
 import sys
-from PIL import Image
-import requests
 import urllib.request
+import requests
+from PIL import Image
 
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, generate_reset_code
+from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users
 from functions.Errors import AccessError
 
 
@@ -91,14 +91,14 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     returned_status = requests.head(str(img_url))
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
-    
+
     image_name = './server/functions/data/user_images/' + token + '.png'
     urllib.request.urlretrieve(str(img_url), image_name)
     #image = Image.open(requests.get(str(img_url), stream=True).raw)
     image = Image.open(image_name)
     img_x = image.size[0]
     img_y = image.size[1]
-    
+
     if x_start > img_y or x_end > img_x:
         raise ValueError("Invalid x_dimension")
 
