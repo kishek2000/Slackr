@@ -92,7 +92,7 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
     
-    image_name = './data/user_images/' + generate_reset_code() + '.png'
+    image_name = './server/functions/data/user_images/' + token + '.png'
     urllib.request.urlretrieve(str(img_url), image_name)
     #image = Image.open(requests.get(str(img_url), stream=True).raw)
     image = Image.open(image_name)
@@ -109,7 +109,6 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     cropped_image = image.crop(box)
     cropped_image.save(image_name)
 
-    #return cropped_image
     cropped_image.save(image_name)
 
 def users_all(token):
