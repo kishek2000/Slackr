@@ -4,7 +4,8 @@ import datetime
 import time
 import threading
 
-def standup_start(token, channel_id):
+#Assume length is in minutes
+def standup_start(token, channel_id, length):
     
     #Check if valid channel
     if check_valid_channel_id(channel_id) == False:
@@ -22,14 +23,28 @@ def standup_start(token, channel_id):
         raise ValueError("Channel Standup Already Active")
   	    
   	#If no errors raised then start the startup
-    start_standup(channel_id)    
+    time_finish = datetime.datetime.now() + datetime.timedelta(minutes = length)
+    start_standup(channel_id, time_finish)    
   	
   	#Wait for 15 minutes then end the startup
-    t = threading.Timer(60 * 15, end_standup, [channel_id])
+    t = threading.Timer(60 * length, end_standup, [channel_id])
     t.start()
 
-    return datetime.datetime.now() + datetime.timedelta(minutes = 15)     		
- 
+    return time_finish    		
+
+def standup_active(token, channel_id): 
+    
+    #Check if valid channel
+    if check_valid_channel_id(channel_id) == False:
+        raise ValueError("Invalid Channel")
+        
+    #Check if user is in the channel
+    
+    if check_token_in_channel(token, channel_id) == False:
+    
+        raise AccessError("User Not In Channel")       
+        
+    return standup_status(channel_id)[0],  standup_status(channel_id)[1]
         		
 def standup_send(token, channel_id, message):
 

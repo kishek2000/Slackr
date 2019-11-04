@@ -301,24 +301,47 @@ def check_standup_active(channel_id):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            if channel['standup_active'] == True:
-                return True
+            try:
+                if channel['standup_active'][0] == True:
+                    return True
                 
+            except TypeError:
+                continue            
+                
+                                            
     return False
     
     
-def start_standup(channel_id):
+def start_standup(channel_id, time_finish):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            channel['standup_active'] = True
+            channel['standup_active'] = [None, None]
+            channel['standup_active'][0] = True
+            channel['standup_active'][1] =  time_finish 
+            
     return {}
+
+def standup_status(channel_id):
+    
+    for channel in all_channels_messages:
+        if channel_id == channel['channel_id']:
+            
+            try:
+                channel['standup_active'][1] != None
+                return [True, channel['standup_active'][1]] 
+            
+            except TypeError:
+                return [False, None]
+            
+    return [False, None]
                     
 def end_standup(channel_id):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            channel['standup_active'] = False    
+            channel['standup_active'][0] = False    
+            channel['standup_active'][1] = None    
     return {}
 
                 

@@ -40,11 +40,11 @@ def test_standup_start_correct_details(setup):
     channel_id = setup['channel_created_by_user_1']
     
     #Should produce no errors
-    standup_start(user_1_token, channel_id)
+    standup_start(user_1_token, channel_id, 1)
     
 def test_standup_invalid_helpers(setup):
     assert check_standup_active(-1) == False
-    assert start_standup(-1) == {}
+    assert start_standup(-1, None) == {}
     assert end_standup(-1) == {}
     assert add_to_standup_queue(-1, "hi") == {}
  
@@ -55,11 +55,11 @@ def test_standup_attempt_to_start_already_active_standup(setup):
     channel_id = setup['channel_created_by_user_1']
     
     #Should produce no errors
-    standup_start(user_1_token, channel_id)
+    standup_start(user_1_token, channel_id, 1)
 
     #Should produce ValueError as standup is already active
     with pytest.raises(ValueError):
-        standup_start(user_1_token, channel_id)
+        standup_start(user_1_token, channel_id, 1)
  
 
 def test_standup_start_nonexistant_channel(setup):
@@ -70,7 +70,7 @@ def test_standup_start_nonexistant_channel(setup):
     
     #Should produce ValueError as channel with channel_id = -1 does not exist
     with pytest.raises(ValueError):
-        standup_start(user_1_token, channel_id)
+        standup_start(user_1_token, channel_id, 1)
         
         
 def test_standup_start_unauthorised_user_access(setup):
@@ -81,7 +81,7 @@ def test_standup_start_unauthorised_user_access(setup):
     
     #Should produce AccessError as the user is not a member of the channel
     with pytest.raises(AccessError):
-        standup_start(user_2_token, channel_id)
+        standup_start(user_2_token, channel_id, 1)
         
      
 def test_standup_start_time_finish_greaterThan_time_current(setup):
@@ -91,25 +91,25 @@ def test_standup_start_time_finish_greaterThan_time_current(setup):
     user_1_token = setup['user_1_token']
     channel_id = setup['channel_created_by_user_1']
     
-    time_finish = standup_start(user_1_token, channel_id)
+    time_finish = standup_start(user_1_token, channel_id, 1)
     
     #Testing if time_finish is greater than the time_current 
     assert((time_finish > time_current) == True)
     
   
-def test_standup_start_correct_time_difference(setup):
+def test_standup_start_correct_time_difference_1_minute(setup):
     
     time_current = datetime.datetime.now()
 
     user_1_token = setup['user_1_token']
     channel_id = setup['channel_created_by_user_1']
         
-    time_finish = standup_start(user_1_token, channel_id)
+    time_finish = standup_start(user_1_token, channel_id, 1)
     
     time_difference = time_finish - time_current 
     
     #Testing if time_finish has a 15 minute differnce in time from time_current 
-    assert((time_difference.seconds/60) == 15)
+    assert((time_difference.seconds/60) == 1)
 
 
 #################################################################################
@@ -127,7 +127,7 @@ def test_standup_send_valid(setup):
     
     #registered_user_1 starts the standup
     
-    standup_start(user_1_token, channel_id)
+    standup_start(user_1_token, channel_id, 1)
     
     #Should produce no error as a valid message is sent by both registered_users during the standup
     
@@ -142,7 +142,7 @@ def test_standup_send_nonexistant_channel(setup):
     
     user_token = setup['user_1_token']
     channel_id_1 = setup['channel_created_by_user_1']      
-    standup_start(user_token, channel_id_1)
+    standup_start(user_token, channel_id_1, 1)
     
     #Should produce ValueError as channel with channel_id = -1 does not exist
     
@@ -160,7 +160,7 @@ def test_standup_send_message_too_long(setup):
     
     user_token = setup['user_1_token']
     channel_id = setup['channel_created_by_user_1']   
-    time_finish = standup_start(user_token, channel_id)
+    time_finish = standup_start(user_token, channel_id, 1)
     
     #Should produce ValueError as the message is greater than 1000 characters
     
@@ -176,7 +176,7 @@ def test_standup_send_unauthorised_user(setup):
     
     user_1_token = setup['user_1_token']
     channel_id = setup['channel_created_by_user_1'] 
-    time_finish = standup_start(user_1_token, channel_id)
+    time_finish = standup_start(user_1_token, channel_id, 1)
     
     
     #Should produce AccessError as the user is not a member of the channel
@@ -189,17 +189,17 @@ def test_standup_send_unauthorised_user(setup):
         
         
         
-def test_standup_send_standup_time_finished(setup):
+def test_standup_send_standup_time_finished_1_minute(setup):
     
     #Start the standup
     
     user_token = setup['user_1_token']
     channel_id = setup['channel_created_by_user_1']   
-    standup_start(user_token, channel_id)
+    standup_start(user_token, channel_id, 1)
     
     #Sleep 15 minutes
     
-    time.sleep(60 * 15)  
+    time.sleep(60 * 1)  
     
     #Standup time should be finished so now sending a message to the standup should produce
     #an AccessError even if the user sending a message to the standup belongs to the channel
