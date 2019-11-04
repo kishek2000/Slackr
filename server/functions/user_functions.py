@@ -2,9 +2,10 @@
 import sys
 from PIL import Image
 import requests
+import urllib.request
 
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users
+from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, generate_reset_code
 from functions.Errors import AccessError
 
 
@@ -78,6 +79,7 @@ def user_profile_sethandle(token, handle_str):
 
 def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     """ user_profiles_uploadphoto function """
+    # https://auth0.com/blog/image-processing-in-python-with-pillow/
 
     if not check_valid_token(token):
         raise AccessError("Invalid token")
@@ -85,15 +87,18 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     if x_start > x_end or y_start > y_end:
         raise ValueError("Invalid dimensions")
 
-    # https://auth0.com/blog/image-processing-in-python-with-pillow/
     #need to handle if image doesnt exist
     returned_status = requests.head(str(img_url))
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
-
-    image = Image.open(requests.get(str(img_url), stream=True).raw)
+    
+    image_name = './data/user_images/' + generate_reset_code() + '.png'
+    urllib.request.urlretrieve(str(img_url), image_name)
+    #image = Image.open(requests.get(str(img_url), stream=True).raw)
+    image = Image.open(image_name)
     img_x = image.size[0]
     img_y = image.size[1]
+    
     if x_start > img_y or x_end > img_x:
         raise ValueError("Invalid x_dimension")
 
@@ -102,8 +107,10 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
 
     box = (x_start, y_start, x_end, y_end)
     cropped_image = image.crop(box)
+    cropped_image.save(image_name)
 
     #return cropped_image
+    cropped_image.save(image_name)
 
 def users_all(token):
     """ users_all function """
