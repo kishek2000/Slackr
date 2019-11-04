@@ -329,12 +329,12 @@ def standup_status(channel_id):
             
             try:
                 channel['standup_active'][1] != None
-                return [True, channel['standup_active'][1]] 
+                return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]} 
             
             except TypeError:
-                return [False, None]
+                return {'standup_active' : False, 'time_finish' : None} 
             
-    return [False, None]
+    return {'standup_active' : False, 'time_finish' : None} 
                     
 def end_standup(channel_id):
 

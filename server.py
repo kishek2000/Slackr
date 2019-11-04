@@ -412,9 +412,10 @@ def start_standup():
 
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
+    length = request.form.get('length')
 
     try:
-        standup_end_time = standup_start(token, channel_id)
+        standup_end_time = standup_start(token, channel_id, length)
 
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
@@ -427,6 +428,23 @@ def start_standup():
     except AccessError as error:
         return {'error': error}
 
+@APP.route('/standup/active', methods=['GET'])
+def standup_active_check():
+    """ Description of function """
+
+    token = request.args.get('token')
+    channel_id = int(request.args.get('channel_id'))
+    
+    try:
+        standup_details = standup_active(token, channel_id)
+        return dumps({'standup_active' : standup_details['standup_active'], 
+                      'time_finish': standup_details['time_finish']})
+
+    except ValueError as error:
+        return {'error': error}
+
+    except AccessError as error:
+        return {'error': error}
 
 @APP.route('/standup/send', methods=['POST'])
 def start_send():

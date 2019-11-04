@@ -44,7 +44,9 @@ def standup_active(token, channel_id):
     
         raise AccessError("User Not In Channel")       
         
-    return standup_status(channel_id)[0],  standup_status(channel_id)[1]
+    standup_details = standup_status(channel_id)    
+        
+    return standup_details['standup_active'],  standup_details['time_finish']
         		
 def standup_send(token, channel_id, message):
 
