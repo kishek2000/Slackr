@@ -79,7 +79,7 @@ def auth_register(email, password, name_first, name_last):
     
     list_of_users.append({"handle_str": handle, "email" : email, "password": password_hash(password), "u_id": None,
                           "token" : None, "reset_code": None , "name_first": name_first, "name_last": name_last,       
-                          'app_permission_id': None})
+                          'app_permission_id': None, 'image_path': None})
     
     #Assign token and u_id
     

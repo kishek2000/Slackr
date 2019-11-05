@@ -209,36 +209,36 @@ def test_user_profiles_uploadphoto_no_return(register_account):
 # This function tests that the code throws no errors
 def test_user_profiles_uploadphoto_no_errors(register_account):
     token = register_account['token']
-    user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 0, 2864, 1861)
+    user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '0', '0', '2864', '1861')
 
 def test_user_profiles_upload_photo_invalid_token(register_account):
     token = 'wrong token'
     with pytest.raises(AccessError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 0, 2864, 1861)
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '0', '0', '2864', '1861')
 
 # This tests the function with an invalid photo url, a HTTP status that is not 200
 def test_user_profiles_uploadphoto_not_200(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Potates.jpg', 0, 0, 2864, 1861)
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Potates.jpg', '0', '0', '2864', '1861')
 
 # This function passes x,y coordinates that are not possible (e.g x_end > x_start)
 def test_user_profiles_uploadphoto_wrong_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 2864, 1861, 0, 0)
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '2864', '1861', '0', '0')
 
 # This function passes x coordinates that are larger than the photo
 def test_user_profiles_uploadphoto_larger_X_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 2865, 0, 2867, 1861)
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '2865', '0', '2867', '1861')
 
 # This function passes y coordinates that are larger than the photo
 def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 1862, 2864, 1865)
+        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '0', '1862', '2864', '1865')
 
 #################################################################################
 ##                            TESTING users_all                                ##
@@ -250,7 +250,7 @@ def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
 #Ensure the function does not return anything
 def test_users_all_correct_return(register_account):
     token = register_account['token']
-    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'password': list_of_users[0]['password'], 'u_id': 1, 'token' : list_of_users[0]['token'], 'reset_code': None, 'name_first': 'Epic', 'name_last': 'Style', 'app_permission_id': 1}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'password': list_of_users[1]['password'], 'u_id': 2, 'token' : token, 'reset_code': None, 'name_first': 'dan', 'name_last': 'man', 'app_permission_id': 3}]}
+    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'password': list_of_users[0]['password'], 'u_id': 1, 'token' : list_of_users[0]['token'], 'reset_code': None, 'name_first': 'Epic', 'name_last': 'Style', 'app_permission_id': 1, 'image_path': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'password': list_of_users[1]['password'], 'u_id': 2, 'token' : token, 'reset_code': None, 'name_first': 'dan', 'name_last': 'man', 'app_permission_id': 3, 'image_path': None}]}
 
 #This should cause the function to raise an error as the token is invalid
 def test_users_all_invalid_token():

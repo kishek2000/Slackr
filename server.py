@@ -3,7 +3,7 @@ import sys
 from json import dumps
 from datetime import timezone
 from flask_cors import CORS
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 sys.path.append('server/')
 from functions.auth_functions import *
 from functions.channel_functions import *
@@ -13,6 +13,7 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
+from functions.helper_functions import get_user_details
 
 APP = Flask(__name__)
 CORS(APP)
@@ -387,7 +388,8 @@ def post_user_uploadphoto():
     y_end = request.form.get('y_end')
     try:
         user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
-        return dumps({})
+        returned_dict = get_user_details(token)
+        return send_from_directory('', returned_dict['image_path'])
     except ValueError as error:
         return {'error': error}
 

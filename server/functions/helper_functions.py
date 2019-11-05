@@ -45,7 +45,7 @@ atexit.register(pickle_data, all_channels_details, all_channels_messages, all_ch
 def get_user_details(token_or_u_id):
     for user in list_of_users:
         if user['token'] == token_or_u_id or user['u_id'] == token_or_u_id:
-            return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id']}
+            return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id'], 'image_path': user['image_path']}
     return {}
 
 def get_user_from_token(token):
