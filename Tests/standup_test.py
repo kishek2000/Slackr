@@ -111,7 +111,66 @@ def test_standup_start_correct_time_difference_1_minute(setup):
     #Testing if time_finish has a 15 minute differnce in time from time_current 
     assert((time_difference.seconds/60) == 1)
 
+#################################################################################
+##                           TESTING standup_active                            ##
+#################################################################################
 
+def test_standup_active_valid(setup):
+
+    #Start the standup on the channel with channel id 'channel_id_user_1'  
+    
+    user_token = setup['user_1_token']
+    channel_id_1 = setup['channel_created_by_user_1']      
+    standup_start(user_token, channel_id_1, 1)
+
+    #Should return true
+    
+    assert(standup_active(user_token, channel_id_1)['standup_active'] == True)
+
+def test_standup_active_invalid(setup):
+
+    #Start the standup on the channel with channel id 'channel_id_user_1'  
+    
+    user_token = setup['user_1_token']
+    channel_id_1 = setup['channel_created_by_user_1']      
+
+    #Should return true
+    
+    assert(standup_active(user_token, channel_id_1)['standup_active'] == False)
+
+def test_standup_active_invalid_channel(setup):
+
+    #Start the standup on the channel with channel id 'channel_id_user_1'  
+    
+    user_token = setup['user_1_token']
+    channel_id_1 = setup['channel_created_by_user_1']      
+    standup_start(user_token, channel_id_1, 1)
+
+    channel_id_2 = -1
+    
+    #Since channel is nonexistant and hence invalid
+    with pytest.raises(ValueError):
+        standup_active(user_token, channel_id_2)  
+        
+    assert(standup_status(channel_id_2) == {'standup_active' : False, 'time_finish' : None})    
+         
+
+def test_standup_active_user_not_in_channel(setup):
+
+    #Start the standup
+    
+    user_1_token = setup['user_1_token']
+    channel_id = setup['channel_created_by_user_1'] 
+    standup_start(user_1_token, channel_id, 1)
+    
+    
+    #Should produce AccessError as the user is not a member of the channel
+    
+    user_3_token = setup['user_3_token']
+    
+    with pytest.raises(AccessError):
+        standup_active(user_3_token, channel_id) 
+        
 #################################################################################
 ##                           TESTING standup_send                              ##
 #################################################################################
@@ -138,7 +197,7 @@ def test_standup_send_valid(setup):
      
 def test_standup_send_nonexistant_channel(setup):
     
-    #Start the standup on the channel with channel id channel_id_user_1  
+    #Start the standup on the channel with channel id 'channel_id_user_1' 
     
     user_token = setup['user_1_token']
     channel_id_1 = setup['channel_created_by_user_1']      

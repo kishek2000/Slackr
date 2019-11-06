@@ -46,7 +46,8 @@ def standup_active(token, channel_id):
         
     standup_details = standup_status(channel_id)    
         
-    return standup_details['standup_active'],  standup_details['time_finish']
+    return {'standup_active' : standup_details['standup_active'],
+            'time_finish' : standup_details['time_finish']}
         		
 def standup_send(token, channel_id, message):
 
