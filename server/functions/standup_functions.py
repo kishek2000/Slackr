@@ -23,7 +23,7 @@ def standup_start(token, channel_id, length):
         raise ValueError("Channel Standup Already Active")
   	    
   	#If no errors raised then start the startup
-    time_finish = datetime.datetime.now() + datetime.timedelta(minutes = length)
+    time_finish = datetime.datetime.now() + datetime.timedelta(minutes = int(length))
     start_standup(channel_id, time_finish)    
   	
   	#Wait for 15 minutes then end the startup
