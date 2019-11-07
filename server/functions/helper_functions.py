@@ -27,6 +27,7 @@ def pickle_data(all_channels_details, all_channels_messages, all_channels_permis
     pickle.dump(number_of_messages, open('server/functions/data/number_of_messages.p', 'wb'))
     pickle.dump(number_of_users, open('server/functions/data/number_of_messages.p', 'wb'))
 
+
 all_channels_details = pickle.load(open("server/functions/data/all_channels_details.p", "rb"))
 all_channels_messages = pickle.load(open("server/functions/data/all_channels_messages.p", "rb"))
 all_channels_permissions = pickle.load(open("server/functions/data/all_channels_permissions.p", "rb"))
@@ -34,7 +35,6 @@ list_of_users = pickle.load(open("server/functions/data/list_of_users.p", "rb"))
 number_of_channels = pickle.load(open("server/functions/data/number_of_channels.p", "rb"))
 number_of_messages = pickle.load(open("server/functions/data/number_of_messages.p", "rb"))
 number_of_users = pickle.load(open("server/functions/data/number_of_users.p", "rb"))
-
 atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages)
 
 #===============================================================================#
@@ -254,6 +254,7 @@ def has_user_reacted(uid, react_id, message):
 
 def generate_message_id():
     '''Creates a new message id by starting at 1 and adding one for each message'''
+    global number_of_messages
     number_of_messages += 1
     return number_of_messages
 
