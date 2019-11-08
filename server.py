@@ -422,7 +422,7 @@ def start_standup():
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
         timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
-        return dumps({'time_finish' : timestamp})
+        return dumps({'time_finish' : str(timestamp)})
 
     except ValueError as error:
         return {'error': error}
