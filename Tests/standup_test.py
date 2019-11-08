@@ -7,7 +7,7 @@ import pytest
 import sys
 sys.path.append('server/')
 from functions.standup_functions import standup_start, standup_active, standup_send
-from functions.helper_functions import (start_standup, end_standup, add_to_standup_queue, 
+from functions.helper_functions import (start_standup, end_standup, add_to_standup_queue,
                                         standup_status, reset_data)
 from functions.channel_functions import channels_create, channel_join
 from functions.auth_functions import auth_register
@@ -208,9 +208,10 @@ def test_standup_active_end_of_standup(_setup):
 
     #Wait till standup ends
     time.sleep(11)
-    
-    assert(standup_active(user_1_token, channel_id) == {'standup_active' : False, 'time_finish' : None})
-  
+
+    assert(standup_active(user_1_token, channel_id) == {'standup_active' : False,
+                                                        'time_finish' : None})
+
 def test_standup_active_correct_time_difference(_setup):
     '''Testing standup_active after standup's completion'''
     #Start the standup
@@ -218,13 +219,10 @@ def test_standup_active_correct_time_difference(_setup):
     user_1_token = _setup['user_1_token']
     channel_id = _setup['channel_created_by_user_1']
     time_finish = standup_start(user_1_token, channel_id, 60)
-    
-    assert(standup_active(user_1_token, channel_id)['time_finish'] == time_finish) 
-    
-    time_current = datetime.datetime.now()
-    time_difference = standup_active(user_1_token, channel_id)['time_finish'] - time_current
-    
-    
+
+    assert standup_active(user_1_token, channel_id)['time_finish'] == time_finish
+
+
 #################################################################################
 ##                           TESTING standup_send                              ##
 #################################################################################
