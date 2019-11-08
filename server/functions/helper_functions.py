@@ -5,7 +5,6 @@ import datetime
 import sys
 import atexit
 import pickle
-
 '''
     Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
     1 and 2 have same permissions but 2 cannot change the privileges that 1 has.
@@ -337,13 +336,6 @@ def standup_status(channel_id):
             
     return {'standup_active' : False, 'time_finish' : None} 
                     
-def end_standup(channel_id):
-
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            channel['standup_active'][0] = False    
-            channel['standup_active'][1] = None    
-    return {}
 
                 
 def add_to_standup_queue(channel_id, message):

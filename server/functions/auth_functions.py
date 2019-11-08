@@ -10,6 +10,7 @@ from functions.helper_functions import (valid_email, email_matches_password, val
                                         email_registered, generate_reset_code, list_of_users,
                                         password_hash, generate_token, generate_u_id)
 
+
 def auth_login(email, password):
     '''Funtion logs a registered user onto slackr'''
     #Checking for valid email

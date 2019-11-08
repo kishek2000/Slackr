@@ -5,9 +5,10 @@ File contains standup related functions
 import datetime
 import threading
 from functions.Errors import AccessError
-from functions.helper_functions import (check_valid_channel_id, check_token_in_channel, end_standup,
+from functions.helper_functions import (check_valid_channel_id, check_token_in_channel, 
                                         standup_status, add_to_standup_queue, all_channels_messages,
                                         start_standup)
+from functions.message_functions import message_send
 
 #Assume length is in seconds
 def standup_start(token, channel_id, length):
@@ -32,7 +33,7 @@ def standup_start(token, channel_id, length):
     start_standup(channel_id, time_finish)
 
   	#Wait for 'length' seconds then end the startup
-    threading_timer = threading.Timer(int(length), end_standup, [channel_id])
+    threading_timer = threading.Timer(int(length), end_standup, [channel_id, token])
     threading_timer.start()
 
     return time_finish
@@ -88,5 +89,22 @@ def standup_send(token, channel_id, message):
         raise AccessError("User Not In Channel")
 
     #Otherwise queue message to a standup buffer
-
+    
+    message_send(token, channel_id, "Standup: " + message)
+    
     add_to_standup_queue(channel_id, message)
+    
+    
+def end_standup(channel_id, token):
+
+    for channel in all_channels_messages:
+        if channel_id == channel['channel_id']:
+            channel['standup_active'][0] = False    
+            channel['standup_active'][1] = None 
+            standup_summary = channel['standup_buffer']
+            channel['standup_buffer'] = ''
+    
+    message_send(token, channel_id, "Standup Summary" + standup_summary)
+            
+    return {}    
+    
