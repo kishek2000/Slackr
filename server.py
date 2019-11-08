@@ -414,7 +414,7 @@ def start_standup():
 
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
-    length = request.form.get('length')
+    length = int(request.form.get('length'))
 
     try:
         standup_end_time = standup_start(token, channel_id, length)
