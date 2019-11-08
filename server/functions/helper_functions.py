@@ -297,7 +297,7 @@ def reset_data():
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
 #===============================================================================#  
-
+'''
 def check_standup_active(channel_id):
 
     for channel in all_channels_messages:
@@ -311,7 +311,7 @@ def check_standup_active(channel_id):
                 
                                             
     return False
-    
+'''  
     
 def start_standup(channel_id, time_finish):
 
@@ -329,7 +329,7 @@ def standup_status(channel_id):
         if channel_id == channel['channel_id']:
             
             try:
-                channel['standup_active'][1] != None
+                #channel['standup_active'][1] != None
                 return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]} 
             
             except TypeError:

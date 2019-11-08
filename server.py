@@ -418,10 +418,13 @@ def start_standup():
 
     try:
         standup_end_time = standup_start(token, channel_id, length)
-
+       
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
-        timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
+        #timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
+        timestamp = standup_end_time.strftime('%s')
+        #timestamp_starttime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
+        #timestamp = timestamp_endtime - timestamp_starttime
         return dumps({'time_finish' : str(timestamp)})
 
     except ValueError as error:
@@ -439,8 +442,18 @@ def standup_active_check():
     
     try:
         standup_details = standup_active(token, channel_id)
+        
+        timestamp = None
+        
+        if standup_details['time_finish'] != None: 
+            
+            timestamp = standup_details['time_finish'].strftime('%s')
+            #timestamp = standup_details['time_finish'].replace(tzinfo=timezone.utc).timestamp()
+            #timestamp_starttime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
+            #timestamp = timestamp_endtime - timestamp_starttime
+        
         return dumps({'standup_active' : standup_details['standup_active'], 
-                      'time_finish': standup_details['time_finish']})
+                      'time_finish': str(timestamp)})
 
     except ValueError as error:
         return {'error': error}
