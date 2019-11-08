@@ -3,7 +3,6 @@ File contains standup related functions
 '''
 
 import datetime
-
 import threading
 from functions.Errors import AccessError
 from functions.helper_functions import (check_valid_channel_id, check_token_in_channel, end_standup,
