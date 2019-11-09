@@ -198,7 +198,7 @@ def test_user_profile_sethandle_already_exists(register_account):
 #################################################################################
 ##                  TESTING user_profiles_uploadphoto                          ##
 #################################################################################
-# function inputs: token, img_url, x_start, y_start, x_end, y_end
+# function inputs: token, profile_img_url, x_start, y_start, x_end, y_end
 # function returns:
 '''
 # This tests passes if the function works correctly, does not pass back any errors
@@ -250,7 +250,7 @@ def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
 #Ensure the function does not return anything
 def test_users_all_correct_return(register_account):
     token = register_account['token']
-    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'password': list_of_users[0]['password'], 'u_id': 1, 'token' : list_of_users[0]['token'], 'reset_code': None, 'name_first': 'Epic', 'name_last': 'Style', 'app_permission_id': 1, 'image_path': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'password': list_of_users[1]['password'], 'u_id': 2, 'token' : token, 'reset_code': None, 'name_first': 'dan', 'name_last': 'man', 'app_permission_id': 3, 'image_path': None}]}
+    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'password': list_of_users[0]['password'], 'u_id': 1, 'token' : list_of_users[0]['token'], 'reset_code': None, 'name_first': 'Epic', 'name_last': 'Style', 'app_permission_id': 1, 'profile_img_url': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'password': list_of_users[1]['password'], 'u_id': 2, 'token' : token, 'reset_code': None, 'name_first': 'dan', 'name_last': 'man', 'app_permission_id': 3, 'profile_img_url': None}]}
 
 #This should cause the function to raise an error as the token is invalid
 def test_users_all_invalid_token():
