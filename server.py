@@ -389,7 +389,7 @@ def post_user_uploadphoto():
     try:
         user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
         returned_dict = get_user_details(token)
-        return send_from_directory('', returned_dict['image_path'])
+        return send_from_directory('', returned_dict['profile_img_url'])
     except ValueError as error:
         return {'error': error}
 
