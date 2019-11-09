@@ -113,7 +113,7 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     box = (x_start, y_start, x_end, y_end)
     cropped_image = image.crop(box)
     cropped_image.save(image_dir)
-    
+
     for user in list_of_users:
         if user['token'] == token:
             user['profile_img_url'] = image_path
