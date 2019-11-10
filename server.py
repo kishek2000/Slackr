@@ -16,6 +16,7 @@ from functions.message_functions import *
 from functions.helper_functions import get_user_details
 
 APP = Flask(__name__)
+app_img = Flask(__name__, static_url_path = '/')
 CORS(APP)
 
 @APP.route('/echo/get', methods=['GET'])
@@ -389,7 +390,8 @@ def post_user_uploadphoto():
     try:
         user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
         returned_dict = get_user_details(token)
-        return send_from_directory('', returned_dict['profile_img_url'])
+        #return send_from_directory('', returned_dict['profile_img_url'])
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
@@ -403,6 +405,10 @@ def get_users_all():
     except ValueError as error:
         print(error)
         return {'error': error}
+
+@app_img.route('/<path:path>')
+def send_js(path):
+    return send_from_directory('', path)
 
 #===============================================================================#
 #=================================   STANDUP    ================================#
