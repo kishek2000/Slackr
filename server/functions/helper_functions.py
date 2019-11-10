@@ -60,13 +60,13 @@ def get_user_app_permission(u_id):
     return_dict = get_user_details(u_id)
     return return_dict['app_permission_id']
 
-## GENERATE FUNCTIONS   
-def generate_token(email):   
+## GENERATE FUNCTIONS
+def generate_token(email):
     for user in list_of_users:
         if user['email'] == email:
             hashed_token = hashlib.sha256(email.encode()).hexdigest()
             user['token'] = hashed_token
-    return hashed_token                    
+    return hashed_token
 
 def generate_u_id():
     global number_of_users
@@ -84,7 +84,7 @@ def check_valid_token(token):
     for user in list_of_users:
         if token == user['token']:
             return True
-    return False 
+    return False
 
 def check_token_matches_user(u_id, token):
     for user in list_of_users:
@@ -96,11 +96,11 @@ def check_valid_handle(handle_str):
     for user in list_of_users:
         if handle_str == user['handle_str']:
             return True
-    return False 
-    
+    return False
 
-    
-    
+
+
+
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
@@ -109,76 +109,76 @@ def email_registered(email):
     for user in list_of_users:
         if email == user['email']:
             return True
-    
+
     return False
 
 def email_matches_password(registered_email, password):
 
     for user in list_of_users:
         if registered_email == user['email'] and password == user['password']:
-            return True 
-    
+            return True
+
     return False
 
 def valid_email(email):
 
 #To check whether an email is valid the method from https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/ was used
 
-    regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' 
-    
+    regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+
     if re.search(regex, email) is None:
         return False
     else:
         return True
-        
+
 def valid_password(password):
-    
+
     no_of_characters = 0
     no_of_numbers = 0
     no_of_upper_case = 0
     no_of_lower_case = 0
     no_of_special_characters = 0
-    
+
     for character in password:
-    
+
         no_of_characters += 1
-    
+
         if character.isupper():
             no_of_upper_case += 1
-            
+
         if character.islower():
-            no_of_lower_case += 1   
-    
+            no_of_lower_case += 1
+
         if character.isdigit():
             no_of_numbers += 1
 
 #To check for special characters in a string the method from https://www.geeksforgeeks.org/python-program-check-string-contains-special-character/ was used
-        
+
         regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-       
-        if regex.search(character) is not None: 
+
+        if regex.search(character) is not None:
             no_of_special_characters += 1
-            
-            
+
+
     if (no_of_characters >= 1 and no_of_numbers >= 1 and
         no_of_upper_case >= 1 and no_of_lower_case >= 1 and
         no_of_special_characters >= 1 and len(password) >= 6):
-        
+
         return True
-        
+
     else:
-        return False  
- 
-#Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019 
+        return False
+
+#Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019
 def password_hash(password):
     return hashlib.sha256(password.encode()).hexdigest()
-    
-def generate_reset_code():
-    reset_code = random.randint(1,10000000)   
-    return str(reset_code)
-  
 
-    
+def generate_reset_code():
+    reset_code = random.randint(1,10000000)
+    return str(reset_code)
+
+
+
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
 #===============================================================================#
@@ -281,10 +281,10 @@ def change_user_channel_permission(u_id, permission_id, channel_id):
                 return {'added_id': u_id, 'changed_permission': permission_id}
     if added_person == False or user_found == False:
         all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
-    
+
 
 def reset_data():
-    global number_of_users 
+    global number_of_users
     global number_of_channels
     all_channels_details.clear()
     all_channels_messages.clear()
@@ -293,10 +293,10 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
-    
+
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
-#===============================================================================#  
+#===============================================================================#
 
 def check_standup_active(channel_id):
 
@@ -305,52 +305,52 @@ def check_standup_active(channel_id):
             try:
                 if channel['standup_active'][0] == True:
                     return True
-                
+
             except TypeError:
-                continue            
-                
-                                            
+                continue
+
+
     return False
-    
-    
+
+
 def start_standup(channel_id, time_finish):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
             channel['standup_active'] = [None, None]
             channel['standup_active'][0] = True
-            channel['standup_active'][1] =  time_finish 
-            
+            channel['standup_active'][1] =  time_finish
+
     return {}
 
 def standup_status(channel_id):
-    
+
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            
+
             try:
                 channel['standup_active'][1] != None
-                return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]} 
-            
+                return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]}
+
             except TypeError:
-                return {'standup_active' : False, 'time_finish' : None} 
-            
-    return {'standup_active' : False, 'time_finish' : None} 
-                    
+                return {'standup_active' : False, 'time_finish' : None}
+
+    return {'standup_active' : False, 'time_finish' : None}
+
 def end_standup(channel_id):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            channel['standup_active'][0] = False    
-            channel['standup_active'][1] = None    
+            channel['standup_active'][0] = False
+            channel['standup_active'][1] = None
     return {}
 
-                
+
 def add_to_standup_queue(channel_id, message):
 
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
             channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
     return {}
-            
-                
+
+
