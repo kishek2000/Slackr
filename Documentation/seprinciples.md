@@ -1,4 +1,31 @@
+Things to include and talk about:
 
+1) DESIGN SMELLS:
+
+- Rigidity
+- Fragility
+- Immobility
+- Viscosity
+- Opacity
+- Needless complexity
+- Needless repetition
+- Coupling
+
+2) DESIGN PRINCIPLES (How our code is):
+
+- Extensible
+- Reusable
+- Maintainable
+- Understandable
+- Testable
+
+3) KISS
+
+4) ENCAPSULATION
+
+5) TOP-DOWN THINKING
+
+6) SINGLE RESPONSIBILITY PRINCIPLE
 
 ##Standup Changes:
 

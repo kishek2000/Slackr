@@ -5,7 +5,6 @@ import datetime
 import sys
 import atexit
 import pickle
-
 '''
     Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
     1 and 2 have same permissions but 2 cannot change the privileges that 1 has.
@@ -45,7 +44,7 @@ atexit.register(pickle_data, all_channels_details, all_channels_messages, all_ch
 def get_user_details(token_or_u_id):
     for user in list_of_users:
         if user['token'] == token_or_u_id or user['u_id'] == token_or_u_id:
-            return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id'], 'image_path': user['image_path']}
+            return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id'], 'profile_img_url': user['profile_img_url']}
     return {}
 
 def get_user_from_token(token):
@@ -297,7 +296,7 @@ def reset_data():
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
 #===============================================================================#
-
+'''
 def check_standup_active(channel_id):
 
     for channel in all_channels_messages:
@@ -311,7 +310,7 @@ def check_standup_active(channel_id):
 
 
     return False
-
+'''
 
 def start_standup(channel_id, time_finish):
 
@@ -329,21 +328,13 @@ def standup_status(channel_id):
         if channel_id == channel['channel_id']:
 
             try:
-                channel['standup_active'][1] != None
+                #channel['standup_active'][1] != None
                 return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]}
 
             except TypeError:
                 return {'standup_active' : False, 'time_finish' : None}
 
     return {'standup_active' : False, 'time_finish' : None}
-
-def end_standup(channel_id):
-
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            channel['standup_active'][0] = False
-            channel['standup_active'][1] = None
-    return {}
 
 
 def add_to_standup_queue(channel_id, message):
