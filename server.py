@@ -16,7 +16,7 @@ from functions.message_functions import *
 from functions.helper_functions import get_user_details
 
 APP = Flask(__name__)
-app_img = Flask(__name__, static_url_path = '/')
+app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
 CORS(APP)
 
 @APP.route('/echo/get', methods=['GET'])
@@ -406,7 +406,7 @@ def get_users_all():
         print(error)
         return {'error': error}
 
-@app_img.route('/<path:path>')
+@app_img.route('/server/functions/data/user_images/<path:path>')
 def send_js(path):
     return send_from_directory('', path)
 
