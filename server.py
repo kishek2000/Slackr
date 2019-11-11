@@ -503,8 +503,6 @@ def get_search():
 @APP.route('/admin/userpermission/change', methods=['POST'])
 def post_admin_userpermission_change():
     """ Description of function """
-
-
     token = request.form.get('token')
     u_id = int(request.form.get('u_id'))
     permission_id = int(request.form.get('permission_id'))
