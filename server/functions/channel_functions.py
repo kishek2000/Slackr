@@ -160,7 +160,7 @@ def channel_addowner(token, channel_id, u_id):
                     new_user_dict = get_user_details(get_token_from_user(u_id))
                     channels['owner_members'].append({
                         'u_id': new_user_dict['u_id'], 'name_first': new_user_dict['name_first'],
-                        'name_last': new_user_dict['name_last']
+                        'name_last': new_user_dict['name_last'], 'profile_img_url': new_user_dict['profile_img_url']
                     })
                     change_user_channel_permission(u_id, 1, channel_id)
                     break
@@ -243,9 +243,9 @@ def channels_create(token, name, is_public):
     u_id = get_user_from_token(token)
     all_channels_details.append({
         'channel_id': channel_id, 'name': name, 'owner_members':[{
-            'u_id': u_id, 'name_first': name_first, 'name_last': name_last
+            'u_id': u_id, 'name_first': name_first, 'name_last': name_last, 'profile_img_url': new_user_dict['profile_img_url']
         }],
-        'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last}],
+        'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last, 'profile_img_url': new_user_dict['profile_img_url']}],
         'is_public': is_public
     })
     all_channels_messages.append({

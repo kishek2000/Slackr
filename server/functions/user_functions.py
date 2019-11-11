@@ -94,7 +94,7 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     #image_path = '/server/functions/data/user_images/' + token + '.png'
     #image_dir = '.' + image_path
     image_path = token + '.jpg'
-    image_dir = '.' + '/server/functions/data/user_images/' + image_path
+    image_dir = '.' + '/static/' + image_path
     urllib.request.urlretrieve(str(img_url), image_dir)
     #image = Image.open(requests.get(str(img_url), stream=True).raw)
     image = Image.open(image_dir)
@@ -114,9 +114,9 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     for user in list_of_users:
         if user['token'] == token:
             if url_root is None:
-                user['profile_img_url'] = 'server/functions/data/user_images/' + image_path
+                user['profile_img_url'] = 'static/' + image_path
             else:
-                user['profile_img_url'] = url_root + 'server/functions/data/user_images/' + image_path
+                user['profile_img_url'] = url_root + 'static/' + image_path
 
 def users_all(token):
     """ users_all function """
