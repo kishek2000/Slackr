@@ -14,7 +14,10 @@ def registered_user_1():
     
     reset_data() 
     
-    user_details = auth_register("PokemonMaster@gmail.com", "validP@sswrd1", "Ash", "Ketcham")      
+    user_details = auth_register(email="PokemonMaster@gmail.com", 
+                                 password="validP@sswrd1", 
+                                 name_first="Ash",
+                                 name_last="Ketcham")      
     
     user_u_id = user_details['u_id']
     user_token = user_details['token']
@@ -27,9 +30,10 @@ def registered_user_2():
    
     reset_data() 
     
-    user_details = user_u_id, user_token = auth_register("TheRealPokemonMaster@gmail.com", 
-                                                         "ValidP@sswordRocks1",
-                                                         "Gary", "Oak")    
+    user_details = user_u_id, user_token = auth_register(email="TheRealPokemonMaster@gmail.com", 
+                                                         password="ValidP@sswordRocks1",
+                                                         name_first="Gary",
+                                                         name_last="Oak")    
         
     user_u_id = user_details['u_id']
     user_token = user_details['token']    
@@ -47,8 +51,8 @@ def test_auth_login_correct_details(registered_user_1):
     password = "validP@sswrd1"
     
     #Should produce no errors as the user is registered in the fixture
-    auth_login(email, password)
-
+    auth_login(email=email, password=password)
+    
  
 def test_auth_login_invalid_email(registered_user_1):
 
@@ -57,7 +61,7 @@ def test_auth_login_invalid_email(registered_user_1):
     
     #Should produce ValueError as an invalid email is provided
     with pytest.raises(ValueError):
-        auth_login(email, password)
+        auth_login(email=email, password=password)
     
  
 def test_auth_login_email_not_registered():
@@ -67,7 +71,7 @@ def test_auth_login_email_not_registered():
     
     #Should produce ValueError as an invalid email entered does not belong to a user
     with pytest.raises(ValueError):
-        auth_login(email, password)
+        auth_login(email=email, password=password)
  
  
 def test_auth_login_incorrect_password(registered_user_1):
@@ -77,7 +81,7 @@ def test_auth_login_incorrect_password(registered_user_1):
     
     #Should produce ValueError as an incorrect password is provided
     with pytest.raises(ValueError):
-        auth_login(email, password)
+        auth_login(email=email, password=password)
 
                 
 def test_auth_login_email_and_password_mismatch(registered_user_1, registered_user_2):
@@ -87,7 +91,7 @@ def test_auth_login_email_and_password_mismatch(registered_user_1, registered_us
     
     #Should produce ValueError as the password does not match to the email provided, hence is incorrect
     with pytest.raises(ValueError):
-        auth_login(email, password)
+        auth_login(email=email, password=password)
 
 
 def test_auth_login_valid_token_generated(registered_user_1):
@@ -170,8 +174,10 @@ def test_auth_register_correct_details():
     name_last_2 = "Oak"  
        
     #Should produce no errors
-    user_details_1 = auth_register(email_1, password_1, name_first_1, name_last_1)
-    user_details_2 = auth_register(email_2, password_2, name_first_2, name_last_2)
+    user_details_1 = auth_register(email=email_1, password=password_1, 
+                                   name_first=name_first_1, name_last=name_last_1)
+    user_details_2 = auth_register(email=email_2, password=password_2, 
+                                   name_first=name_first_2, name_last=name_last_2)
     
     assert(get_user_app_permission(user_details_1['u_id']) == 1)
     assert(get_user_app_permission(user_details_2['u_id']) == 3)
@@ -187,7 +193,7 @@ def test_auth_register_invalid_email():
     
     #Should produce ValueError as an invalid email is provided
     with pytest.raises(ValueError):
-        auth_register(email, password, name_first, name_last)
+        auth_register(email=email, password=password, name_first=name_first, name_last=name_last)
 
 
 def test_auth_register_email_already_used(registered_user_1):
@@ -199,7 +205,7 @@ def test_auth_register_email_already_used(registered_user_1):
     
     #Should produce ValueError as the provided email is already being used by another user
     with pytest.raises(ValueError):
-        auth_register(email, password, name_first, name_last)    
+        auth_register(email=email, password=password, name_first=name_first, name_last=name_last)    
 
 
 def test_auth_register_invalid_password():
@@ -213,7 +219,7 @@ def test_auth_register_invalid_password():
     
     #Should produce ValueError as invalid password has been provided
     with pytest.raises(ValueError):
-        auth_register(email, password, name_first, name_last)  
+        auth_register(email=email, password=password, name_first=name_first, name_last=name_last)  
 
 def test_auth_register_first_name_too_long():
 
@@ -226,7 +232,7 @@ def test_auth_register_first_name_too_long():
     
     #Should produce ValueError as the first name is greater than 50 characters
     with pytest.raises(ValueError):
-        auth_register(email, password, name_first, name_last)  
+        auth_register(email=email, password=password, name_first=name_first, name_last=name_last)  
 
 
 def test_auth_register_last_name_too_long():
@@ -240,7 +246,7 @@ def test_auth_register_last_name_too_long():
     
     #Should produce ValueError as the last name is greater than 50 characters
     with pytest.raises(ValueError):
-        auth_register(email, password, name_first, name_last)     
+        auth_register(email=email, password=password, name_first=name_first, name_last=name_last)     
 
 
 def test_auth_register_first_and_last_name_too_long():
@@ -254,7 +260,7 @@ def test_auth_register_first_and_last_name_too_long():
     
     #Should produce ValueError as the first and last name are greater than 50 characters
     with pytest.raises(ValueError):
-        auth_register(email, password, name_first, name_last) 
+        auth_register(email=email, password=password, name_first=name_first, name_last=name_last) 
 
 def test_auth_register_first_name_long_handler():
 
@@ -265,7 +271,7 @@ def test_auth_register_first_name_long_handler():
     name_first = "UvuvwevwevweOsassz"
     name_last = "Super"
       
-    user_details = auth_register(email, password, name_first, name_last)         
+    user_details = auth_register(email=email, password=password, name_first=name_first, name_last=name_last)         
     
     token = user_details['token']
     #obtain handle             
@@ -284,7 +290,7 @@ def test_auth_register_last_name_long_handler():
     name_first = "Super"
     name_last = "UvuvwevwevweOsasszkilo"
       
-    user_details = auth_register(email, password, name_first, name_last)         
+    user_details = auth_register(email=email, password=password, name_first=name_first, name_last=name_last)         
                
     token = user_details['token']
     #obtain handle             
@@ -302,7 +308,8 @@ def test_auth_register_first_and_last_name_long_handler():
     name_first = "Supercalifragilisticexpialidocious"
     name_last = "UvuvwevwevweOsassz"
       
-    user_details = auth_register(email, password, name_first, name_last)         
+    user_details = auth_register(email=email, password=password, name_first=name_first,
+                                 name_last=name_last)         
     
     token = user_details['token']
     #obtain handle             
@@ -322,7 +329,8 @@ def test_auth_register_valid_token_generated():
     name_last = "Ketchum"
     
     #Should produce no errors
-    user_details = auth_register(email, password, name_first, name_last)
+    user_details = auth_register(email=email, password=password, name_first=name_first, 
+                                 name_last=name_last)
     
     user_token = user_details['token']
     
@@ -338,8 +346,10 @@ def test_auth_register_valid_u_id_generated():
     name_last = "Ketchum"
     
     #Should produce no errors
-    user_details = auth_register(email, password, name_first, name_last)
+    user_details = auth_register(email=email, password=password, name_first=name_first, 
+                                 name_last=name_last)
     
+    print(user_details)
     user_u_id = user_details['u_id']
     
     assert(check_valid_u_id(user_u_id) == True)       
@@ -359,7 +369,7 @@ def test_auth_passwordreset_request_valid_email_provided(registered_user_1):
     email = "PokemonMaster@gmail.com"      
     
     #Should produce no errors as the provided email for the password reset is valid
-    auth_passwordreset_request(email)  
+    auth_passwordreset_request(reset_email=email)  
 
  
 def test_auth_passwordreset_request_invalid_email_provided(registered_user_1):
@@ -368,7 +378,7 @@ def test_auth_passwordreset_request_invalid_email_provided(registered_user_1):
     
     #Should produce a ValueError as an invalid email is provided
     with pytest.raises(ValueError):
-        auth_passwordreset_request(email)   
+        auth_passwordreset_request(reset_email=email)   
   
     
 def test_auth_passwordreset_request_non_registered_email_provided():
@@ -377,7 +387,7 @@ def test_auth_passwordreset_request_non_registered_email_provided():
     
     #Should produce a ValueError as the email provided is not regesitered 
     with pytest.raises(ValueError):
-        auth_passwordreset_request(email)    
+        auth_passwordreset_request(reset_email=email)    
  
         
 #################################################################################
@@ -387,7 +397,7 @@ def test_auth_passwordreset_request_non_registered_email_provided():
 def test_auth_passwordreset_reset_correct_details(registered_user_1):
 
     #Registered user requests a reset code
-    auth_passwordreset_request("PokemonMaster@gmail.com")
+    auth_passwordreset_request(reset_email="PokemonMaster@gmail.com")
 
     reset_code = get_user_details(registered_user_1['token'])['reset_code']
     
@@ -397,12 +407,12 @@ def test_auth_passwordreset_reset_correct_details(registered_user_1):
     auth_passwordreset_reset(reset_code, new_password)    
     
     #Test logging in which should produce no errors
-    auth_login("PokemonMaster@gmail.com", "ThisIsAV@lidNewPassword123")
+    auth_login(email="PokemonMaster@gmail.com", password="ThisIsAV@lidNewPassword123")
         
 def test_auth_passwordreset_reset_incorrect_reset_code(registered_user_1):
 
     #Registered user requests a reset code
-    auth_passwordreset_request("PokemonMaster@gmail.com")
+    auth_passwordreset_request(reset_email="PokemonMaster@gmail.com")
     
     reset_code = -1
     
@@ -416,7 +426,7 @@ def test_auth_passwordreset_reset_incorrect_reset_code(registered_user_1):
 def test_auth_passwordreset_reset_invalid_password(registered_user_1):
 
     #Registered user requests a reset code
-    auth_passwordreset_request("PokemonMaster@gmail.com")
+    auth_passwordreset_request(reset_email="PokemonMaster@gmail.com")
 
     reset_code = get_user_details(registered_user_1['token'])['reset_code']
     
@@ -430,7 +440,7 @@ def test_auth_passwordreset_reset_invalid_password(registered_user_1):
 def test_auth_passwordreset_reset_invalid_password_and_reset_code(registered_user_1):
     
     #Registered user requests a reset code
-    auth_passwordreset_request("PokemonMaster@gmail.com")
+    auth_passwordreset_request(reset_email="PokemonMaster@gmail.com")
     
     reset_code = -1
     

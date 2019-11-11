@@ -116,6 +116,46 @@ def check_valid_handle(handle_str):
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
+
+def authorise_login(function):
+    def wrapper(**kwargs):
+        if valid_email(kwargs['email']) == False:
+            raise ValueError("Invalid Email")
+        if email_matches_password(kwargs['email'], password_hash(kwargs['password'])) == False:
+            raise ValueError("Incorrect Password Entered")
+        if email_registered(kwargs['email']) == False:  
+            raise ValueError("Email Not Registered")  
+        return function(kwargs['email'], kwargs['password'])
+    return wrapper
+
+def authorise_register(function):
+    def wrapper(**kwargs):
+        if valid_email(kwargs['email']) is False:
+            raise ValueError("Invalid Email")
+        if valid_password(kwargs['password']) is False:
+            raise ValueError("Invalid Password Entered")
+        if email_registered(kwargs['email']) is True:  
+            raise ValueError("Email Provided Already in Use")  
+        if (len(kwargs['name_first']) < 1 or len(kwargs['name_first']) > 50):
+            raise ValueError("Invalid First Name")
+        if (len(kwargs['name_last']) < 1 or len(kwargs['name_last']) > 50):
+            raise ValueError("Invalid Last Name")
+        return function(kwargs['email'], kwargs['password'], kwargs['name_first'], 
+                        kwargs['name_last'])
+    return wrapper
+    
+def authorise_passwordreset_request(function):    
+    def wrapper(**kwargs):
+        if valid_email(kwargs['reset_email']) is False:
+            raise ValueError("Invalid Email")
+        
+        if email_registered(kwargs['reset_email']) is False:  
+            raise ValueError("Email Not Registered")  
+        
+        return function(kwargs['reset_email'])
+    return wrapper
+
+
 def email_registered(email):
     ''' Does email already exist '''
     for user in list_of_users:
@@ -179,6 +219,22 @@ def valid_password(password):
 
     else:
         return False
+
+def generate_handle(name_first, name_last):
+    '''Generates handle based on first and last names'''
+    if len(name_first + name_last) > 20:
+
+            if len(name_first) > 20 and len(name_last) < 20:
+                handle = name_first[0] + name_last
+
+            elif len(name_last) > 20 and len(name_first) < 20:
+                handle = name_first + name_last[0]
+
+            else:
+                handle = name_first[0:2] + name_last[0:2]
+
+    else:
+        handle = name_first + name_last
 
 #Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019
 def password_hash(password):

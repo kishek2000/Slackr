@@ -45,7 +45,7 @@ def login_user():
     password = request.form.get('password')
 
     try:
-        user_details = auth_login(email, password)
+        user_details = auth_login(email=email, password=password)
         return dumps({'u_id' : user_details['u_id'], 'token' : user_details['token']})
     except ValueError as error:
         return {'error': error}
@@ -71,7 +71,8 @@ def create_user():
     email = request.form.get('email')
     password = request.form.get('password')
     try:
-        return dumps(auth_register(email, password, name_first, name_last))
+        return dumps(auth_register(email=email, password=password, name_first=name_first,
+                                   name_last=name_last))
     except ValueError as error:
         return {'error': error}
 
@@ -81,7 +82,7 @@ def request_password_reset():
     email = request.form.get('email')
 
     try:
-        auth_passwordreset_request(email)
+        auth_passwordreset_request(reset_email=email)
         return dumps({"Action": "Success"})
 
     except ValueError as error:

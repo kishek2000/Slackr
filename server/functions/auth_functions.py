@@ -1,37 +1,27 @@
 '''
 File contains auth related functions
 '''
-#import re
 import smtplib
-#import ssl
-#import sys
-#import hashlib
+import hashlib
 from functions.helper_functions import (valid_email, email_matches_password, valid_password,
                                         email_registered, generate_reset_code, list_of_users,
-                                        password_hash, generate_token, generate_u_id)
+                                        password_hash, generate_token, generate_u_id, 
+                                        authorise_login, authorise_register, generate_handle,
+                                        authorise_passwordreset_request)
 
-
-def auth_login(email, password):
+@authorise_login
+def auth_login(email=None, password=None, **kwargs):
     '''Funtion logs a registered user onto slackr'''
-    #Checking for valid email
-    if not valid_email(email):
-        raise ValueError("Invalid Email")
 
     #Assign token to user if they are not logged in:
 
     for user in list_of_users:
         if user["email"] == email:
 
-            #Checking if password matches email
-            if not email_matches_password(email, password_hash(password)):
-                raise ValueError("Incorrect Password Entered")
-
             #Otherwise
             user["token"] = generate_token(email)
             return {'u_id': user["u_id"], 'token': user["token"]}
-
-    #If loop finishes then the email is not registered
-    raise ValueError("Email Not Registered")
+          
 
 def auth_logout(token):
     '''Funtion logs out a registered user from slackr'''
@@ -42,76 +32,34 @@ def auth_logout(token):
 
     return False
 
-def auth_register(email, password, name_first, name_last):
+@authorise_register
+def auth_register(email=None, password=None, name_first=None, name_last=None, **kwargs):
     '''Funtion registers a user onto slackr'''
-    #FIRST CHECK IF ALL THE PASSED IN PARAMETERS ARE VALID
-
-    #Checking for valid email
-    if not valid_email(email):
-        raise ValueError("Invalid Email")
-
-    #Checking if valid password
-    if not valid_password(password):
-        raise ValueError("Invalid Password")
-
-    #Check if for valid first and last names
-    if (len(name_first) < 1 or len(name_first) > 50):
-        raise ValueError("Invalid First Name")
-
-    if (len(name_last) < 1 or len(name_last) > 50):
-        raise ValueError("Invalid Last Name")
-
-    #print("VALIDDD")
-
-    #Check if user is in list_of_users
-
-    if email_registered(email):
-        raise ValueError("Email Provided Already in Use")
-
-    #If not then add the user to list_of_users
-    if len(name_first + name_last) > 20:
-
-        if len(name_first) > 20 and len(name_last) < 20:
-            handle = name_first[0] + name_last
-
-        elif len(name_last) > 20 and len(name_first) < 20:
-            handle = name_first + name_last[0]
-
-        else:
-            handle = name_first[0:2] + name_last[0:2]
-
+    
+    handle = generate_handle(name_first, name_last)
+    
+    if len(list_of_users) == 0:
+    
+        default_app_permission_id = 1
     else:
-        handle = name_first + name_last
-
-
+    
+        default_app_permission_id = 3
+    
+    #Add user
     list_of_users.append({"handle_str": handle, "email" : email,
-                          "password": password_hash(password), "u_id": None,
-                          "token" : None, "reset_code": None, "name_first": name_first,
+                          "password": password_hash(password), "u_id": generate_u_id(),
+                          "token" : hashlib.sha256(email.encode()).hexdigest(),
+                          "reset_code": None, "name_first": name_first,
                           "name_last": name_last,
-                          'app_permission_id': None, 'profile_img_url': None})
-
-    #Assign token and u_id
-
-    list_of_users[-1]["token"] = generate_token(email)
-    list_of_users[-1]["u_id"] = generate_u_id()
-
-    if list_of_users[-1]['u_id'] == 1:
-        list_of_users[-1]["app_permission_id"] = 1
-    else:
-        list_of_users[-1]["app_permission_id"] = 3
+                          'app_permission_id': default_app_permission_id, 'profile_img_url': None})
 
 
     return {'u_id' : list_of_users[-1]["u_id"], 'token': list_of_users[-1]["token"]}
 
-def auth_passwordreset_request(reset_email):
+@authorise_passwordreset_request
+def auth_passwordreset_request(reset_email=None, **kwargs):
     '''Funtion requests a reset code for a password reset'''
-    #Method for sending email obtained from https://www.youtube.com/watch?v=JRCJ6RtE3xU
-
-    #Checking for valid email
-    if not valid_email(reset_email):
-        raise ValueError("Invalid Email")
-
-
+    #Method for sending email obtained from https://www.youtube.com/watch?v=JRCJ6RtE3x
     reset_code = generate_reset_code()
 
     for user in list_of_users:
@@ -126,7 +74,7 @@ def auth_passwordreset_request(reset_email):
 
             message = f'Subject: {subject}\n\n{body}'
 
-            print("Starting to send Email")
+            print("Starting to send Email...")
 
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
                 server.login("teamhdslackr@gmail.com", "V@lidPassword123")
@@ -135,10 +83,6 @@ def auth_passwordreset_request(reset_email):
             print("Email Sent")
 
             return
-
-    #If the loop completes then no valid emeail was found
-
-    raise ValueError("Email Not Registered")
 
 def auth_passwordreset_reset(reset_code, new_password):
     '''Funtion allows a user to reset their password provided the correct reset code'''
