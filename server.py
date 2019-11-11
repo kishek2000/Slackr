@@ -15,8 +15,8 @@ from functions.Errors import *
 from functions.message_functions import *
 from functions.helper_functions import get_user_details
 
-APP = Flask(__name__)
-app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
+APP = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
+#app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
 CORS(APP)
 
 @APP.route('/echo/get', methods=['GET'])
@@ -388,8 +388,9 @@ def post_user_uploadphoto():
     x_end = request.form.get('x_end')
     y_end = request.form.get('y_end')
     try:
-        user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+        user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, request.url_root)
         returned_dict = get_user_details(token)
+        #send_js(returned_dict['profile_img_url'])
         #return send_from_directory('', returned_dict['profile_img_url'])
         return dumps({})
     except ValueError as error:
@@ -406,7 +407,7 @@ def get_users_all():
         print(error)
         return {'error': error}
 
-@app_img.route('/server/functions/data/user_images/<path:path>')
+@APP.route('/server/functions/data/user_images/<path:path>')
 def send_js(path):
     return send_from_directory('', path)
 
