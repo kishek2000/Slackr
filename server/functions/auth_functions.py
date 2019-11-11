@@ -17,7 +17,6 @@ def auth_login(email, password):
     if not valid_email(email):
         raise ValueError("Invalid Email")
 
-
     #Assign token to user if they are not logged in:
 
     for user in list_of_users:
