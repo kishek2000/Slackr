@@ -8,15 +8,15 @@ def channel_invite(token, channel_id, u_id):
     ## First make sure the given channel id, u_id and token are existing, and token is member of
     ## channel
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_u_id(u_id):
-        raise ValueError
+        raise ValueError("Given user id does not exist.")
     if not check_valid_token(token):
         raise AccessError
     if not check_token_in_channel(token, channel_id):
         raise AccessError ## accessing user's token is not part of the given channel
     if check_user_in_channel(u_id, channel_id):
-        raise ValueError ## invited user already in channel
+        raise ValueError("Give user id already part of the channel.") ## invited user already in channel
 
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
@@ -30,7 +30,7 @@ def channel_invite(token, channel_id, u_id):
 def channel_details(token, channel_id):
     ## First make sure the token is actually in the channel, and the channel id also is valid
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_token(token):
         raise AccessError
     if not check_token_in_channel(token, channel_id):
@@ -49,7 +49,7 @@ def channel_details(token, channel_id):
 def channel_messages(token, channel_id, start):
     ## First make sure the token is actually in the channel, and the channel id also is valid
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_token(token):
         raise AccessError
     if not check_token_in_channel(token, channel_id):
@@ -91,7 +91,7 @@ def channel_messages(token, channel_id, start):
 def channel_leave(token, channel_id):
     ## First make sure the token is actually in the channel, and the channel id also is valid
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_token(token):
         raise AccessError
     if not check_token_in_channel(token, channel_id):
@@ -113,11 +113,11 @@ def channel_leave(token, channel_id):
 def channel_join(token, channel_id):
     ## First make sure the token is not actually in the channel, and the channel id also is valid
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_token(token):
         raise AccessError
     if check_token_in_channel(token, channel_id):
-        raise ValueError ## because token user already in the channel
+        raise ValueError("You are already in this channel!") ## because token user already in the channel
 
     ## This function specifically lets all members to join publics, but only admins to join private
     ## channel ids that are given as a destination
@@ -141,7 +141,7 @@ def channel_join(token, channel_id):
 def channel_addowner(token, channel_id, u_id):
     ## First make sure the given channel id and u_id are existing, and token is owner of channel
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_u_id(u_id):
         raise ValueError
     if not check_valid_token(token):
@@ -169,7 +169,7 @@ def channel_addowner(token, channel_id, u_id):
 def channel_removeowner(token, channel_id, u_id):
     ## First make sure the given channel id and u_id are existing, and token is owner of channel
     if not check_valid_channel_id(channel_id):
-        raise ValueError
+        raise ValueError("Given channel does not exist.")
     if not check_valid_u_id(u_id):
         raise ValueError
     if not check_valid_token(token):
@@ -236,7 +236,7 @@ def channels_create(token, name, is_public):
         raise AccessError
     channel_id = generate_channel_id()
     if len(name) > 20:
-        raise ValueError ## can't be having names above 20 chars!!
+        raise ValueError("Cannot create a channel with name more than 20 characters.") ## can't be having names above 20 chars!!
     user_details = get_user_details(token)
     name_first = user_details['name_first']
     name_last = user_details['name_last']
