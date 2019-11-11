@@ -1,3 +1,4 @@
+''' Common functions that are used in varying places '''
 import re
 import random
 import hashlib
@@ -42,25 +43,32 @@ atexit.register(pickle_data, all_channels_details, all_channels_messages, all_ch
 
 ## GET FUNCTIONS
 def get_user_details(token_or_u_id):
+    ''' Used to retrieve user details based on a varying input '''
     for user in list_of_users:
         if user['token'] == token_or_u_id or user['u_id'] == token_or_u_id:
             return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id'], 'profile_img_url': user['profile_img_url']}
     return {}
 
+# This is obsolete #####################################################
 def get_user_from_token(token):
+    ''' function description '''
     return_dict = get_user_details(token)
     return return_dict['u_id']
 
 def get_token_from_user(u_id):
+    ''' function description '''
     return_dict = get_user_details(u_id)
     return return_dict['token']
 
 def get_user_app_permission(u_id):
+    ''' function description '''
     return_dict = get_user_details(u_id)
     return return_dict['app_permission_id']
+#########################################################################
 
 ## GENERATE FUNCTIONS
 def generate_token(email):
+    ''' Used to generate user token based on email '''
     for user in list_of_users:
         if user['email'] == email:
             hashed_token = hashlib.sha256(email.encode()).hexdigest()
@@ -68,30 +76,35 @@ def generate_token(email):
     return hashed_token
 
 def generate_u_id():
+    ''' Assigns a unique u_id to a user '''
     global number_of_users
     number_of_users += 1
     return number_of_users
 
 ## CHECK FUNCTIONS
 def check_valid_u_id(u_id):
+    ''' Checks if u_id exists '''
     for user in list_of_users:
         if u_id == user['u_id']:
             return True
     return False
 
 def check_valid_token(token):
+    ''' Checks if token exists '''
     for user in list_of_users:
         if token == user['token']:
             return True
     return False
 
 def check_token_matches_user(u_id, token):
+    ''' Checks if token and u_id is from same user '''
     for user in list_of_users:
         if u_id == user['u_id'] and token == user['token']:
                 return True
     return False
 
 def check_valid_handle(handle_str):
+    ''' Checks if handle exists '''
     for user in list_of_users:
         if handle_str == user['handle_str']:
             return True
@@ -103,8 +116,48 @@ def check_valid_handle(handle_str):
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
-def email_registered(email):
 
+def authorise_login(function):
+    def wrapper(**kwargs):
+        if valid_email(kwargs['email']) == False:
+            raise ValueError("Invalid Email")
+        if email_matches_password(kwargs['email'], password_hash(kwargs['password'])) == False:
+            raise ValueError("Incorrect Password Entered")
+        if email_registered(kwargs['email']) == False:  
+            raise ValueError("Email Not Registered")  
+        return function(kwargs['email'], kwargs['password'])
+    return wrapper
+
+def authorise_register(function):
+    def wrapper(**kwargs):
+        if valid_email(kwargs['email']) is False:
+            raise ValueError("Invalid Email")
+        if valid_password(kwargs['password']) is False:
+            raise ValueError("Invalid Password Entered")
+        if email_registered(kwargs['email']) is True:  
+            raise ValueError("Email Provided Already in Use")  
+        if (len(kwargs['name_first']) < 1 or len(kwargs['name_first']) > 50):
+            raise ValueError("Invalid First Name")
+        if (len(kwargs['name_last']) < 1 or len(kwargs['name_last']) > 50):
+            raise ValueError("Invalid Last Name")
+        return function(kwargs['email'], kwargs['password'], kwargs['name_first'], 
+                        kwargs['name_last'])
+    return wrapper
+    
+def authorise_passwordreset_request(function):    
+    def wrapper(**kwargs):
+        if valid_email(kwargs['reset_email']) is False:
+            raise ValueError("Invalid Email")
+        
+        if email_registered(kwargs['reset_email']) is False:  
+            raise ValueError("Email Not Registered")  
+        
+        return function(kwargs['reset_email'])
+    return wrapper
+
+
+def email_registered(email):
+    ''' Does email already exist '''
     for user in list_of_users:
         if email == user['email']:
             return True
@@ -112,7 +165,7 @@ def email_registered(email):
     return False
 
 def email_matches_password(registered_email, password):
-
+    ''' Checks if email and password come from same user '''
     for user in list_of_users:
         if registered_email == user['email'] and password == user['password']:
             return True
@@ -120,8 +173,7 @@ def email_matches_password(registered_email, password):
     return False
 
 def valid_email(email):
-
-#To check whether an email is valid the method from https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/ was used
+    ''' To check whether an email is valid the method from https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/ was used '''
 
     regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
@@ -131,7 +183,7 @@ def valid_email(email):
         return True
 
 def valid_password(password):
-
+    ''' Checks if password meets is strong enough '''
     no_of_characters = 0
     no_of_numbers = 0
     no_of_upper_case = 0
@@ -160,20 +212,38 @@ def valid_password(password):
 
 
     if (no_of_characters >= 1 and no_of_numbers >= 1 and
-        no_of_upper_case >= 1 and no_of_lower_case >= 1 and
-        no_of_special_characters >= 1 and len(password) >= 6):
+            no_of_upper_case >= 1 and no_of_lower_case >= 1 and
+            no_of_special_characters >= 1 and len(password) >= 6):
 
         return True
 
     else:
         return False
 
+def generate_handle(name_first, name_last):
+    '''Generates handle based on first and last names'''
+    if len(name_first + name_last) > 20:
+
+            if len(name_first) > 20 and len(name_last) < 20:
+                handle = name_first[0] + name_last
+
+            elif len(name_last) > 20 and len(name_first) < 20:
+                handle = name_first + name_last[0]
+
+            else:
+                handle = name_first[0:2] + name_last[0:2]
+
+    else:
+        handle = name_first + name_last
+
 #Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019
 def password_hash(password):
+    ''' Hashes Password '''
     return hashlib.sha256(password.encode()).hexdigest()
 
 def generate_reset_code():
-    reset_code = random.randint(1,10000000)
+    ''' Create reset code to send to user '''
+    reset_code = random.randint(1, 10000000)
     return str(reset_code)
 
 
@@ -183,17 +253,20 @@ def generate_reset_code():
 #===============================================================================#
 
 def check_valid_channel_id(channel_id):
+    ''' Checks if channel id exists '''
     for channel in all_channels_details:
         if channel_id == channel['channel_id']:
             return True
     return False
 
 def generate_channel_id():
+    ''' Creat new and unique channel_id '''
     global number_of_channels
     number_of_channels += 1
     return number_of_channels
 
 def check_token_in_channel(token, channel_id):
+    ''' Check if user token exists in channel '''
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
@@ -203,6 +276,7 @@ def check_token_in_channel(token, channel_id):
     return False
 
 def check_user_in_channel(u_id, channel_id):
+    ''' Checks if user u_id exists in channel '''
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
@@ -212,18 +286,21 @@ def check_user_in_channel(u_id, channel_id):
     return False
 
 def get_total_channel_messages(channel_id):
+    ''' Returns the amount of messages in a given channel '''
     for channels in all_channels_messages:
         if channel_id == channels['channel_id']:
             return channels['total_messages']
     return {}
 
 def get_channel_id_from_name(name):
+    ''' Get channel_id from channel name '''
     for channels in all_channels_details:
         if channels['name'] == name:
             return channels['channel_id']
     return {}
 
 def get_user_channel_permission(channel_id, u_id):
+    ''' Get user permission in a given channel '''
     for users in all_channels_permissions:
         if users['channel_id'] == channel_id:
             if users['u_id'] == u_id:
@@ -232,7 +309,7 @@ def get_user_channel_permission(channel_id, u_id):
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
-VALID_REACTS = [1,2,3]
+VALID_REACTS = [1, 2, 3]
 
 def find_message_info(message_id):
     '''Returns pointer to message item in all_channels_messages, or none if not found'''
@@ -261,6 +338,7 @@ def generate_message_id():
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
 def change_user_app_permission(u_id, permission_id):
+    ''' Change permission_id of a given user '''
     for user in list_of_users:
         if u_id == user['u_id']:
             user['app_permission_id'] = permission_id
@@ -268,6 +346,7 @@ def change_user_app_permission(u_id, permission_id):
     return {}
 
 def change_user_channel_permission(u_id, permission_id, channel_id):
+    ''' Change channel_permission_id of a given user '''
     added_person = False
     user_found = False
     print({"u_id": u_id, "permission_id": permission_id, "channel_id": channel_id})
@@ -283,6 +362,7 @@ def change_user_channel_permission(u_id, permission_id, channel_id):
 
 
 def reset_data():
+    ''' Resets all existing stored data '''
     global number_of_users
     global number_of_channels
     all_channels_details.clear()
@@ -313,17 +393,17 @@ def check_standup_active(channel_id):
 '''
 
 def start_standup(channel_id, time_finish):
-
+    ''' Starts a standup '''
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
             channel['standup_active'] = [None, None]
             channel['standup_active'][0] = True
-            channel['standup_active'][1] =  time_finish
+            channel['standup_active'][1] = time_finish
 
     return {}
 
 def standup_status(channel_id):
-
+    ''' Checks the standup_status in a given channel '''
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
 
@@ -338,10 +418,8 @@ def standup_status(channel_id):
 
 
 def add_to_standup_queue(channel_id, message):
-
+    ''' Adds a message to the queue of messages from a standup '''
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
             channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
     return {}
-
-

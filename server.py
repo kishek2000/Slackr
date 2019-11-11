@@ -15,7 +15,8 @@ from functions.Errors import *
 from functions.message_functions import *
 from functions.helper_functions import get_user_details
 
-APP = Flask(__name__)
+APP = Flask(__name__, static_url_path = '/static/')
+#app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
 CORS(APP)
 
 @APP.route('/echo/get', methods=['GET'])
@@ -44,7 +45,7 @@ def login_user():
     password = request.form.get('password')
 
     try:
-        user_details = auth_login(email, password)
+        user_details = auth_login(email=email, password=password)
         return dumps({'u_id' : user_details['u_id'], 'token' : user_details['token']})
     except ValueError as error:
         return {'error': error}
@@ -70,7 +71,8 @@ def create_user():
     email = request.form.get('email')
     password = request.form.get('password')
     try:
-        return dumps(auth_register(email, password, name_first, name_last))
+        return dumps(auth_register(email=email, password=password, name_first=name_first,
+                                   name_last=name_last))
     except ValueError as error:
         return {'error': error}
 
@@ -80,7 +82,7 @@ def request_password_reset():
     email = request.form.get('email')
 
     try:
-        auth_passwordreset_request(email)
+        auth_passwordreset_request(reset_email=email)
         return dumps({"Action": "Success"})
 
     except ValueError as error:
@@ -387,9 +389,11 @@ def post_user_uploadphoto():
     x_end = request.form.get('x_end')
     y_end = request.form.get('y_end')
     try:
-        user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+        user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, request.url_root)
         returned_dict = get_user_details(token)
-        return send_from_directory('', returned_dict['profile_img_url'])
+        #send_js(returned_dict['profile_img_url'])
+        #return send_from_directory('', returned_dict['profile_img_url'])
+        return dumps({})
     except ValueError as error:
         return {'error': error}
 
@@ -403,6 +407,10 @@ def get_users_all():
     except ValueError as error:
         print(error)
         return {'error': error}
+
+@APP.route('/static/<path:path>')
+def send_js(path):
+    return send_from_directory('', path)
 
 #===============================================================================#
 #=================================   STANDUP    ================================#
@@ -503,8 +511,6 @@ def get_search():
 @APP.route('/admin/userpermission/change', methods=['POST'])
 def post_admin_userpermission_change():
     """ Description of function """
-
-
     token = request.form.get('token')
     u_id = int(request.form.get('u_id'))
     permission_id = int(request.form.get('permission_id'))
