@@ -77,7 +77,7 @@ def user_profile_sethandle(token, handle_str):
         if user['token'] == token:
             user['handle_str'] = handle_str
 
-def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
+def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, url_root):
     """ user_profiles_uploadphoto function """
     # https://auth0.com/blog/image-processing-in-python-with-pillow/
 
@@ -96,10 +96,13 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
 
-    image_path = './server/functions/data/user_images/' + token + '.png'
-    urllib.request.urlretrieve(str(img_url), image_path)
+    #image_path = '/server/functions/data/user_images/' + token + '.png'
+    #image_dir = '.' + image_path
+    image_path = token + '.jpg'
+    image_dir = '.' + '/server/functions/data/user_images/' + image_path
+    urllib.request.urlretrieve(str(img_url), image_dir)
     #image = Image.open(requests.get(str(img_url), stream=True).raw)
-    image = Image.open(image_path)
+    image = Image.open(image_dir)
     img_x = image.size[0]
     img_y = image.size[1]
 
@@ -111,13 +114,11 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
 
     box = (x_start, y_start, x_end, y_end)
     cropped_image = image.crop(box)
-    cropped_image.save(image_path)
+    cropped_image.save(image_dir)
 
-    cropped_image.save(image_path)
-    
     for user in list_of_users:
         if user['token'] == token:
-            user['image_path'] = image_path
+            user['profile_img_url'] = url_root + 'server/functions/data/user_images/' + image_path
 
 def users_all(token):
     """ users_all function """

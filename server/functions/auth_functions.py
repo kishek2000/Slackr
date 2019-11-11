@@ -88,7 +88,7 @@ def auth_register(email, password, name_first, name_last):
                           "password": password_hash(password), "u_id": None,
                           "token" : None, "reset_code": None, "name_first": name_first,
                           "name_last": name_last,
-                          'app_permission_id': None, 'image_path': None})
+                          'app_permission_id': None, 'profile_img_url': None})
 
     #Assign token and u_id
 
