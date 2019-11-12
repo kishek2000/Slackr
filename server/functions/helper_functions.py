@@ -123,8 +123,8 @@ def authorise_login(function):
             raise ValueError("Invalid Email")
         if email_matches_password(kwargs['email'], password_hash(kwargs['password'])) == False:
             raise ValueError("Incorrect Password Entered")
-        if email_registered(kwargs['email']) == False:  
-            raise ValueError("Email Not Registered")  
+        if email_registered(kwargs['email']) == False:
+            raise ValueError("Email Not Registered")
         return function(kwargs['email'], kwargs['password'])
     return wrapper
 
@@ -134,24 +134,24 @@ def authorise_register(function):
             raise ValueError("Invalid Email")
         if valid_password(kwargs['password']) is False:
             raise ValueError("Invalid Password Entered")
-        if email_registered(kwargs['email']) is True:  
-            raise ValueError("Email Provided Already in Use")  
+        if email_registered(kwargs['email']) is True:
+            raise ValueError("Email Provided Already in Use")
         if (len(kwargs['name_first']) < 1 or len(kwargs['name_first']) > 50):
             raise ValueError("Invalid First Name")
         if (len(kwargs['name_last']) < 1 or len(kwargs['name_last']) > 50):
             raise ValueError("Invalid Last Name")
-        return function(kwargs['email'], kwargs['password'], kwargs['name_first'], 
+        return function(kwargs['email'], kwargs['password'], kwargs['name_first'],
                         kwargs['name_last'])
     return wrapper
-    
-def authorise_passwordreset_request(function):    
+
+def authorise_passwordreset_request(function):
     def wrapper(**kwargs):
         if valid_email(kwargs['reset_email']) is False:
             raise ValueError("Invalid Email")
-        
-        if email_registered(kwargs['reset_email']) is False:  
-            raise ValueError("Email Not Registered")  
-        
+
+        if email_registered(kwargs['reset_email']) is False:
+            raise ValueError("Email Not Registered")
+
         return function(kwargs['reset_email'])
     return wrapper
 
@@ -246,8 +246,6 @@ def generate_reset_code():
     reset_code = random.randint(1, 10000000)
     return str(reset_code)
 
-
-
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
 #===============================================================================#
@@ -305,6 +303,15 @@ def get_user_channel_permission(channel_id, u_id):
         if users['channel_id'] == channel_id:
             if users['u_id'] == u_id:
                 return users['channel_permission_id']
+
+def message_reacts_helper(message_list, uid):
+    ''' This helper handles the reactions code in channel/messages '''
+    for message in message_list:
+        for react in message['reacts']:
+            if uid in react["u_ids"]:
+                react["is_this_user_reacted"] = True
+            else:
+                react["is_this_user_reacted"] = False
 
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
