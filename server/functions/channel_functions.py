@@ -243,9 +243,9 @@ def channels_create(token, name, is_public):
     u_id = get_user_from_token(token)
     all_channels_details.append({
         'channel_id': channel_id, 'name': name, 'owner_members':[{
-            'u_id': u_id, 'name_first': name_first, 'name_last': name_last, 'profile_img_url': new_user_dict['profile_img_url']
+            'u_id': u_id, 'name_first': name_first, 'name_last': name_last, 'profile_img_url': user_details['profile_img_url']
         }],
-        'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last, 'profile_img_url': new_user_dict['profile_img_url']}],
+        'all_members':[{'u_id': u_id, 'name_first': name_first, 'name_last': name_last, 'profile_img_url': user_details['profile_img_url']}],
         'is_public': is_public
     })
     all_channels_messages.append({
