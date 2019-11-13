@@ -6,13 +6,18 @@ import hashlib
 from functions.helper_functions import (valid_email, email_matches_password, valid_password,
                                         email_registered, generate_reset_code, list_of_users,
                                         password_hash, generate_token, generate_u_id, 
-                                        authorise_login, authorise_register, generate_handle,
-                                        authorise_passwordreset_request)
+                                        generate_handle)
 
-@authorise_login
-def auth_login(email=None, password=None, **kwargs):
+
+def auth_login(email, password):
     '''Funtion logs a registered user onto slackr'''
-
+    
+    if valid_email(email) == False:
+            raise ValueError("Invalid Email")
+            
+    if email_matches_password(email, password_hash(password)) == False:
+        raise ValueError("Incorrect Password Entered")
+    
     #Assign token to user if they are not logged in:
 
     for user in list_of_users:
@@ -22,8 +27,9 @@ def auth_login(email=None, password=None, **kwargs):
             user["token"] = generate_token(email)
             return {'u_id': user["u_id"], 'token': user["token"]}
           
-
-def auth_logout(token=None):
+    raise ValueError("Email Not Registered")  
+    
+def auth_logout(token):
     '''Funtion logs out a registered user from slackr'''
     for user in list_of_users:
         if user["token"] == token:
@@ -32,9 +38,20 @@ def auth_logout(token=None):
 
     return False
 
-@authorise_register
-def auth_register(email=None, password=None, name_first=None, name_last=None, **kwargs):
+
+def auth_register(email, password, name_first, name_last):
     '''Funtion registers a user onto slackr'''
+    
+    if valid_email(email) is False:
+        raise ValueError("Invalid Email")
+    if valid_password(password) is False:
+        raise ValueError("Invalid Password Entered")
+    if email_registered(email) is True:
+        raise ValueError("Email Provided Already in Use")
+    if (len(name_first) < 1 or len(name_first) > 50):
+        raise ValueError("Invalid First Name")
+    if (len(name_last) < 1 or len(name_last) > 50):
+        raise ValueError("Invalid Last Name")
     
     handle = generate_handle(name_first, name_last)
     
@@ -56,9 +73,13 @@ def auth_register(email=None, password=None, name_first=None, name_last=None, **
 
     return {'u_id' : list_of_users[-1]["u_id"], 'token': list_of_users[-1]["token"]}
 
-@authorise_passwordreset_request
-def auth_passwordreset_request(reset_email=None, **kwargs):
+
+def auth_passwordreset_request(reset_email):
     '''Funtion requests a reset code for a password reset'''
+   
+    if valid_email(reset_email) is False:
+        raise ValueError("Invalid Email")      
+        
     #Method for sending email obtained from https://www.youtube.com/watch?v=JRCJ6RtE3x
     reset_code = generate_reset_code()
 
@@ -83,8 +104,10 @@ def auth_passwordreset_request(reset_email=None, **kwargs):
             print("Email Sent")
 
             return
-
-def auth_passwordreset_reset(reset_code=None, new_password=None):
+    
+    raise ValueError("Email Not Registered")
+    
+def auth_passwordreset_reset(reset_code, new_password):
     '''Funtion allows a user to reset their password provided the correct reset code'''
     #Check if reset code belongs to any user. If not it is invalid
 

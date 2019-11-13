@@ -45,7 +45,7 @@ def login_user():
     password = request.form.get('password')
 
     try:
-        user_details = auth_login(email=email, password=password)
+        user_details = auth_login(email, password)
         return dumps({'u_id' : user_details['u_id'], 'token' : user_details['token']})
     except ValueError as error:
         return {'error': error}
@@ -57,7 +57,7 @@ def logout_user():
 
     token = request.form.get('token')
 
-    if auth_logout(token=token):
+    if auth_logout(token):
         return dumps({"Action": "Success"})
 
     return dumps({"Action": "Failure"})
@@ -71,8 +71,7 @@ def create_user():
     email = request.form.get('email')
     password = request.form.get('password')
     try:
-        return dumps(auth_register(email=email, password=password, name_first=name_first,
-                                   name_last=name_last))
+        return dumps(auth_register(email, password, name_first, name_last))
     except ValueError as error:
         return {'error': error}
 
@@ -82,7 +81,7 @@ def request_password_reset():
     email = request.form.get('email')
 
     try:
-        auth_passwordreset_request(reset_email=email)
+        auth_passwordreset_request(email)
         return dumps({"Action": "Success"})
 
     except ValueError as error:
@@ -99,7 +98,7 @@ def reset_password():
 
     try:
 
-        auth_passwordreset_reset(reset_code=reset_code, new_password=new_password)
+        auth_passwordreset_reset(reset_code, new_password)
         return dumps({"Action": "Success"})
 
     except ValueError as error:
@@ -425,14 +424,12 @@ def start_standup():
     length = int(request.form.get('length'))
 
     try:
-        standup_end_time = standup_start(token=token, channel_id=channel_id, length=length)
+        standup_end_time = standup_start(token, channel_id, length)
        
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
-        #timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
         timestamp = standup_end_time.strftime('%s')
-        #timestamp_starttime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
-        #timestamp = timestamp_endtime - timestamp_starttime
+        
         return dumps({'time_finish' : str(timestamp)})
 
     except ValueError as error:
@@ -449,16 +446,13 @@ def standup_active_check():
     channel_id = int(request.args.get('channel_id'))
     
     try:
-        standup_details = standup_active(token=token, channel_id=channel_id)
+        standup_details = standup_active(token, channel_id)
         
         timestamp = None
         
         if standup_details['time_finish'] != None: 
             
             timestamp = standup_details['time_finish'].strftime('%s')
-            #timestamp = standup_details['time_finish'].replace(tzinfo=timezone.utc).timestamp()
-            #timestamp_starttime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
-            #timestamp = timestamp_endtime - timestamp_starttime
         
         return dumps({'standup_active' : standup_details['standup_active'], 
                       'time_finish': str(timestamp)})
@@ -478,7 +472,7 @@ def start_send():
     message = request.form.get('message')
 
     try:
-        standup_send(token=token, channel_id=channel_id, message=message)
+        standup_send(token, channel_id, message)
         return dumps({})
 
     except ValueError as error:
