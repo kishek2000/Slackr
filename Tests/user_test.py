@@ -11,8 +11,8 @@ from functions.Errors import AccessError
 def register_account():
     """ register_account fixture """
     reset_data()
-    auth_register('example2@gmail.com', 'P@ssword123', 'Epic', 'Style')
-    return auth_register('example@gmail.com', 'Go0dPa>sword', 'dan', 'man')
+    auth_register(email = 'example2@gmail.com', password = 'P@ssword123', name_first = 'Epic', name_last = 'Style')
+    return auth_register(email = 'example@gmail.com', password = 'Go0dPa>sword', name_first = 'dan', name_last = 'man')
 
 #################################################################################
 ##                           TESTING user_profile                              ##

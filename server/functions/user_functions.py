@@ -118,10 +118,8 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
             else:
                 user['profile_img_url'] = url_root + 'static/' + image_path
 
+@authorise_token
 def users_all(token):
     """ users_all function """
-
-    if not check_valid_token(token):
-        raise AccessError("Invalid token")
 
     return {'users': list_of_users}

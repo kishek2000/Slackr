@@ -235,6 +235,8 @@ def generate_handle(name_first, name_last):
 
     else:
         handle = name_first + name_last
+        
+    return handle
 
 #Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019
 def password_hash(password):
