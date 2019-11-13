@@ -398,9 +398,9 @@ def check_standup_active(channel_id):
 
     return False
 '''
-
+'''
 def start_standup(channel_id, time_finish):
-    ''' Starts a standup '''
+    Starts a standup
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
             channel['standup_active'] = [None, None]
@@ -410,7 +410,7 @@ def start_standup(channel_id, time_finish):
     return {}
 
 def standup_status(channel_id):
-    ''' Checks the standup_status in a given channel '''
+     Checks the standup_status in a given channel
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
 
@@ -422,7 +422,7 @@ def standup_status(channel_id):
                 return {'standup_active' : False, 'time_finish' : None}
 
     return {'standup_active' : False, 'time_finish' : None}
-
+'''
 
 def add_to_standup_queue(channel_id, message):
     ''' Adds a message to the queue of messages from a standup '''

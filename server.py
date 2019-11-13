@@ -425,7 +425,7 @@ def start_standup():
     length = int(request.form.get('length'))
 
     try:
-        standup_end_time = standup_start(token, channel_id, length)
+        standup_end_time = standup_start(token=token, channel_id=channel_id, length=length)
        
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
@@ -449,7 +449,7 @@ def standup_active_check():
     channel_id = int(request.args.get('channel_id'))
     
     try:
-        standup_details = standup_active(token, channel_id)
+        standup_details = standup_active(token=token, channel_id=channel_id)
         
         timestamp = None
         
@@ -478,7 +478,7 @@ def start_send():
     message = request.form.get('message')
 
     try:
-        standup_send(token, channel_id, message)
+        standup_send(token=token, channel_id=channel_id, message=message)
         return dumps({})
 
     except ValueError as error:
