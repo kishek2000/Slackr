@@ -23,7 +23,7 @@ def auth_login(email=None, password=None, **kwargs):
             return {'u_id': user["u_id"], 'token': user["token"]}
           
 
-def auth_logout(token):
+def auth_logout(token=None):
     '''Funtion logs out a registered user from slackr'''
     for user in list_of_users:
         if user["token"] == token:
@@ -84,7 +84,7 @@ def auth_passwordreset_request(reset_email=None, **kwargs):
 
             return
 
-def auth_passwordreset_reset(reset_code, new_password):
+def auth_passwordreset_reset(reset_code=None, new_password=None):
     '''Funtion allows a user to reset their password provided the correct reset code'''
     #Check if reset code belongs to any user. If not it is invalid
 

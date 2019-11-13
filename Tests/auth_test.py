@@ -127,7 +127,7 @@ def test_auth_logout_active_token_provided(registered_user_1):
     assert(check_valid_token(user_token) == True)    
     
     #The function auth_logout should invalidate the token provided, logging the user out
-    auth_logout(user_token)
+    auth_logout(token=user_token)
     
     #Check if the token is now invalid
     assert(check_valid_token(user_token) == False)    
@@ -142,13 +142,13 @@ def test_auth_logout_inactive_token_provided(registered_user_2):
     assert(check_valid_token(user_token) == True)    
     
     #The function auth_logout should invalidate the token provided, logging the user out
-    auth_logout(user_token)
+    auth_logout(token=user_token)
     
     #Check if the token is now invalid
     assert(check_valid_token(user_token) == False)
     
     #The function auth_logout should do nothing, as the token provided is already invalid
-    auth_logout(user_token)
+    auth_logout(token=user_token)
     
     #Check if the token is still invalid
     assert(check_valid_token(user_token) == False)    
@@ -404,7 +404,7 @@ def test_auth_passwordreset_reset_correct_details(registered_user_1):
     new_password = "ThisIsAV@lidNewPassword123"
     
     #Should produce no errors
-    auth_passwordreset_reset(reset_code, new_password)    
+    auth_passwordreset_reset(reset_code=reset_code, new_password=new_password)    
     
     #Test logging in which should produce no errors
     auth_login(email="PokemonMaster@gmail.com", password="ThisIsAV@lidNewPassword123")
@@ -420,7 +420,7 @@ def test_auth_passwordreset_reset_incorrect_reset_code(registered_user_1):
     
     #Should produce a ValueError as an incorrect reset_code is provided
     with pytest.raises(ValueError):
-        auth_passwordreset_reset(reset_code, new_password)  
+        auth_passwordreset_reset(reset_code=reset_code, new_password=new_password)  
     
 
 def test_auth_passwordreset_reset_invalid_password(registered_user_1):
@@ -434,7 +434,7 @@ def test_auth_passwordreset_reset_invalid_password(registered_user_1):
     
     #Should produce a ValueError as an invalid password is provided
     with pytest.raises(ValueError):
-        auth_passwordreset_reset(reset_code, new_password)  
+        auth_passwordreset_reset(reset_code=reset_code, new_password=new_password)  
 
 
 def test_auth_passwordreset_reset_invalid_password_and_reset_code(registered_user_1):
@@ -448,6 +448,6 @@ def test_auth_passwordreset_reset_invalid_password_and_reset_code(registered_use
     
     #Should produce a ValueError as an reset code and invalid password is provided
     with pytest.raises(ValueError):
-        auth_passwordreset_reset(reset_code, new_password)  
+        auth_passwordreset_reset(reset_code=reset_code, new_password=new_password)  
     
     

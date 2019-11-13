@@ -57,7 +57,7 @@ def logout_user():
 
     token = request.form.get('token')
 
-    if auth_logout(token):
+    if auth_logout(token=token):
         return dumps({"Action": "Success"})
 
     return dumps({"Action": "Failure"})
@@ -99,7 +99,7 @@ def reset_password():
 
     try:
 
-        auth_passwordreset_reset(reset_code, new_password)
+        auth_passwordreset_reset(reset_code=reset_code, new_password=new_password)
         return dumps({"Action": "Success"})
 
     except ValueError as error:
