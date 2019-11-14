@@ -308,16 +308,13 @@ def generate_message_id():
 #===============================================================================#
 #================================ USER HELPERS =================================#
 #===============================================================================#
-'''
+
 def fix_img_url(url_root):
     for user in list_of_users:
         if user['profile_img_url'] is not None:
-            src_dir = './static/' + user['profile_img_url']
-            new_url = url_root + 'static/' + user['token'] + '.jpg'
-            dst_dir = './static/' + new_url
-            os.rename(src_dir, dst_dir) 
+            new_url = url_root + 'static/' + str(user['u_id']) + '.jpg'
             user['profile_img_url'] = new_url
-'''
+
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
@@ -356,9 +353,16 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
+<<<<<<< HEAD
     #images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
     #for i in images:
     #    os.remove(os.path.join('./static/', i))
+=======
+    if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
+        images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
+        for i in images:
+            os.remove(os.path.join('./static/', i))
+>>>>>>> harry_branch
 
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
