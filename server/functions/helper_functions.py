@@ -304,7 +304,20 @@ def generate_message_id():
     global number_of_messages
     number_of_messages += 1
     return number_of_messages
-
+    
+#===============================================================================#
+#================================ USER HELPERS =================================#
+#===============================================================================#
+'''
+def fix_img_url(url_root):
+    for user in list_of_users:
+        if user['profile_img_url'] is not None:
+            src_dir = './static/' + user['profile_img_url']
+            new_url = url_root + 'static/' + user['token'] + '.jpg'
+            dst_dir = './static/' + new_url
+            os.rename(src_dir, dst_dir) 
+            user['profile_img_url'] = new_url
+'''
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#

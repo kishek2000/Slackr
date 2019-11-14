@@ -92,27 +92,8 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
 
-    
     image_path = token + '.jpg'
-    #x = datetime.datetime.now()
-    #################################
-    #return_dict = get_user_details(token)
-    
-    #image_path = return_dict['u_id'] + x + '.jpg'
-    ###############################
-    image_dir = '.' + '/static/' + image_path
-    
-    
-    '''
-    return_dict = get_user_details(token)
-    if return_dict['profile_img_url'] is not None:
-        print('yo')
-        os.remove(image_dir)
-        for user in list_of_users:
-            if user['token'] == token:
-                user['profile_img_url'] = None
-    '''
-    
+    image_dir = '.' + '/static/' + image_path    
     
     urllib.request.urlretrieve(str(img_url), image_dir)
     #image = Image.open(requests.get(str(img_url), stream=True).raw)
