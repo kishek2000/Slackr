@@ -6,6 +6,7 @@ import datetime
 import sys
 import atexit
 import pickle
+import os
 '''
     Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
     1 and 2 have same permissions but 2 cannot change the privileges that 1 has.
@@ -342,6 +343,9 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
+    images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
+    for i in images:
+        os.remove(os.path.join('./static/', i))
 
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
