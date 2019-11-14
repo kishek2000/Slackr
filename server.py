@@ -13,7 +13,7 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
-from functions.helper_functions import fix_img_url
+from functions.helper_functions import fix_img_url, update_channels_details
 
 APP = Flask(__name__, static_url_path = '/static/')
 #app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
@@ -36,6 +36,7 @@ def echo2():
 @APP.before_first_request
 def activate_task():
     fix_img_url(request.url_root)
+    update_channels_details()
 
 #===============================================================================#
 #=================================     AUTH     ================================#

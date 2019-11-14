@@ -277,6 +277,21 @@ def message_reacts_helper(message_list, uid):
             else:
                 react["is_this_user_reacted"] = False
 
+def update_channels_details():
+    print (all_channels_details)
+    for channels in all_channels_details:
+        for users in channels['owner_members']:
+            returned_dict = get_user_details(users['u_id'])
+            #print(returned_dict['profile_img_url'])
+            users['name_first'] = returned_dict['name_first']
+            users['name_last'] = returned_dict['name_last']
+            users['profile_img_url'] = returned_dict['profile_img_url']
+        for users in channels['all_members']:
+            returned_dict = get_user_details(users['u_id'])
+            users['name_first'] = returned_dict['name_first']
+            users['name_last'] = returned_dict['name_last']
+            users['profile_img_url'] = returned_dict['profile_img_url']
+
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
