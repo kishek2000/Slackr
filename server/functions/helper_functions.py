@@ -353,16 +353,10 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
-<<<<<<< HEAD
-    #images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
-    #for i in images:
-    #    os.remove(os.path.join('./static/', i))
-=======
     if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
         images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
         for i in images:
             os.remove(os.path.join('./static/', i))
->>>>>>> harry_branch
 
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
