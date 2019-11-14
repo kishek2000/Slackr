@@ -91,8 +91,9 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     returned_status = requests.head(str(img_url))
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
-
-    image_path = token + '.jpg'
+    
+    returned_dict = get_user_details(token)
+    image_path = str(returned_dict['u_id']) + '.jpg'
     image_dir = '.' + '/static/' + image_path    
     
     urllib.request.urlretrieve(str(img_url), image_dir)
@@ -121,5 +122,8 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
 @authorise_token
 def users_all(token):
     """ users_all function """
-
-    return {'users': list_of_users}
+    user_list = []
+    for user in list_of_users:
+        new_dict = {'u_id': user['u_id'], 'email': user['email'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'profile_img_url': user['profile_img_url']}
+        user_list.append(new_dict)
+    return {'users': user_list}
