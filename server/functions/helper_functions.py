@@ -356,9 +356,9 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
-    images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
-    for i in images:
-        os.remove(os.path.join('./static/', i))
+    #images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
+    #for i in images:
+    #    os.remove(os.path.join('./static/', i))
 
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
