@@ -1,6 +1,5 @@
 """ user_functions """
 import sys
-#import os
 import urllib.request
 import requests
 from PIL import Image
@@ -10,9 +9,10 @@ from functions.helper_functions import check_valid_token, check_valid_u_id, get_
 from functions.Errors import AccessError
 
 def authorise_token(function):
+    """ Check that the token is legitimate """
     def wrapper(*args, **kwargs):
-        argsList = list(args)
-        if not check_valid_token(argsList[0]):
+        args_list = list(args)
+        if not check_valid_token(args_list[0]):
             raise AccessError("Token is Invalid")
         return function(*args, **kwargs)
     return wrapper
@@ -94,13 +94,12 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     returned_status = requests.head(str(img_url))
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
-    
+
     returned_dict = get_user_details(token)
     image_path = str(returned_dict['u_id']) + '.jpg'
-    image_dir = '.' + '/static/' + image_path    
-    
+    image_dir = '.' + '/static/' + image_path
+
     urllib.request.urlretrieve(str(img_url), image_dir)
-    #image = Image.open(requests.get(str(img_url), stream=True).raw)
     image = Image.open(image_dir)
     img_x = image.size[0]
     img_y = image.size[1]

@@ -15,8 +15,7 @@ from functions.Errors import *
 from functions.message_functions import *
 from functions.helper_functions import fix_img_url, update_channels_details, default_photo
 
-APP = Flask(__name__, static_url_path = '/static/')
-#app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
+APP = Flask(__name__, static_url_path='/static/')
 CORS(APP)
 
 @APP.route('/echo/get', methods=['GET'])
@@ -125,7 +124,7 @@ def invite_to_channel():
     u_id = int(request.form.get('u_id'))
 
     try:
-        channel_invite(token = token, channel_id = channel_id, u_id = u_id)
+        channel_invite(token=token, channel_id=channel_id, u_id=u_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -137,7 +136,7 @@ def get_channel_details():
     channel_id = int(request.args.get('channel_id'))
 
     try:
-        returning_dict = channel_details(token = token, channel_id = channel_id)
+        returning_dict = channel_details(token=token, channel_id=channel_id)
         return dumps(returning_dict)
     except ValueError as error:
         return {'error': error}
@@ -150,7 +149,7 @@ def get_channel_messages():
     start = int(request.args.get('start'))
 
     try:
-        returning_messages = channel_messages(token = token, channel_id = channel_id, start = start)
+        returning_messages = channel_messages(token=token, channel_id=channel_id, start=start)
         return dumps(returning_messages)
     except ValueError as error:
         return {'error': error}
@@ -162,7 +161,7 @@ def leave_channel():
     channel_id = int(request.form.get('channel_id'))
 
     try:
-        channel_leave(token = token, channel_id = channel_id)
+        channel_leave(token=token, channel_id=channel_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -173,7 +172,7 @@ def join_channel():
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     try:
-        channel_join(token = token, channel_id = channel_id)
+        channel_join(token=token, channel_id=channel_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -186,7 +185,7 @@ def add_owner_to_channel():
     u_id = int(request.form.get('u_id'))
 
     try:
-        channel_addowner(token = token, channel_id = channel_id, u_id = u_id)
+        channel_addowner(token=token, channel_id=channel_id, u_id=u_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -199,7 +198,7 @@ def remover_owner_from_channel():
     u_id = int(request.form.get('u_id'))
 
     try:
-        channel_removeowner(token = token, channel_id = channel_id, u_id = u_id)
+        channel_removeowner(token=token, channel_id=channel_id, u_id=u_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -210,7 +209,7 @@ def get_channels_list():
     token = request.args.get('token')
 
     try:
-        returning_list_dictionary = channels_list(token = token)
+        returning_list_dictionary = channels_list(token=token)
         return dumps({'channels': returning_list_dictionary})
     except ValueError as error:
         return {'error': error}
@@ -220,7 +219,7 @@ def get_channels_listall():
     """ Description of function """
     token = request.args.get('token')
     try:
-        returning_listall_dictionary = channels_listall(token = token)
+        returning_listall_dictionary = channels_listall(token=token)
         return dumps({'channels': returning_listall_dictionary})
     except ValueError as error:
         return {'error': error}
@@ -232,7 +231,7 @@ def create_channel():
     name = request.form.get('name')
     is_public = request.form.get('is_public')
     try:
-        new_channel_id = channels_create(token = token, name = name, is_public = is_public)
+        new_channel_id = channels_create(token=token, name=name, is_public=is_public)
         return dumps({'channel_id': new_channel_id})
     except ValueError as error:
         return {'error': error}
@@ -433,11 +432,11 @@ def start_standup():
 
     try:
         standup_end_time = standup_start(token=token, channel_id=channel_id, length=length)
-       
+
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
         timestamp = standup_end_time.strftime('%s')
-        
+
         return dumps({'time_finish' : str(timestamp)})
 
     except ValueError as error:
@@ -452,16 +451,16 @@ def standup_active_check():
 
     token = request.args.get('token')
     channel_id = int(request.args.get('channel_id'))
-    
+
     try:
         standup_details = standup_active(token=token, channel_id=channel_id)
-        
+
         timestamp = None
-        
-        if standup_details['time_finish'] != None: 
-            
+
+        if standup_details['time_finish'] != None:
+
             timestamp = standup_details['time_finish'].strftime('%s')
-        
+
         return dumps({'standup_active' : standup_details['standup_active'], 
                       'time_finish': str(timestamp)})
 
