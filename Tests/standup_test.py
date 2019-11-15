@@ -22,22 +22,22 @@ def _setup():
 
     reset_data()
 
-    user_1_details = auth_register(email="PokemonMaster@gmail.com", 
+    user_1_details = auth_register(email="PokemonMaster@gmail.com",
                                    password="validP@sswrd1",
                                    name_first="Ash",
                                    name_last="Ketcham")
-    user_2_details = auth_register(email="TheRealPokemonMaster@gmail.com", 
+    user_2_details = auth_register(email="TheRealPokemonMaster@gmail.com",
                                    password="ValidP@sswordRocks1",
-                                   name_first="Gary", 
+                                   name_first="Gary",
                                    name_last="Oak")
-    user_3_details = auth_register(email="FreddieMercury@gmail.com", 
+    user_3_details = auth_register(email="FreddieMercury@gmail.com",
                                    password="We@reTheChampions123",
                                    name_first="Freddie",
                                    name_last="Mercury")
 
 
     user_1_created_channel_id = channels_create(token=user_1_details['token'],
-                                                name="ValidChannelName", 
+                                                name="ValidChannelName",
                                                 is_public=True)
 
     return {'user_1_u_id': user_1_details['u_id'], 'user_1_token' : user_1_details['token'],
@@ -72,7 +72,7 @@ def test_standup_attempt_to_start_already_active_standup(_setup):
 
     #Should produce no errors
     standup_start(token=user_1_token, channel_id=channel_id, length=10)
-    
+
     print(standup_active(token=user_1_token, channel_id=channel_id)['standup_active'])
     #Should produce ValueError as standup is already active
     with pytest.raises(ValueError):
@@ -131,7 +131,7 @@ def test_standup_start_correct_time_difference_5_seconds(_setup):
 def test_standup_start_correct_time_difference_10_seconds(_setup):
     '''Testing standup_start and checking for correct time difference of 10 seconds'''
     time_current = datetime.datetime.now()
-    
+
     user_1_token = _setup['user_1_token']
     channel_id = _setup['channel_created_by_user_1']
 
@@ -216,7 +216,7 @@ def test_standup_active_end_of_standup(_setup):
     time.sleep(11)
 
     assert(standup_active(token=user_1_token, channel_id=channel_id) == {'standup_active' : False,
-                                                        'time_finish' : None})
+                                                                         'time_finish' : None})
 
 def test_standup_active_correct_time_difference(_setup):
     '''Testing standup_active after standup's completion'''
@@ -321,4 +321,3 @@ def test_standup_send_standup_time_finished_5_seconds(_setup):
 
     with pytest.raises(ValueError):
         standup_send(token=user_token, channel_id=channel_id, message=message)
-
