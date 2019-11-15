@@ -113,61 +113,6 @@ def check_valid_handle(handle_str):
 
 
 #===============================================================================#
-#=============================== AUTH DECORATORS ===============================#
-#===============================================================================#
-
-def check_name_validity(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if (len(user_details['name_first']) < 1 or len(user_details['name_first']) > 50):
-            raise ValueError("Invalid First Name")
-        if (len(user_details['name_last']) < 1 or len(user_details['name_last']) > 50):
-            raise ValueError("Invalid Last Name")
-        return function(*args, **kwargs)
-    return wrapper
-
-
-def check_valid_password(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if valid_password(user_details['password']) is False:
-            raise ValueError("Invalid Password Entered")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_email_registered_false(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if email_registered(user_details['email']) == False:
-            raise ValueError("Email Not Registered")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_email_registered_true(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if email_registered(user_details['email']) == True:
-            raise ValueError("Email Not Registered")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_valid_email(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if valid_email(user_details['email']) == False:
-            raise ValueError("Invalid Email")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_password_email_match(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if email_matches_password(user_details['email'], password_hash(user_details['password'])) == False:
-            raise ValueError("Incorrect Password Entered")
-        return function(*args, **kwargs)
-    return wrapper
-
-#===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
 
@@ -263,17 +208,6 @@ def generate_reset_code():
     reset_code = random.randint(1, 10000000)
     return str(reset_code)
 
-#===============================================================================#
-#============================= CHANNEL DECORATORS ==============================#
-#===============================================================================#
-
-def valid_channel_id(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if check_valid_channel_id(user_details['channel_id']) is False:
-            raise ValueError("Invalid Channel")
-        return function(*args, **kwargs)
-    return wrapper
 
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
@@ -433,10 +367,10 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
-    if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
-        images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
-        for i in images:
-            os.remove(os.path.join('./static/', i))
+   # if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
+   #     images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
+   #     for i in images:
+   #        os.remove(os.path.join('./static/', i))
 
 
 #===============================================================================#

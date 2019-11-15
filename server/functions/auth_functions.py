@@ -8,61 +8,10 @@ from functions.helper_functions import (valid_email, email_matches_password, val
                                         password_hash, generate_token, generate_u_id, 
                                         generate_handle)
 
+from functions.Errors import (check_name_validity, check_valid_password,
+                              check_email_registered_false, check_email_registered_true,
+                              check_valid_email, check_password_email_match)
 
-#===============================================================================#
-#=============================== AUTH DECORATORS ===============================#
-#===============================================================================#
-
-def check_name_validity(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if (len(user_details['name_first']) < 1 or len(user_details['name_first']) > 50):
-            raise ValueError("Invalid First Name")
-        if (len(user_details['name_last']) < 1 or len(user_details['name_last']) > 50):
-            raise ValueError("Invalid Last Name")
-        return function(*args, **kwargs)
-    return wrapper
-
-
-def check_valid_password(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if valid_password(user_details['password']) is False:
-            raise ValueError("Invalid Password Entered")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_email_registered_false(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if email_registered(user_details['email']) == False:
-            raise ValueError("Email Not Registered")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_email_registered_true(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if email_registered(user_details['email']) == True:
-            raise ValueError("Email Not Registered")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_valid_email(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if valid_email(user_details['email']) == False:
-            raise ValueError("Invalid Email")
-        return function(*args, **kwargs)
-    return wrapper
-
-def check_password_email_match(function):
-    def wrapper(*args, **kwargs):
-        user_details = kwargs
-        if email_matches_password(user_details['email'], password_hash(user_details['password'])) == False:
-            raise ValueError("Incorrect Password Entered")
-        return function(*args, **kwargs)
-    return wrapper
 
 #===============================================================================#
 #================================ AUTH FUNCTIONS ===============================#
