@@ -343,6 +343,11 @@ def default_photo(url_root):
         if user['profile_img_url'] is None:
             new_url = url_root + 'static/default.jpg'
             user['profile_img_url'] = new_url
+
+def make_default_photo():
+    image_dir = './static/default.jpg'    
+    urllib.request.urlretrieve('https://images-na.ssl-images-amazon.com/images/I/41mUvRO4kXL.jpg', image_dir)
+
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
@@ -385,9 +390,7 @@ def reset_data():
         images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
         for i in images:
            os.remove(os.path.join('./static/', i))
-    image_dir = './static/default.jpg'    
-    urllib.request.urlretrieve('https://images-na.ssl-images-amazon.com/images/I/41mUvRO4kXL.jpg', image_dir)
-    
+    make_default_photo()    
 
 
 #===============================================================================#

@@ -4,7 +4,7 @@ File contains standup related functions
 
 import datetime
 import threading
-from functions.Errors import (valid_channel_id, token_in_channel)
+from functions.Errors import (authorise_channel_id, token_in_channel)
 from functions.helper_functions import (add_to_standup_queue, all_channels_messages)
 from functions.message_functions import message_send
 
@@ -13,7 +13,7 @@ from functions.message_functions import message_send
 #=============================== STANDUP FUNCTIONS ==============================#
 #===============================================================================#
 
-@valid_channel_id
+@authorise_channel_id
 @token_in_channel
 def standup_start(token=None, channel_id=None, length=None):
     '''Function starts a standup in a channel if inactive'''
@@ -37,7 +37,7 @@ def standup_start(token=None, channel_id=None, length=None):
 
     return time_finish
 
-@valid_channel_id
+@authorise_channel_id
 @token_in_channel
 def standup_active(token=None, channel_id=None):
     '''Function checks if a standup is active/inactive'''
@@ -52,7 +52,7 @@ def standup_active(token=None, channel_id=None):
 
     return {'standup_active' : False, 'time_finish' : None}
 
-@valid_channel_id
+@authorise_channel_id
 @token_in_channel
 def standup_send(token=None, channel_id=None, message=None):
     '''Functions sends a message to be buffered in the standup queue'''

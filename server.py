@@ -13,7 +13,7 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
-from functions.helper_functions import fix_img_url, update_channels_details, default_photo
+from functions.helper_functions import fix_img_url, update_channels_details, default_photo, list_of_users, make_default_photo
 
 APP = Flask(__name__, static_url_path='/static/')
 CORS(APP)
@@ -34,6 +34,8 @@ def echo2():
 
 @APP.before_first_request
 def activate_task():
+    if list_of_users == []:
+        make_default_photo()
     fix_img_url(request.url_root)
     update_channels_details()
 
@@ -246,7 +248,7 @@ def post_message_send():
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
     try:
-        message_id = message_send(token, channel_id, message)
+        message_id = message_send(token=token, channel_id=channel_id, message=message)
         return dumps({'message_id': message_id})
     except ValueError as error:
         return {'error': error}
@@ -260,7 +262,7 @@ def post_message_sendlater():
     #time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
     time_sent = int(request.form.get('time_sent'))/1000.0
     try:
-        message_id = message_sendlater(token, channel_id, message, time_sent)
+        message_id = message_sendlater(token=token, channel_id=channel_id, message=message, time_sent=time_sent)
         return dumps({'message_id': message_id})
     except ValueError as error:
         print(error)
@@ -272,7 +274,7 @@ def post_message_remove():
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     try:
-        message_remove(token, message_id)
+        message_remove(token=token, message_id=message_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -284,7 +286,7 @@ def put_message_edit():
     message_id = int(request.form.get('message_id'))
     message = request.form.get('message')
     try:
-        message_edit(token, message_id, message)
+        message_edit(token=token, message_id=message_id, message=message)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -296,7 +298,7 @@ def post_message_react():
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
     try:
-        message_react(token, message_id, react_id)
+        message_react(token=token, message_id=message_id, react_id=react_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -308,7 +310,7 @@ def post_message_unreact():
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
     try:
-        message_unreact(token, message_id, react_id)
+        message_unreact(token=token, message_id=token, react_id=react_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -319,7 +321,7 @@ def post_message_pin():
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     try:
-        message_pin(token, message_id)
+        message_pin(token=token, message_id=message_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
@@ -330,7 +332,7 @@ def post_message_unpin():
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     try:
-        message_unpin(token, message_id)
+        message_unpin(token=token, message_id=mesage_id)
         return dumps({})
     except ValueError as error:
         return {'error': error}
