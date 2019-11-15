@@ -47,3 +47,19 @@ It was observed that other that a lot of conditions such as 'check_token_in_chan
 
 Functions in both function and test files were each given docstrings to briefly describe them. This would add to the codes understandability if referred to at a future date as each function has been described. Further, intially all the contents of files rather than the required contents were imported. This created inefficiant code and was changed to only import the required functions from other files. Code style was further improved by improving variable names, removing trailing whitespaces and breaking down long lines. This brought up our overall pylint scores which were in the negatives at the start of the iteration.
 
+##Message Changes:
+Followed PEP guidelines more closely:
+    Moved standard library imports above custom imports (eg. import sys above from helper_functions)
+    Eliminated spaces on empty lines
+    Changed == None to is None
+    Changed == False to Not
+    Removed == True
+    Changed constant name valid_reacts to VALID_REACTS
+    Added docstrings to the start of functions briefly explaining their purpose
+    Added header in message_functions identifying who wrote it, what functions are in it, and sub-functions
+    Declared a list just before using it to prevent lines from being too long.
+    Split import from helper_functions over multiple lines to make it more readable.
+
+Moved checks that appear in more than one function to a decorator.
+Added support for kwargs
+
