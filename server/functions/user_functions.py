@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users
+from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, update_channels_details
 from functions.Errors import AccessError
 
 def authorise_token(function):
@@ -45,6 +45,7 @@ def user_profile_setname(token, name_first, name_last):
         if user['token'] == token:
             user['name_first'] = name_first
             user['name_last'] = name_last
+    update_channels_details()
 
 @authorise_token
 def user_profile_setemail(token, email):
@@ -57,6 +58,7 @@ def user_profile_setemail(token, email):
     for user in list_of_users:
         if user['token'] == token:
             user['email'] = email
+    update_channels_details()
 
 @authorise_token
 def user_profile_sethandle(token, handle_str):
@@ -73,6 +75,7 @@ def user_profile_sethandle(token, handle_str):
     for user in list_of_users:
         if user['token'] == token:
             user['handle_str'] = handle_str
+    update_channels_details()
 
 @authorise_token
 def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, url_root=None):
@@ -91,8 +94,9 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     returned_status = requests.head(str(img_url))
     if returned_status.status_code != 200:
         raise ValueError("Invalid img_url")
-
-    image_path = token + '.jpg'
+    
+    returned_dict = get_user_details(token)
+    image_path = str(returned_dict['u_id']) + '.jpg'
     image_dir = '.' + '/static/' + image_path    
     
     urllib.request.urlretrieve(str(img_url), image_dir)
@@ -117,9 +121,13 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
                 user['profile_img_url'] = 'static/' + image_path
             else:
                 user['profile_img_url'] = url_root + 'static/' + image_path
+    update_channels_details()
 
 @authorise_token
 def users_all(token):
     """ users_all function """
-
-    return {'users': list_of_users}
+    user_list = []
+    for user in list_of_users:
+        new_dict = {'u_id': user['u_id'], 'email': user['email'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'profile_img_url': user['profile_img_url']}
+        user_list.append(new_dict)
+    return {'users': user_list}
