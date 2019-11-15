@@ -54,7 +54,6 @@ def authorise(function):
             if kwargs['react_id'] not in VALID_REACTS:
                 raise ValueError("Not a valid react_id")
 
-
         return function(*args, **kwargs)
     return wrapper
 
