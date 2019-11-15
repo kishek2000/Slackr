@@ -11,8 +11,8 @@ from functions.Errors import AccessError
 def register_account():
     """ register_account fixture """
     reset_data()
-    auth_register('example2@gmail.com', 'P@ssword123', 'Epic', 'Style')
-    return auth_register('example@gmail.com', 'Go0dPa>sword', 'dan', 'man')
+    auth_register(email = 'example2@gmail.com', password = 'P@ssword123', name_first = 'Epic', name_last = 'Style')
+    return auth_register(email = 'example@gmail.com', password = 'Go0dPa>sword', name_first = 'dan', name_last = 'man')
 
 #################################################################################
 ##                           TESTING user_profile                              ##
@@ -281,7 +281,7 @@ def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
 def test_users_all_correct_return(register_account):
     """ test_users_all_correct_return """
     token = register_account['token']
-    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'password': list_of_users[0]['password'], 'u_id': 1, 'token' : list_of_users[0]['token'], 'reset_code': None, 'name_first': 'Epic', 'name_last': 'Style', 'app_permission_id': 1, 'profile_img_url': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'password': list_of_users[1]['password'], 'u_id': 2, 'token' : token, 'reset_code': None, 'name_first': 'dan', 'name_last': 'man', 'app_permission_id': 3, 'profile_img_url': None}]}
+    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'u_id': 1, 'name_first': 'Epic', 'name_last': 'Style', 'profile_img_url': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'u_id': 2, 'name_first': 'dan', 'name_last': 'man', 'profile_img_url': None}]}
 
 #This should cause the function to raise an error as the token is invalid
 def test_users_all_invalid_token():

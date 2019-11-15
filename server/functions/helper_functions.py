@@ -6,6 +6,7 @@ import datetime
 import sys
 import atexit
 import pickle
+import os
 '''
     Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
     1 and 2 have same permissions but 2 cannot change the privileges that 1 has.
@@ -111,50 +112,9 @@ def check_valid_handle(handle_str):
     return False
 
 
-
-
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
 #===============================================================================#
-
-def authorise_login(function):
-    def wrapper(**kwargs):
-        if valid_email(kwargs['email']) == False:
-            raise ValueError("Invalid Email")
-        if email_matches_password(kwargs['email'], password_hash(kwargs['password'])) == False:
-            raise ValueError("Incorrect Password Entered")
-        if email_registered(kwargs['email']) == False:
-            raise ValueError("Email Not Registered")
-        return function(kwargs['email'], kwargs['password'])
-    return wrapper
-
-def authorise_register(function):
-    def wrapper(**kwargs):
-        if valid_email(kwargs['email']) is False:
-            raise ValueError("Invalid Email")
-        if valid_password(kwargs['password']) is False:
-            raise ValueError("Invalid Password Entered")
-        if email_registered(kwargs['email']) is True:
-            raise ValueError("Email Provided Already in Use")
-        if (len(kwargs['name_first']) < 1 or len(kwargs['name_first']) > 50):
-            raise ValueError("Invalid First Name")
-        if (len(kwargs['name_last']) < 1 or len(kwargs['name_last']) > 50):
-            raise ValueError("Invalid Last Name")
-        return function(kwargs['email'], kwargs['password'], kwargs['name_first'],
-                        kwargs['name_last'])
-    return wrapper
-
-def authorise_passwordreset_request(function):
-    def wrapper(**kwargs):
-        if valid_email(kwargs['reset_email']) is False:
-            raise ValueError("Invalid Email")
-
-        if email_registered(kwargs['reset_email']) is False:
-            raise ValueError("Email Not Registered")
-
-        return function(kwargs['reset_email'])
-    return wrapper
-
 
 def email_registered(email):
     ''' Does email already exist '''
@@ -235,6 +195,8 @@ def generate_handle(name_first, name_last):
 
     else:
         handle = name_first + name_last
+        
+    return handle
 
 #Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019
 def password_hash(password):
@@ -245,6 +207,7 @@ def generate_reset_code():
     ''' Create reset code to send to user '''
     reset_code = random.randint(1, 10000000)
     return str(reset_code)
+
 
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
@@ -313,6 +276,21 @@ def message_reacts_helper(message_list, uid):
             else:
                 react["is_this_user_reacted"] = False
 
+def update_channels_details():
+    print (all_channels_details)
+    for channels in all_channels_details:
+        for users in channels['owner_members']:
+            returned_dict = get_user_details(users['u_id'])
+            #print(returned_dict['profile_img_url'])
+            users['name_first'] = returned_dict['name_first']
+            users['name_last'] = returned_dict['name_last']
+            users['profile_img_url'] = returned_dict['profile_img_url']
+        for users in channels['all_members']:
+            returned_dict = get_user_details(users['u_id'])
+            users['name_first'] = returned_dict['name_first']
+            users['name_last'] = returned_dict['name_last']
+            users['profile_img_url'] = returned_dict['profile_img_url']
+
 #===============================================================================#
 #=============================== MESSAGE HELPERS ===============================#
 #===============================================================================#
@@ -340,6 +318,16 @@ def generate_message_id():
     global number_of_messages
     number_of_messages += 1
     return number_of_messages
+    
+#===============================================================================#
+#================================ USER HELPERS =================================#
+#===============================================================================#
+
+def fix_img_url(url_root):
+    for user in list_of_users:
+        if user['profile_img_url'] is not None:
+            new_url = url_root + 'static/' + str(user['u_id']) + '.jpg'
+            user['profile_img_url'] = new_url
 
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
@@ -379,50 +367,15 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
+   # if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
+   #     images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
+   #     for i in images:
+   #        os.remove(os.path.join('./static/', i))
+
 
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
 #===============================================================================#
-'''
-def check_standup_active(channel_id):
-
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            try:
-                if channel['standup_active'][0] == True:
-                    return True
-
-            except TypeError:
-                continue
-
-
-    return False
-'''
-
-def start_standup(channel_id, time_finish):
-    ''' Starts a standup '''
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            channel['standup_active'] = [None, None]
-            channel['standup_active'][0] = True
-            channel['standup_active'][1] = time_finish
-
-    return {}
-
-def standup_status(channel_id):
-    ''' Checks the standup_status in a given channel '''
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-
-            try:
-                #channel['standup_active'][1] != None
-                return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]}
-
-            except TypeError:
-                return {'standup_active' : False, 'time_finish' : None}
-
-    return {'standup_active' : False, 'time_finish' : None}
-
 
 def add_to_standup_queue(channel_id, message):
     ''' Adds a message to the queue of messages from a standup '''

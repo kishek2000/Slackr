@@ -13,7 +13,7 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
-from functions.helper_functions import get_user_details
+from functions.helper_functions import fix_img_url, update_channels_details
 
 APP = Flask(__name__, static_url_path = '/static/')
 #app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
@@ -32,6 +32,11 @@ def echo2():
     return dumps({
         'echo' : request.form.get('echo'),
     })
+
+@APP.before_first_request
+def activate_task():
+    fix_img_url(request.url_root)
+    update_channels_details()
 
 #===============================================================================#
 #=================================     AUTH     ================================#
@@ -82,7 +87,7 @@ def request_password_reset():
     email = request.form.get('email')
 
     try:
-        auth_passwordreset_request(reset_email=email)
+        auth_passwordreset_request(email=email)
         return dumps({"Action": "Success"})
 
     except ValueError as error:
@@ -425,14 +430,12 @@ def start_standup():
     length = int(request.form.get('length'))
 
     try:
-        standup_end_time = standup_start(token, channel_id, length)
+        standup_end_time = standup_start(token=token, channel_id=channel_id, length=length)
        
 #To represet 'standup_end_time' numerically as 'timestamp' the following method from https://www.tutorialspoint.com/How-to-convert-Python-date-to-Unix-timestamp was used
 
-        #timestamp = standup_end_time.replace(tzinfo=timezone.utc).timestamp()
         timestamp = standup_end_time.strftime('%s')
-        #timestamp_starttime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
-        #timestamp = timestamp_endtime - timestamp_starttime
+        
         return dumps({'time_finish' : str(timestamp)})
 
     except ValueError as error:
@@ -449,16 +452,13 @@ def standup_active_check():
     channel_id = int(request.args.get('channel_id'))
     
     try:
-        standup_details = standup_active(token, channel_id)
+        standup_details = standup_active(token=token, channel_id=channel_id)
         
         timestamp = None
         
         if standup_details['time_finish'] != None: 
             
             timestamp = standup_details['time_finish'].strftime('%s')
-            #timestamp = standup_details['time_finish'].replace(tzinfo=timezone.utc).timestamp()
-            #timestamp_starttime = datetime.datetime.now().replace(tzinfo=timezone.utc).timestamp()
-            #timestamp = timestamp_endtime - timestamp_starttime
         
         return dumps({'standup_active' : standup_details['standup_active'], 
                       'time_finish': str(timestamp)})
@@ -478,7 +478,7 @@ def start_send():
     message = request.form.get('message')
 
     try:
-        standup_send(token, channel_id, message)
+        standup_send(token=token, channel_id=channel_id, message=message)
         return dumps({})
 
     except ValueError as error:

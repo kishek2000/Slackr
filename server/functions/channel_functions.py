@@ -261,7 +261,8 @@ def channels_create(token=None, name=None, is_public=None, **kwargs):
         'is_public': is_public
     })
     all_channels_messages.append({
-        'channel_id': channel_id, 'total_messages': 0, 'standup_active': False,
+        'channel_id': channel_id, 'total_messages': 0, 
+        'standup_details': {'standup_active' : False, 'time_finish': None},
         'standup_buffer': '', 'messages': []
     })
     change_user_channel_permission(u_id, 1, channel_id,)
