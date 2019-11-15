@@ -4,7 +4,7 @@ File contains standup related functions
 
 import datetime
 import threading
-from functions.Errors import (authorise_channel_id, token_in_channel)
+from functions.Errors import (authorise_channel_id, token_in_channel, ValueError)
 from functions.helper_functions import (add_to_standup_queue, all_channels_messages)
 from functions.message_functions import message_send
 
@@ -48,8 +48,6 @@ def standup_active(token=None, channel_id=None):
             if channel['standup_details']['standup_active'] is True:
                 return {'standup_active' : channel['standup_details']['standup_active'],
                         'time_finish' : channel['standup_details']['time_finish']}
-
-
     return {'standup_active' : False, 'time_finish' : None}
 
 @authorise_channel_id

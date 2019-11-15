@@ -22,7 +22,7 @@ from functions.helper_functions import check_token_in_channel, generate_message_
 from functions.helper_functions import get_user_from_token, all_channels_messages
 from functions.helper_functions import find_message_info, get_user_app_permission
 from functions.helper_functions import has_user_reacted, VALID_REACTS
-from functions.Errors import AccessError
+from functions.Errors import AccessError, ValueError
 
 def authorise(function):
     def wrapper(*args, **kwargs):

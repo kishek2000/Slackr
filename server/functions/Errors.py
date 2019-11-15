@@ -2,13 +2,21 @@ from functions.helper_functions import valid_email, email_matches_password, vali
 from functions.helper_functions import email_registered, password_hash, check_valid_channel_id
 from functions.helper_functions import check_token_in_channel, add_to_standup_queue
 from functions.helper_functions import all_channels_messages, check_valid_u_id, check_valid_token
+from werkzeug.exceptions import HTTPException
+
 
 #===============================================================================#
-#=============================== ACCESSERROR DEF ===============================#
+#=============================== ERRORS DEF ====================================#
 #===============================================================================#
-class AccessError(Exception):
-    ## We raise this in general when things aren't accessed correctly!!
-    pass
+## For actual messages to print in the frontend, we define our classes here
+## and then import these everywhere.
+class AccessError(HTTPException):
+    code = 400
+    message = "no message specified"
+
+class ValueError(HTTPException):
+    code = 400
+    message = "no message specified"
 
 #===============================================================================#
 #=============================== COMMON DECORATORS =============================#
@@ -57,7 +65,7 @@ def check_email_registered_true(function):
     def wrapper(*args, **kwargs):
         user_details = kwargs
         if email_registered(user_details['email']) == True:
-            raise ValueError("Email Not Registered")
+            raise ValueError("Email Is Already Registered")
         return function(*args, **kwargs)
     return wrapper
 

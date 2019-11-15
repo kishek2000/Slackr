@@ -2,7 +2,7 @@
 import sys
 sys.path.append("/Server/functions/")
 from functions.helper_functions import all_channels_messages, get_user_from_token, all_channels_details
-
+from functions.Errors import ValueError
 def search(token, query_str):
     """ search_function """
     found_messages = {"messages": []}

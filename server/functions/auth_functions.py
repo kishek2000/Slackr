@@ -9,7 +9,7 @@ from functions.helper_functions import  (valid_password, generate_reset_code, li
 
 from functions.Errors import (check_name_validity, check_valid_password,
                               check_email_registered_false, check_email_registered_true,
-                              check_valid_email, check_password_email_match)
+                              check_valid_email, check_password_email_match, ValueError)
 
 #===============================================================================#
 #================================ AUTH FUNCTIONS ===============================#

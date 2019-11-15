@@ -19,7 +19,7 @@ from functions.helper_functions import get_user_details, generate_channel_id
 from functions.helper_functions import change_user_channel_permission, message_reacts_helper
 from functions.helper_functions import check_token_in_channel
 from functions.Errors import AccessError, authorise_token, authorise_channel_id, token_in_channel
-from functions.Errors import authorise_u_id
+from functions.Errors import authorise_u_id, ValueError
 
 #====================================== channel/invite [POST] ====================================#
 @authorise_token

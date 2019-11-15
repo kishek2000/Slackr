@@ -1,6 +1,6 @@
 """ admin_functions """
 from functions.helper_functions import check_valid_u_id, check_valid_token, get_user_details, list_of_users
-from functions.Errors import AccessError
+from functions.Errors import AccessError, ValueError
 
 def admin_userpermission_change(token, u_id, permission_id):
     """ admin_userpermission_change function """
