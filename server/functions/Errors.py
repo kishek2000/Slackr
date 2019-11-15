@@ -1,7 +1,7 @@
-from functions.helper_functions import (valid_email, email_matches_password, valid_password,
-                                        email_registered, password_hash, check_valid_channel_id,            
-                                        check_token_in_channel, add_to_standup_queue, 
-                                        all_channels_messages)
+from functions.helper_functions import valid_email, email_matches_password, valid_password
+from functions.helper_functions import email_registered, password_hash, check_valid_channel_id
+from functions.helper_functions import check_token_in_channel, add_to_standup_queue
+from functions.helper_functions import all_channels_messages, check_valid_u_id, check_valid_token
 
 #===============================================================================#
 #=============================== ACCESSERROR DEF ===============================#
@@ -9,7 +9,19 @@ from functions.helper_functions import (valid_email, email_matches_password, val
 class AccessError(Exception):
     ## We raise this in general when things aren't accessed correctly!!
     pass
-    
+
+#===============================================================================#
+#=============================== COMMON DECORATORS =============================#
+#===============================================================================#
+def authorise_token(function):
+    ''' Decorator for authorising just token '''
+    def wrapper(**kwargs):
+        if kwargs['token'] and not check_valid_token(kwargs['token']):
+            raise AccessError("Given token is invalid")
+        return function(**kwargs)
+    return wrapper
+
+
 #===============================================================================#
 #=============================== AUTH DECORATORS ===============================#
 #===============================================================================#
@@ -64,25 +76,38 @@ def check_password_email_match(function):
             raise ValueError("Incorrect Password Entered")
         return function(*args, **kwargs)
     return wrapper
-    
+
 #===============================================================================#
 #============================= CHANNEL DECORATORS ==============================#
 #===============================================================================#
 
-def valid_channel_id(function):
+def authorise_channel_id(function):
+    ''' Decorator for authorising channel id '''
     def wrapper(*args, **kwargs):
         user_details = kwargs
         if check_valid_channel_id(user_details['channel_id']) is False:
             raise ValueError("Invalid Channel")
         return function(*args, **kwargs)
     return wrapper
-    
+
 def token_in_channel(function):
+    ''' Decorator for authorising token is in channel '''
     def wrapper(*args, **kwargs):
         user_details = kwargs
         if check_token_in_channel(user_details['token'], user_details['channel_id']) is False:
-            raise AccessError("User Not In Channel")
+            raise AccessError("Accessing user is not in this channel")
         return function(*args, **kwargs)
-    return wrapper   
+    return wrapper
+
+def authorise_u_id(function):
+    ''' Decorator for authorising uid '''
+    def wrapper(**kwargs):
+        if kwargs['u_id'] and not check_valid_u_id(kwargs['u_id']):
+            raise ValueError("Given user id does not exist.")
+        return function(**kwargs)
+    return wrapper
+
+
+
 
 
