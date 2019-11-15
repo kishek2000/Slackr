@@ -12,10 +12,10 @@ from functions.message_functions import message_send, message_remove
 def register_account():
     ''' Used to set up temporary variables '''
     reset_data()
-    returned_dict = auth_register('example@gmail.com', 'Go0dPa>sword', 'dan', 'man')
-    channel_id = channels_create(returned_dict['token'], "Channel A", False)
-    temp_second_dict = auth_register('exampl3@gmail.com', 'P@ssword123', 'Sharon', 'Mina')
-    temp_channel = channels_create(temp_second_dict['token'], "Channel B", False)
+    returned_dict = auth_register(email='example@gmail.com', password='Go0dPa>sword', name_first='dan', name_last='man')
+    channel_id = channels_create(token=returned_dict['token'], name="Channel A", is_Public=False)
+    temp_second_dict = auth_register(email='exampl3@gmail.com', password='P@ssword123', name_first='Sharon', name_last='Mina')
+    temp_channel = channels_create(token=temp_second_dict['token'], name="Channel B", is_Public=False)
     return [returned_dict, channel_id]
 
 #################################################################################

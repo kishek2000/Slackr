@@ -12,8 +12,8 @@ def register_account():
     ''' Set up temporary data '''
     reset_data()
     return_list = []
-    return_list.append(auth_register('example@gmail.com', 'P@ssword123', 'dan', 'man'))
-    return_list.append(auth_register('example2@gmail.com', 'P@ssword123', 'Epic', 'Style'))
+    return_list.append(auth_register(email='example@gmail.com', password='P@ssword123', name_first='dan', name_last='man'))
+    return_list.append(auth_register(email='example2@gmail.com', password='P@ssword123', name_first='Epic', name_last='Style'))
     return return_list
 
 #################################################################################
