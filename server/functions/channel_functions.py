@@ -22,6 +22,7 @@ from .helper_functions import change_user_channel_permission, message_reacts_hel
 from functions.Errors import AccessError
 
 def authorise_all_arguments(function):
+    ''' Decorator for authorising 3 arguments '''
     def wrapper(**kwargs):
         if kwargs['channel_id'] and not check_valid_channel_id(kwargs['channel_id']):
             raise ValueError("Given channel does not exist.")
@@ -33,6 +34,7 @@ def authorise_all_arguments(function):
     return wrapper
 
 def authorise_less_arguments(function):
+    ''' Decorator for authorising 2 arguments '''
     def wrapper(**kwargs):
         if kwargs['channel_id'] and not check_valid_channel_id(kwargs['channel_id']):
             raise ValueError("Given channel does not exist.")
@@ -42,6 +44,7 @@ def authorise_less_arguments(function):
     return wrapper
 
 def authorise_token(function):
+    ''' Decorator for authorising just token '''
     def wrapper(**kwargs):
         if kwargs['token'] and not check_valid_token(kwargs['token']):
             raise AccessError("Given token is invalid")
@@ -50,7 +53,7 @@ def authorise_token(function):
 
 #====================================== channel/invite [POST] ====================================#
 @authorise_all_arguments
-def channel_invite(token = None, channel_id = None, u_id = None, **kwargs):
+def channel_invite(token=None, channel_id=None, u_id=None, **kwargs):
     ''' This function invites a given u_id to a channel that the token user is part of '''
     ## Extra checks that are specific:
     if not check_token_in_channel(token, channel_id):
@@ -67,7 +70,7 @@ def channel_invite(token = None, channel_id = None, u_id = None, **kwargs):
                     break
 #======================================= channel/details [GET] ====================================#
 @authorise_less_arguments
-def channel_details(token = None, channel_id = None, **kwargs):
+def channel_details(token=None, channel_id=None, **kwargs):
     ''' This function provides the details of a channel that a token user is part of '''
     ## Extra check that is specific:
     if not check_token_in_channel(token, channel_id):
@@ -84,7 +87,7 @@ def channel_details(token = None, channel_id = None, **kwargs):
     return {}
 #======================================= channel/messages [GET ===================================#
 @authorise_less_arguments
-def channel_messages(token = None, channel_id = None, start = None, **kwargs):
+def channel_messages(token=None, channel_id=None, start=None, **kwargs):
     ''' This function provides the messages of a channel that a token user is part of '''
     ## Extra check that is specific:
     if not check_token_in_channel(token, channel_id):
@@ -117,7 +120,7 @@ def channel_messages(token = None, channel_id = None, start = None, **kwargs):
     return {}
 #======================================= channel/leave [POST] ====================================#
 @authorise_less_arguments
-def channel_leave(token = None, channel_id = None, **kwargs):
+def channel_leave(token=None, channel_id=None, **kwargs):
     ''' This function returns deletes the token user from the channel '''
     ## Extra check that is specific:
     if not check_token_in_channel(token, channel_id):
@@ -137,7 +140,7 @@ def channel_leave(token = None, channel_id = None, **kwargs):
 
 #======================================= channel/join [POST] =====================================#
 @authorise_less_arguments
-def channel_join(token = None, channel_id = None, **kwargs):
+def channel_join(token=None, channel_id=None, **kwargs):
     ''' This function allows a token user to join a channel based on some constraints '''
     ## Extra check that is specific:
     if check_token_in_channel(token, channel_id):
@@ -163,7 +166,7 @@ def channel_join(token = None, channel_id = None, **kwargs):
 
 #===================================== channel/addowner [POST] ===================================#
 @authorise_all_arguments
-def channel_addowner(token = None, channel_id = None, u_id = None, **kwargs):
+def channel_addowner(token=None, channel_id=None, u_id=None, **kwargs):
     ''' This function allows an existing channel owner to add a new channel owner '''
     ## Extra checks that are specific:
     if get_user_app_permission(get_user_from_token(token)) != 1:
@@ -188,7 +191,7 @@ def channel_addowner(token = None, channel_id = None, u_id = None, **kwargs):
 
 #==================================== channel/removeowner [POST] =================================#
 @authorise_all_arguments
-def channel_removeowner(token = None, channel_id = None, u_id = None, **kwargs):
+def channel_removeowner(token=None, channel_id=None, u_id=None, **kwargs):
     ''' This function allows an existing channel owner to remove an existing channel owner '''
     ## Extra checks that are specific:
     user_app = get_user_app_permission(get_user_from_token(token))
@@ -211,7 +214,7 @@ def channel_removeowner(token = None, channel_id = None, u_id = None, **kwargs):
 
 #==================================== channels/list [GET] ====================================#
 @authorise_token
-def channels_list(token = None, **kwargs):
+def channels_list(token=None, **kwargs):
     ''' This function returns the list of channels the token user is part of '''
     returning_list = []
     u_id = get_user_from_token(token)
@@ -226,8 +229,10 @@ def channels_list(token = None, **kwargs):
 
 #=================================== channels/listall [GET] ==================================#
 @authorise_token
-def channels_listall(token = None, **kwargs):
+def channels_listall(token=None, **kwargs):
     ''' This function returns a list of all channels present in the Slackr app '''
+    ## Token is completely unneeded in this function besides authorising it is existing. That is
+    ## done by the decorator already.
     returning_list = []
     for channels in all_channels_details:
         returning_list.append({'channel_id': channels['channel_id'], 'name': channels['name']})
@@ -235,7 +240,7 @@ def channels_listall(token = None, **kwargs):
 
 #=================================== channels/create [POST] ==================================#
 @authorise_token
-def channels_create(token = None, name = None, is_public = None, **kwargs):
+def channels_create(token=None, name=None, is_public=None, **kwargs):
     ''' This function allows a token user to create a channel '''
     channel_id = generate_channel_id()
     if len(name) > 20:
