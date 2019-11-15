@@ -6,26 +6,49 @@ import datetime
 import threading
 from functions.Errors import AccessError
 from functions.helper_functions import (check_valid_channel_id, check_token_in_channel, 
-                                        add_to_standup_queue, all_channels_messages)
+                                        add_to_standup_queue, all_channels_messages,
+                                        valid_channel_id)
 from functions.message_functions import message_send
 
+#===============================================================================#
+#============================= STANDUP DECORATORS ==============================#
+#===============================================================================#
+
+def check_standup_active_true(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if standup_active(token=user_details['token'], 
+                          channel_id=user_details['channel_id'])['standup_active'] is True:
+            raise ValueError("Channel Standup Already Active")
+        return function(*args, **kwargs)
+    return wrapper
+
+def check_standup_active_false(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if standup_active(token=user_details['token'], 
+                          channel_id=user_details['channel_id'])['standup_active'] is False:
+            raise ValueError("Channel Standup Already Active")
+        return function(*args, **kwargs)
+    return wrapper
+
+def token_in_channel(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if check_token_in_channel(user_details['token'], user_details['channel_id']) is False:
+            raise AccessError("User Not In Channel")
+        return function(*args, **kwargs)
+    return wrapper
 
 #===============================================================================#
-#============================== STANDUP FUNCTIONS ==============================#
+#=============================== STANDUP FUNCTIONS ==============================#
 #===============================================================================#
 
-
-def standup_start(token, channel_id, length):
+@valid_channel_id
+@token_in_channel
+@check_standup_active_true
+def standup_start(token=None, channel_id=None, length=None):
     '''Function starts a standup in a channel if inactive'''
-
-    if check_valid_channel_id(channel_id) is False:
-        raise ValueError("Invalid Channel")
-
-    if check_token_in_channel(token, channel_id) is False:
-        raise AccessError("User Not In Channel")
-
-    if standup_active(token, channel_id)['standup_active'] is True:
-        raise ValueError("Channel Standup Already Active")
 
   	#If no errors raised then start the startup
     time_finish = datetime.datetime.now() + datetime.timedelta(seconds=int(length))
@@ -42,41 +65,29 @@ def standup_start(token, channel_id, length):
 
     return time_finish
 
-def standup_active(token, channel_id):
+@valid_channel_id
+@token_in_channel
+def standup_active(token=None, channel_id=None):
     '''Function checks if a standup is active/inactive'''
     
-    if check_valid_channel_id(channel_id) is False:
-            raise ValueError("Invalid Channel")
-            
-    if check_token_in_channel(token, channel_id) is False:
-        raise AccessError("User Not In Channel")
-    #standup_details = standup_status(channel_id)
-
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-          #  try:
+
             if channel['standup_details']['standup_active'] is True:
                 return {'standup_active' : channel['standup_details']['standup_active'],
                         'time_finish' : channel['standup_details']['time_finish']}
 
-          #  except TypeError:
-          #     continue
-
 
     return {'standup_active' : False, 'time_finish' : None}
 
-
-def standup_send(token, channel_id, message):
+@valid_channel_id
+@token_in_channel
+@check_standup_active_false
+def standup_send(token=None, channel_id=None, message=None):
     '''Functions sends a message to be buffered in the standup queue'''
-  
-    if check_valid_channel_id(channel_id) is False:
-        raise ValueError("Invalid Channel")
+
     if len(message) > 1000:
         raise ValueError("Message too long")
-    if standup_active(token, channel_id)['standup_active'] is False:
-        raise ValueError("Channel Standup Already Active")
-    if check_token_in_channel(token, channel_id) is False:
-        raise AccessError("User Not In Channel")
 
     message_send(token, channel_id, "Standup: " + message)
     
@@ -95,5 +106,3 @@ def end_standup(channel_id, token):
     message_send(token, channel_id, "Standup Summary" + standup_summary)
             
     return {}   
-    
-

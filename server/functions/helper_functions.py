@@ -112,7 +112,60 @@ def check_valid_handle(handle_str):
     return False
 
 
+#===============================================================================#
+#=============================== AUTH DECORATORS ===============================#
+#===============================================================================#
 
+def check_name_validity(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if (len(user_details['name_first']) < 1 or len(user_details['name_first']) > 50):
+            raise ValueError("Invalid First Name")
+        if (len(user_details['name_last']) < 1 or len(user_details['name_last']) > 50):
+            raise ValueError("Invalid Last Name")
+        return function(*args, **kwargs)
+    return wrapper
+
+
+def check_valid_password(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if valid_password(user_details['password']) is False:
+            raise ValueError("Invalid Password Entered")
+        return function(*args, **kwargs)
+    return wrapper
+
+def check_email_registered_false(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if email_registered(user_details['email']) == False:
+            raise ValueError("Email Not Registered")
+        return function(*args, **kwargs)
+    return wrapper
+
+def check_email_registered_true(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if email_registered(user_details['email']) == True:
+            raise ValueError("Email Not Registered")
+        return function(*args, **kwargs)
+    return wrapper
+
+def check_valid_email(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if valid_email(user_details['email']) == False:
+            raise ValueError("Invalid Email")
+        return function(*args, **kwargs)
+    return wrapper
+
+def check_password_email_match(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if email_matches_password(user_details['email'], password_hash(user_details['password'])) == False:
+            raise ValueError("Incorrect Password Entered")
+        return function(*args, **kwargs)
+    return wrapper
 
 #===============================================================================#
 #================================= AUTH HELPERS ================================#
@@ -209,6 +262,18 @@ def generate_reset_code():
     ''' Create reset code to send to user '''
     reset_code = random.randint(1, 10000000)
     return str(reset_code)
+
+#===============================================================================#
+#============================= CHANNEL DECORATORS ==============================#
+#===============================================================================#
+
+def valid_channel_id(function):
+    def wrapper(*args, **kwargs):
+        user_details = kwargs
+        if check_valid_channel_id(user_details['channel_id']) is False:
+            raise ValueError("Invalid Channel")
+        return function(*args, **kwargs)
+    return wrapper
 
 #===============================================================================#
 #=============================== CHANNEL HELPERS ===============================#
@@ -360,49 +425,10 @@ def reset_data():
     #for i in images:
     #    os.remove(os.path.join('./static/', i))
 
+
 #===============================================================================#
 #=============================== STANDUP HELPERS ===============================#
 #===============================================================================#
-'''
-def check_standup_active(channel_id):
-
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            try:
-                if channel['standup_active'][0] == True:
-                    return True
-
-            except TypeError:
-                continue
-
-
-    return False
-'''
-'''
-def start_standup(channel_id, time_finish):
-    Starts a standup
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-            channel['standup_active'] = [None, None]
-            channel['standup_active'][0] = True
-            channel['standup_active'][1] = time_finish
-
-    return {}
-
-def standup_status(channel_id):
-     Checks the standup_status in a given channel
-    for channel in all_channels_messages:
-        if channel_id == channel['channel_id']:
-
-            try:
-                #channel['standup_active'][1] != None
-                return {'standup_active' : True, 'time_finish' : channel['standup_active'][1]}
-
-            except TypeError:
-                return {'standup_active' : False, 'time_finish' : None}
-
-    return {'standup_active' : False, 'time_finish' : None}
-'''
 
 def add_to_standup_queue(channel_id, message):
     ''' Adds a message to the queue of messages from a standup '''
