@@ -7,6 +7,7 @@ import sys
 import atexit
 import pickle
 import os
+import urllib.request
 '''
     Note: for permission ids, we are saying that 1 is owner, 2 is admin and 3 is member.
     1 and 2 have same permissions but 2 cannot change the privileges that 1 has.
@@ -326,9 +327,22 @@ def generate_message_id():
 def fix_img_url(url_root):
     for user in list_of_users:
         if user['profile_img_url'] is not None:
-            new_url = url_root + 'static/' + str(user['u_id']) + '.jpg'
-            user['profile_img_url'] = new_url
+            data = user['profile_img_url'].split('static/')
+            identifier = data[1].split('.')
+            img_type = str(identifier[0])
+            print (img_type)
+            if img_type == 'default':
+                new_url = url_root + 'static/default.jpg'
+                user['profile_img_url'] = new_url                
+            else:
+                new_url = url_root + 'static/' + str(user['u_id']) + '.jpg'
+                user['profile_img_url'] = new_url
 
+def default_photo(url_root):
+    for user in list_of_users:
+        if user['profile_img_url'] is None:
+            new_url = url_root + 'static/default.jpg'
+            user['profile_img_url'] = new_url
 #===============================================================================#
 #============================= PERMISSIONS HELPERS =============================#
 #===============================================================================#
@@ -367,10 +381,13 @@ def reset_data():
     number_of_users = 0
     number_of_channels = 0
     number_of_messages = 0
-   # if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
-   #     images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
-   #     for i in images:
-   #        os.remove(os.path.join('./static/', i))
+    if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
+        images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
+        for i in images:
+           os.remove(os.path.join('./static/', i))
+    image_dir = './static/default.jpg'    
+    urllib.request.urlretrieve('https://images-na.ssl-images-amazon.com/images/I/41mUvRO4kXL.jpg', image_dir)
+    
 
 
 #===============================================================================#
