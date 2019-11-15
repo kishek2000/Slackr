@@ -13,7 +13,7 @@ from functions.search_function import *
 from functions.admin_function import *
 from functions.Errors import *
 from functions.message_functions import *
-from functions.helper_functions import fix_img_url, update_channels_details
+from functions.helper_functions import fix_img_url, update_channels_details, default_photo
 
 APP = Flask(__name__, static_url_path = '/static/')
 #app_img = Flask(__name__, static_url_path = '/server/functions/data/user_images/')
@@ -76,8 +76,10 @@ def create_user():
     email = request.form.get('email')
     password = request.form.get('password')
     try:
-        return dumps(auth_register(email=email, password=password, name_first=name_first,
-                                   name_last=name_last))
+        return_dict = auth_register(email=email, password=password, name_first=name_first,
+                                   name_last=name_last)
+        default_photo(request.url_root)
+        return dumps(return_dict)
     except ValueError as error:
         return {'error': error}
 
