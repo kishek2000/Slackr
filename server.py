@@ -82,7 +82,11 @@ def create_user():
         default_photo(request.url_root)
         return dumps(return_dict)
     except ValueError as error:
-        return {'error': error}
+        return  dumps({
+                "code": 400,
+                "name": "ValueError",
+                "message": "INALSFBFUSBDUBUFUB"})
+
 
 @APP.route('/auth/passwordreset/request', methods=['POST'])
 def request_password_reset():
