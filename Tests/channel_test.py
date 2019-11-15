@@ -155,8 +155,8 @@ def add_messages_to_channel(setup):
 	## Assuming that message_send has full functionality, (tested in message_tests.py):
 	token_user_A = setup[2] ## Token of user who is owner of channels setup[4] and setup[5]
 	channel_id_public = setup[5] ## Channel id of the public channel from main setup fixture
-	message_one_id = message_send(token_user_A, channel_id_public, "Hello here is a message.")
-	message_two_id = message_send(token_user_A, channel_id_public, "Hello here is a second message.")
+	message_one_id = message_send(token = token_user_A, channel_id = channel_id_public, message = "Hello here is a message.")
+	message_two_id = message_send(token = token_user_A, channel_id = channel_id_public, message = "Hello here is a second message.")
 	return [message_one_id, message_two_id]
 
 def tests_channel_messages_valid(setup, add_messages_to_channel):
@@ -175,7 +175,7 @@ def tests_channel_messages_above_fifty(setup):
 	start = 0
 
 	for i in range(0, 53):
-		message_send(token, channel_id_public, "Hi this is spam")
+		message_send(token = token, channel_id = channel_id_public, message = "Hi this is spam")
 
 	## This should produce no errors:
 	channel_messages(token = token, channel_id = channel_id_public, start = start)
@@ -198,7 +198,7 @@ def tests_channel_messages_single_message(setup):
 	token = setup[2] ## valid token of member in channel
 	start = 0 ## only valid start index for a single message channel
 
-	message_send(token, channel_id_public, "Hello here is a message.")
+	message_send(token = token, channel_id = channel_id_public, message = "Hello here is a message.")
 	## This should produce no errors:
 	return_messages = channel_messages(token = token, channel_id = channel_id_public, start = start)
 	assert return_messages['messages'][0]['message'] == "Hello here is a message."

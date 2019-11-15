@@ -26,7 +26,7 @@ from functions.Errors import AccessError
 
 def authorise(function):
     def wrapper(*args, **kwargs):
-        argsList = list(args) 
+        argsList = list(args)
         if not check_valid_token(kwargs["token"]):
             raise AccessError("Token is Invalid")
         if "channel_id" in kwargs:
@@ -34,7 +34,7 @@ def authorise(function):
                 raise ValueError("Channel ID is invalid")
             if not check_token_in_channel(kwargs["token"], kwargs["channel_id"]):
                 raise AccessError("Token not in channel")
-                
+
         elif "message_id" in kwargs:
             info = find_message_info(kwargs['message_id'])
             if info is None:
@@ -43,18 +43,18 @@ def authorise(function):
             channel = info['channel']
             if not check_token_in_channel(kwargs['token'], channel['channel_id']):
                 raise AccessError("Token not in channel")
-            
+
         if "message" in kwargs:
             if len(kwargs["message"]) > 1000:
                 raise ValueError("Message must be 1000 characters or less")
             if (len(kwargs["message"]) <= 0 and function.__name__ != "message_edit")or kwargs["message"].isspace():
                 raise ValueError("Message must contain a nonspace character")
-        
+
         if "react_id" in kwargs:
             if kwargs['react_id'] not in VALID_REACTS:
                 raise ValueError("Not a valid react_id")
-        
-        
+
+
         return function(*args, **kwargs)
     return wrapper
 
@@ -67,7 +67,7 @@ def message_send(token=None, channel_id=None, message=None):
    #    raise ValueError("Channel ID is invalid")
    #if not check_token_in_channel(token, channel_id):
    #    raise AccessError("Token not in channel")
-    
+
     message_id = generate_message_id()
     uid = get_user_from_token(token)
     for channel in all_channels_messages:
