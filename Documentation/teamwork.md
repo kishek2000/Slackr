@@ -4,25 +4,25 @@
 
 Various meetings were held during during iteration three, over a range of platforms including **Google Hangouts** , **Facebook Messenger,** and **face-to-face meetings**. At the beginning of the iteration, we set up a _gantt chart_ to schedule our timeline for iteration 3, these milestones were:
 
-\*  - (4/11 - 17 /11)
+*  - (4/11 - 17 /11)
 
-\* Pylint and Testing  - (4/11 - 17 /11)
+* Pylint and Testing  - (4/11 - 17 /11)
 
-\* Software Engineering Design Principles - Functions (4/11 - 13/11)
+* Software Engineering Design Principles - Functions (4/11 - 13/11)
 
-\* Adapt changes - (4/11 - 5/11)
+* Adapt changes - (4/11 - 5/11)
 
-\* Frontend Group Demo - (8/11)
+* Frontend Group Demo - (8/11)
 
-\* ER Diagram - (10/11)
+* ER Diagram - (10/11)
 
-\* Teamwork - (14/11 - 15/11)
+* Teamwork - (14/11 - 15/11)
 
-\* Completed Draft Meeting (15/11)
+* Completed Draft Meeting (15/11)
 
-\* Finalisation Meeting (16/11)
+* Finalisation Meeting (16/11)
 
-\* Iteration 3 Due (17/11)
+* Iteration 3 Due (17/11)
 
 ## What methods you used to ensure that meetings were successful
 
@@ -32,19 +32,19 @@ Various meetings were held during during iteration three, over a range of platfo
 
 Akin to previous iterations, we primarily worked on the code that we had written for the previous iterations. These function divisions were as follows:
 
-\* Auth-\&gt; Shoan
+* Auth-\&gt; Shoan
 
-\* Channel-\&gt; Adi
+* Channel-\&gt; Adi
 
-\* Message-\&gt; Liam
+* Message-\&gt; Liam
 
-\* User Profiles-\&gt; Harry
+* User Profiles-\&gt; Harry
 
-\* Standup-\&gt; Shoan
+* Standup-\&gt; Shoan
 
-\* Search-\&gt; Harry
+* Search-\&gt; Harry
 
-\* Admin-\&gt; Harry
+* Admin-\&gt; Harry
 
 As this iteration revolved around finalising the implementation into the front-end, we experienced many errors. Some of these errors were as a result of miscommunication, improper code implementation or so on. In the case of miscommunication, we would often solve try to solve the issue ourselves. If we were unable to solve the issue, then we would contact the person who is most familiar with the code to try to get them to look at the issue. With these situations, there was more overlap with writing code, and cross checking that code is working as intended. We also had overlap when writing decorators.
 
