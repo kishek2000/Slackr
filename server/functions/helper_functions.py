@@ -196,7 +196,7 @@ def generate_handle(name_first, name_last):
 
     else:
         handle = name_first + name_last
-        
+
     return handle
 
 #Following method of hashing password obtained from the COMP1531 lecture on 14th October 2019
@@ -319,7 +319,7 @@ def generate_message_id():
     global number_of_messages
     number_of_messages += 1
     return number_of_messages
-    
+
 #===============================================================================#
 #================================ USER HELPERS =================================#
 #===============================================================================#
@@ -333,7 +333,7 @@ def fix_img_url(url_root):
             print (img_type)
             if img_type == 'default':
                 new_url = url_root + 'static/default.jpg'
-                user['profile_img_url'] = new_url                
+                user['profile_img_url'] = new_url
             else:
                 new_url = url_root + 'static/' + str(user['u_id']) + '.jpg'
                 user['profile_img_url'] = new_url
@@ -345,7 +345,7 @@ def default_photo(url_root):
             user['profile_img_url'] = new_url
 
 def make_default_photo():
-    image_dir = './static/default.jpg'    
+    image_dir = './static/default.jpg'
     urllib.request.urlretrieve('https://images-na.ssl-images-amazon.com/images/I/41mUvRO4kXL.jpg', image_dir)
 
 #===============================================================================#
@@ -379,6 +379,7 @@ def reset_data():
     ''' Resets all existing stored data '''
     global number_of_users
     global number_of_channels
+    global number_of_messages
     all_channels_details.clear()
     all_channels_messages.clear()
     list_of_users.clear()
@@ -390,7 +391,7 @@ def reset_data():
         images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
         for i in images:
            os.remove(os.path.join('./static/', i))
-    make_default_photo()    
+    make_default_photo()
 
 
 #===============================================================================#
