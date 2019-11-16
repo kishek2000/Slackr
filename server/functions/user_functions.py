@@ -77,6 +77,9 @@ def user_profiles_uploadphoto(token=None, img_url=None, x_start=None, y_start=No
     if x_start > x_end or y_start > y_end:
         raise ValueError("Invalid dimensions")
 
+    opener = urllib.request.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    urllib.request.install_opener(opener)
     #need to handle if image doesnt exist
     try:
         returned_status = requests.head(str(img_url))
