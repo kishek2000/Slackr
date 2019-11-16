@@ -2,7 +2,10 @@ from functions.helper_functions import valid_email, email_matches_password, vali
 from functions.helper_functions import email_registered, password_hash, check_valid_channel_id
 from functions.helper_functions import check_token_in_channel, add_to_standup_queue
 from functions.helper_functions import all_channels_messages, check_valid_u_id, check_valid_token
+from functions.helper_functions import get_user_app_permission, find_message_info
+from functions.helper_functions import get_user_from_token, VALID_REACTS
 from werkzeug.exceptions import HTTPException
+from functools import wraps
 
 
 #===============================================================================#
@@ -116,6 +119,59 @@ def authorise_u_id(function):
     return wrapper
 
 
+#===============================================================================#
+#============================= MESSAGE DECORATORS ==============================#
+#===============================================================================#
+def valid_message(function):
+    ''' Decorator for checking a message is the right length '''
+    @wraps(function)
+    def wrapper(**kwargs):
+        message = kwargs["message"]
+        if len(message) > 1000:
+            raise ValueError("Message must be 1000 characters or less")
+        if (len(message) <= 0 and 'message_id' not in kwargs) or message.isspace():
+            raise ValueError("Message must contain a nonspace character")
+        return function(**kwargs)
+    return wrapper
 
+def valid_react(function):
+    ''' Decorator for checking if react_id's are valid '''
+    def wrapper(**kwargs):
+        if kwargs['react_id'] not in VALID_REACTS:
+                raise ValueError("Not a valid react_id")
+        return function(**kwargs)
+    return wrapper
+   
+def authorise_message_id(function):
+    ''' Decorator for authorising message id '''
+    def wrapper(*args, **kwargs):
+        info = find_message_info(kwargs['message_id'])
+        if info is None:
+            raise ValueError("Message ID is invalid")
+        message = info['message']
+        channel = info['channel']
+        if not check_token_in_channel(kwargs['token'], channel['channel_id']):
+            raise AccessError("Token not in channel")
+        return function(*args, **kwargs)
+    return wrapper
+    
+def check_user_is_admin(function):
+    ''' Decorator for checking a user has admin privilages (perm_id 1 or 2) '''
+    def wrapper(*args, **kwargs):
+        uid = get_user_from_token(kwargs["token"])
+        if get_user_app_permission(uid) == 3:
+            raise AccessError("Do not have permission")
+        return function(*args, **kwargs)
+    return wrapper
 
-
+def check_user_can_change_message(function):
+    ''' Decorator for checking a user has admin privilages or sent the message '''
+    def wrapper(*args, **kwargs):
+        info = find_message_info(kwargs["message_id"])
+        message = info['message']
+        channel = info['channel']
+        uid = get_user_from_token(kwargs["token"])
+        if message["u_id"] != uid and get_user_app_permission(uid) == 3:
+            raise AccessError("Do not have permission")
+        return function(*args, **kwargs)
+    return wrapper

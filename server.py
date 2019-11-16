@@ -224,7 +224,7 @@ def post_message_sendlater():
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
     #time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
-    time_sent = int(request.form.get('time_sent'))/1000.0
+    time_sent = int(request.form.get('time_sent'))
     message_id = message_sendlater(token=token, channel_id=channel_id, message=message, time_sent=time_sent)
     return dumps({'message_id': message_id})
 
@@ -260,7 +260,7 @@ def post_message_unreact():
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
-    message_unreact(token=token, message_id=token, react_id=react_id)
+    message_unreact(token=token, message_id=message_id, react_id=react_id)
     return dumps({})
 
 @APP.route('/message/pin', methods=['POST'])
@@ -276,7 +276,7 @@ def post_message_unpin():
     """ Description of function """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
-    message_unpin(token=token, message_id=mesage_id)
+    message_unpin(token=token, message_id=message_id)
     return dumps({})
 
 #===============================================================================#
