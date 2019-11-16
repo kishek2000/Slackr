@@ -28,7 +28,7 @@ def test_admin_no_return(register_account):
     ''' Ensure that the function does not return anything '''
     token = register_account[0]['token']
     u_id = register_account[1]['u_id']
-    assert admin_userpermission_change(token, u_id, 3) is None
+    assert admin_userpermission_change(token=token, u_id=u_id, permission_id=3) is None
 
 #This function should raise an error when the permission_id is empty
 def test_admin_no_input(register_account):
@@ -36,21 +36,21 @@ def test_admin_no_input(register_account):
     token = register_account[0]['token']
     u_id = register_account[1]['u_id']
     with pytest.raises(ValueError):
-        admin_userpermission_change(token, u_id, None)
+        admin_userpermission_change(token=token, u_id=u_id, permission_id=None)
 
 #This function should raise an error when the u_id is invalid
 def test_admin_u_id_invalid(register_account):
     ''' Test invalid u_id '''
     token = register_account[0]['token']
     with pytest.raises(ValueError):
-        admin_userpermission_change(token, 'wrong u_id', 3)
+        admin_userpermission_change(token=token, u_id='wrong u_id', permission_id=3)
 
 #This function should raise an error when the token is invalid
 def test_admin_token_id_invalid(register_account):
     ''' Test invalid token '''
     u_id = register_account[1]['u_id']
-    with pytest.raises(ValueError):
-        admin_userpermission_change('wrong token', u_id, 3)
+    with pytest.raises(AccessError):
+        admin_userpermission_change(token='wrong token', u_id=u_id, permission_id=3)
 
 #This function should raise an error when the permission_id is invalid
 def test_admin_permission_id_invalid(register_account):
@@ -58,7 +58,7 @@ def test_admin_permission_id_invalid(register_account):
     token = register_account[1]['token']
     u_id = register_account[0]['u_id']
     with pytest.raises(ValueError):
-        admin_userpermission_change(token, u_id, 10)
+        admin_userpermission_change(token=token, u_id=u_id, permission_id=10)
 
 #Test a user who is unauthorised to change
 def test_admin_user_unauthorised(register_account):
@@ -66,6 +66,6 @@ def test_admin_user_unauthorised(register_account):
     token = register_account[1]['token']
     u_id = register_account[0]['u_id']
     with pytest.raises(AccessError):
-        admin_userpermission_change(token, u_id, 1)
+        admin_userpermission_change(token=token, u_id=u_id, permission_id=1)
 
 reset_data()

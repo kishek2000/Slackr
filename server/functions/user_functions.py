@@ -1,5 +1,12 @@
-""" user_functions """
-# Written by Harry Wilson
+'''
+user_functions written by Harry
+-> user_profile
+-> user_profile_setname
+-> user_profile_setemail
+-> user_profile_sethandle
+-> user_profiles_uploadphoto
+-> users_all
+'''
 import sys
 import urllib.request
 import requests

@@ -29,21 +29,21 @@ def register_account():
 def test_search_correct_return_type(register_account):
     ''' Ensure that the return is of the correct format '''
     token = register_account[0]['token']
-    assert isinstance(search(token, 'hello'), dict)
+    assert isinstance(search(token=token, query_str='hello'), dict)
 
 #The function should raise an error as there is no query_str
 def test_search_no_input(register_account):
     ''' Test search with no input '''
     token = register_account[0]['token']
     with pytest.raises(ValueError):
-        search(token, '')
+        search(token=token, query_str='')
 
 #The function should return a dictionary with one message in it
 def test_search_returned_value(register_account):
     ''' Check the returned values '''
     token = register_account[0]['token']
     message_send(token=token, channel_id=register_account[1], message="hello")
-    returned_search = search(token, 'hello')
+    returned_search = search(token=token, query_str='hello')
     assert len(returned_search['messages']) == 1
     assert returned_search['messages'][0]['message'] == 'hello'
 
@@ -53,7 +53,7 @@ def test_search_two_messages_in_channel(register_account):
     token = register_account[0]['token']
     message_send(token=token, channel_id=register_account[1], message="hello")
     message_send(token=token, channel_id=register_account[1], message="epic")
-    returned_search = search(token, 'hello')
+    returned_search = search(token=token, query_str='hello')
     assert len(returned_search['messages']) == 1
     assert returned_search['messages'][0]['message'] == 'hello'
 
@@ -62,11 +62,11 @@ def test_search_returned_value_after_remove(register_account):
     ''' See if message is returned after removal '''
     token = register_account[0]['token']
     message_id = message_send(token=token, channel_id=register_account[1], message="hello")
-    returned_search = search(token, 'hello')
+    returned_search = search(token=token, query_str='hello')
     assert len(returned_search['messages']) == 1
     assert returned_search['messages'][0]['message'] == 'hello'
     message_remove(token=token, message_id=message_id)
-    returned_search = search(token, 'hello')
+    returned_search = search(token=token, query_str='hello')
     assert len(returned_search['messages']) == 0
 
 reset_data()

@@ -399,7 +399,7 @@ def get_search():
     """ Description of function """
     token = request.args.get('token')
     query_str = request.args.get('query_str')
-    returning_dict = search(token, query_str)
+    returning_dict = search(token=token, query_str=query_str)
     return dumps(returning_dict)
 
 #===============================================================================#
@@ -412,7 +412,7 @@ def post_admin_userpermission_change():
     token = request.form.get('token')
     u_id = int(request.form.get('u_id'))
     permission_id = int(request.form.get('permission_id'))
-    admin_userpermission_change(token, u_id, permission_id)
+    admin_userpermission_change(token=token, u_id=u_id, permission_id=permission_id)
     return dumps({})
 
 #===============================================================================#
