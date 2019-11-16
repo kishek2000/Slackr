@@ -1,4 +1,5 @@
 """ search_function """
+# Written by Harry Wilson
 import sys
 sys.path.append("/Server/functions/")
 from functions.helper_functions import all_channels_messages, get_user_from_token, all_channels_details

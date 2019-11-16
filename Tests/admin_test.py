@@ -5,7 +5,7 @@ sys.path.append('server/')
 from functions.admin_function import admin_userpermission_change
 from functions.auth_functions import auth_register
 from functions.helper_functions import reset_data
-from functions.Errors import AccessError
+from functions.Errors import AccessError, ValueError
 
 @pytest.fixture
 def register_account():
