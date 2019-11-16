@@ -1,6 +1,6 @@
-**Software Engineering Design Principles**
+##**Software Engineering Design Principles**
 
-When entering the final iterative cycles or sprints of the development of a software product, it is important to ensure that it effectively aligns with core software engineering design principles which ultimately guide us about how to ultimately create an efficient and functional system, that follows these basic design smells and principles:
+#When entering the final iterative cycles or sprints of the development of a software product, it is important to ensure that it effectively aligns with core software engineering design principles which ultimately guide us about how to ultimately create an efficient and functional system, that follows these basic design smells and principles:
 
 - Smells
   - Rigidity
