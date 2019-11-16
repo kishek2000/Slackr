@@ -12,6 +12,7 @@ def search(token, query_str):
 
     # Find messages that match the query_str from all the channels the user has joined
     for channel in all_channels_details:
+        print ('yo')
         for users in channel['all_members']:
              if users['u_id'] == get_user_from_token(token):
                  current_channel_id = channel['channel_id']

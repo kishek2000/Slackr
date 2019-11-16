@@ -6,8 +6,8 @@ from PIL import Image
 
 sys.path.append("/Server/functions/")
 from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, update_channels_details
-from functions.Errors import AccessError, ValueError
-
+from functions.Errors import AccessError, ValueError, authorise_token
+'''
 def authorise_token(function):
     """ Check that the token is legitimate """
     def wrapper(*args, **kwargs):
@@ -16,9 +16,9 @@ def authorise_token(function):
             raise AccessError("Token is Invalid")
         return function(*args, **kwargs)
     return wrapper
-
+'''
 @authorise_token
-def user_profile(token, u_id):
+def user_profile(token=None, u_id=None):
     """ user_profile function """
 
     #Checking for valid u_id
@@ -30,7 +30,7 @@ def user_profile(token, u_id):
     return user_dict
 
 @authorise_token
-def user_profile_setname(token, name_first, name_last):
+def user_profile_setname(token=None, name_first=None, name_last=None):
     """ user_profile_setname function """
 
     #Checking for valid name_first
@@ -48,7 +48,7 @@ def user_profile_setname(token, name_first, name_last):
     update_channels_details()
 
 @authorise_token
-def user_profile_setemail(token, email):
+def user_profile_setemail(token=None, email=None):
     """ user_profile_setemail function """
 
     #Checking for valid email
@@ -61,7 +61,7 @@ def user_profile_setemail(token, email):
     update_channels_details()
 
 @authorise_token
-def user_profile_sethandle(token, handle_str):
+def user_profile_sethandle(token=None, handle_str=None):
     """ user_profile_sethandle function """
 
     #Checking for valid handle_str
@@ -78,7 +78,7 @@ def user_profile_sethandle(token, handle_str):
     update_channels_details()
 
 @authorise_token
-def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, url_root=None):
+def user_profiles_uploadphoto(token=None, img_url=None, x_start=None, y_start=None, x_end=None, y_end=None, url_root=None):
     """ user_profiles_uploadphoto function """
     # https://auth0.com/blog/image-processing-in-python-with-pillow/
 
@@ -123,7 +123,7 @@ def user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, ur
     update_channels_details()
 
 @authorise_token
-def users_all(token):
+def users_all(token=None):
     """ users_all function """
     user_list = []
     for user in list_of_users:

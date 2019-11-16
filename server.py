@@ -288,7 +288,7 @@ def get_user_profile():
     """ Description of function """
     token = request.args.get('token')
     u_id = int(request.args.get('u_id'))
-    returning_dict = user_profile(token, u_id)
+    returning_dict = user_profile(token=token, u_id=u_id)
     return dumps(returning_dict)
 
 @APP.route("/user/profile/setname", methods=['PUT'])
@@ -297,7 +297,7 @@ def put_user_setname():
     token = request.form.get('token')
     name_first = request.form.get('name_first')
     name_last = request.form.get('name_last')
-    user_profile_setname(token, name_first, name_last)
+    user_profile_setname(token=token, name_first=name_first, name_last=name_last)
     return dumps({})
 
 @APP.route("/user/profile/setemail", methods=['PUT'])
@@ -305,7 +305,7 @@ def put_user_setemail():
     """ Description of function """
     token = request.form.get('token')
     email = request.form.get('email')
-    user_profile_setemail(token, email)
+    user_profile_setemail(token=token, email=email)
     return dumps({})
 
 @APP.route("/user/profile/sethandle", methods=['PUT'])
@@ -313,7 +313,7 @@ def put_user_sethandle():
     """ Description of function """
     token = request.form.get('token')
     handle_str = request.form.get('handle_str')
-    user_profile_sethandle(token, handle_str)
+    user_profile_sethandle(token=token, handle_str=handle_str)
     return dumps({})
 
 @APP.route('/user/profiles/uploadphoto', methods=['POST'])
@@ -325,7 +325,7 @@ def post_user_uploadphoto():
     y_start = request.form.get('y_start')
     x_end = request.form.get('x_end')
     y_end = request.form.get('y_end')
-    user_profiles_uploadphoto(token, img_url, x_start, y_start, x_end, y_end, request.url_root)
+    user_profiles_uploadphoto(token=token, img_url=img_url, x_start=x_start, y_start=y_start, x_end=x_end, y_end=y_end, url_root=request.url_root)
     returned_dict = get_user_details(token)
     #send_js(returned_dict['profile_img_url'])
     #return send_from_directory('', returned_dict['profile_img_url'])
@@ -335,7 +335,7 @@ def post_user_uploadphoto():
 def get_users_all():
     """ Description of function """
     token = request.args.get('token')
-    returning_dict = users_all(token)
+    returning_dict = users_all(token=token)
     return dumps(returning_dict)
 
 @APP.route('/static/<path:path>')

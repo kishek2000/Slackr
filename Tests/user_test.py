@@ -11,8 +11,8 @@ from functions.Errors import AccessError
 def register_account():
     """ register_account fixture """
     reset_data()
-    auth_register(email = 'example2@gmail.com', password = 'P@ssword123', name_first = 'Epic', name_last = 'Style')
-    return auth_register(email = 'example@gmail.com', password = 'Go0dPa>sword', name_first = 'dan', name_last = 'man')
+    auth_register(email='example2@gmail.com', password='P@ssword123', name_first='Epic', name_last='Style')
+    return auth_register(email='example@gmail.com', password='Go0dPa>sword', name_first='dan', name_last='man')
 
 #################################################################################
 ##                           TESTING user_profile                              ##
@@ -25,7 +25,7 @@ def test_user_profile_correct_return(register_account):
     """ test_user_profile_correct_return """
     token = register_account['token']
     u_id = register_account['u_id']
-    dictionary = user_profile(token, u_id)
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['email'] == 'example@gmail.com'
     assert dictionary['name_first'] == 'dan'
     assert dictionary['name_last'] == 'man'
@@ -36,7 +36,7 @@ def test_user_profile_incorrect_return(register_account):
     """ test_user_profile_incorrect_return """
     token = register_account['token']
     u_id = register_account['u_id']
-    dictionary = user_profile(token, u_id)
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['handle_str'] != 'dantheman'
 
 def test_user_profile_token_nonexistent(register_account):
@@ -49,14 +49,14 @@ def test_user_profile_invalid_id(register_account):
     """ test_user_profile_invalid_id """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile(token, 'wrong')
+        user_profile(token=token, u_id='wrong')
 
 #This tests that that token is incorrect
 def test_user_profile_invalid_token(register_account):
     """ test_user_profile_invalid_token """
     u_id = register_account['u_id']
     with pytest.raises(AccessError):
-        user_profile('wrong token', u_id)
+        user_profile(token='wrong token', u_id=u_id)
 
 #################################################################################
 ##                      TESTING user_profile_setname                           ##
@@ -72,18 +72,18 @@ Assumptions
 def test_user_profile_setname_no_return(register_account):
     """ test_user_profile_setname_no_return """
     token = register_account['token']
-    assert user_profile_setname(token, 'danny', 'manny') is None
+    assert user_profile_setname(token=token, name_first='danny', name_last='manny') is None
 
 #This function ensures that the updated names are the same as the input
 def test_user_profile_setname_updated_values(register_account):
     """ test_user_profile_setname_updated_values """
     token = register_account['token']
     u_id = register_account['u_id']
-    dictionary = user_profile(token, u_id)
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['name_first'] == 'dan'
     assert dictionary['name_last'] == 'man'
-    user_profile_setname(token, 'danny', 'manny')
-    dictionary = user_profile(token, u_id)
+    user_profile_setname(token=token, name_first='danny', name_last='manny')
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['name_first'] == 'danny'
     assert dictionary['name_last'] == 'manny'
 
@@ -92,28 +92,28 @@ def test_user_profile_setname_invalid_token():
     """ test_user_profile_setname_invalid_token """
     token = 'wrong token'
     with pytest.raises(AccessError):
-        user_profile_setname(token, 'danny', 'manny')
+        user_profile_setname(token=token, name_first='danny', name_last='manny')
 
 #Name_first cannot be greater than 50 characters, so it should raise an error
 def test_user_profile_setname_long_name_first(register_account):
     """ test_user_profile_setname_long_name_first """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_setname(token, '123456789012345678901234567890123456789012345678901', 'manny')
+        user_profile_setname(token=token, name_first='123456789012345678901234567890123456789012345678901', name_last='manny')
 
 #Name_last cannot be greater than 50 characters, so it should raise an error
 def test_user_profile_setname_long_name_last(register_account):
     """ test_user_profile_setname_long_name_last """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_setname(token, 'danny', '123456789012345678901234567890123456789012345678901')
+        user_profile_setname(token=token, name_first='danny', name_last='123456789012345678901234567890123456789012345678901')
 
 #An empty string cannot be a name, so it should raise an error
 def test_user_profile_setname_no_input(register_account):
     """ test_user_profile_setname_no_input """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_setname(token, '', '')
+        user_profile_setname(token=token, name_first='', name_last='')
 
 #################################################################################
 ##                        TESTING user_profile_setemail                        ##
@@ -128,17 +128,17 @@ Assumptions
 def test_user_profile_setemail_no_return(register_account):
     """ test_user_profile_setemail_no_return """
     token = register_account['token']
-    assert user_profile_setemail(token, 'dantheman@gmail.com') is None
+    assert user_profile_setemail(token=token, email='dantheman@gmail.com') is None
 
 #This function ensures that the updated email is the same as the input
 def test_user_profile_setemail_updated_values(register_account):
     """ test_user_profile_setemail_updated_values """
     token = register_account['token']
     u_id = register_account['u_id']
-    dictionary = user_profile(token, u_id)
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['email'] == 'example@gmail.com'
-    user_profile_setemail(token, 'dantheman@gmail.com')
-    dictionary = user_profile(token, u_id)
+    user_profile_setemail(token=token, email='dantheman@gmail.com')
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['email'] == 'dantheman@gmail.com'
 
 #This should cause the function to raise an error as the token is invalid
@@ -146,21 +146,21 @@ def test_user_profile_setemail_invalid_token():
     """ test_user_profile_setemail_invalid_token """
     token = 'wrong token'
     with pytest.raises(AccessError):
-        user_profile_setemail(token, 'dantheman@gmail.com')
+        user_profile_setemail(token=token, email='dantheman@gmail.com')
 
 #This should cause the function to raise an error as the email is invalid
 def test_user_profile_setemail_not_valid(register_account):
     """ test_user_profile_setemail_not_valid """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_setemail(token, 'dan@email')
+        user_profile_setemail(token=token, email='dan@email')
 
 #An empty string as an email should make the function raise an error
 def test_user_profile_setemail_no_input(register_account):
     """ test_user_profile_setemail_no_input """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_setemail(token, '')
+        user_profile_setemail(token=token, email='')
 
 #################################################################################
 ##                        TESTING user_profile_sethandle                       ##
@@ -176,17 +176,17 @@ Assumptions
 def test_user_profile_sethandle_no_return(register_account):
     """ test_user_profile_sethandle_no_return """
     token = register_account['token']
-    assert user_profile_sethandle(token, 'dantheman') is None
+    assert user_profile_sethandle(token=token, handle_str='dantheman') is None
 
 #This function ensures that the updated handle is the same as the input
 def test_user_profile_sethandle_updated_values(register_account):
     """ test_user_profile_sethandle_updated_values """
     token = register_account['token']
     u_id = register_account['u_id']
-    dictionary = user_profile(token, u_id)
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['handle_str'] == 'danman'
-    user_profile_sethandle(token, 'dantheman')
-    dictionary = user_profile(token, u_id)
+    user_profile_sethandle(token=token, handle_str='dantheman')
+    dictionary = user_profile(token=token, u_id=u_id)
     assert dictionary['handle_str'] == 'dantheman'
 
 #Incorrect token should raise an error
@@ -194,21 +194,21 @@ def test_user_profile_set_handle_invalid_token():
     """ test_user_profile_set_handle_invalid_token """
     token = 'wrong token'
     with pytest.raises(AccessError):
-        user_profile_sethandle(token, 'dantheman')
+        user_profile_sethandle(token=token, handle_str='dantheman')
 
 #Function should raise an error as the handle is > 20 characters
 def test_user_profile_sethandle_too_long(register_account):
     """ test_user_profile_sethandle_too_long """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_sethandle(token, 'dantheman12345678901234567890')
+        user_profile_sethandle(token=token, handle_str='dantheman12345678901234567890')
 
 #No handle input should raise an error
 def test_user_profile_sethandle_no_input(register_account):
     """ test_user_profile_sethandle_no_input """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profile_sethandle(token, '')
+        user_profile_sethandle(token=token, handle_str='')
 
 #This tests to see if the user handle already exists
 def test_user_profile_sethandle_already_exists(register_account):
@@ -217,58 +217,53 @@ def test_user_profile_sethandle_already_exists(register_account):
     token = register_account['token']
     #Should raise an error as we cannot have two of the same handles
     with pytest.raises(ValueError):
-        user_profile_sethandle(token, 'RajeshKumar')
+        user_profile_sethandle(token=token, handle_str='RajeshKumar')
 
 #################################################################################
 ##                  TESTING user_profiles_uploadphoto                          ##
 #################################################################################
 # function inputs: token, profile_img_url, x_start, y_start, x_end, y_end
 # function returns:
-'''
-# This tests passes if the function works correctly, does not pass back any errors
-def test_user_profiles_uploadphoto_no_return(register_account):
-    token = register_account['token']
-    assert user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', 0, 0, 2864, 1861) == None
-'''
+
 # This function tests that the code throws no errors
 def test_user_profiles_uploadphoto_no_errors(register_account):
     """ test_user_profiles_uploadphoto_no_errors """
     token = register_account['token']
-    user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '0', '0', '2864', '1861')
+    user_profiles_uploadphoto(token=token, img_url='https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', x_start='0', y_start='0', x_end='2864', y_end='1861')
 
 def test_user_profiles_upload_photo_invalid_token():
     """ test_user_profiles_upload_photo_invalid_token """
     token = 'wrong token'
     with pytest.raises(AccessError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '0', '0', '2864', '1861')
+        user_profiles_uploadphoto(token=token, img_url='https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', x_start='0', y_start='0', x_end='2864', y_end='1861')
 
 # This tests the function with an invalid photo url, a HTTP status that is not 200
 def test_user_profiles_uploadphoto_not_200(register_account):
     """ test_user_profiles_uploadphoto_not_200 """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Potates.jpg', '0', '0', '2864', '1861')
+        user_profiles_uploadphoto(token=token, img_url='https://upload.wikimedia.org/wikipedia/commons/a/ab/Potates.jpg', x_start='0', y_start='0', x_end='2864', y_end='1861')
 
 # This function passes x,y coordinates that are not possible (e.g x_end > x_start)
 def test_user_profiles_uploadphoto_wrong_dimensions(register_account):
     """ test_user_profiles_uploadphoto_wrong_dimensions """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '2864', '1861', '0', '0')
+        user_profiles_uploadphoto(token=token, img_url='https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', x_start='2864', y_start='1861', x_end='0', y_end='0')
 
 # This function passes x coordinates that are larger than the photo
 def test_user_profiles_uploadphoto_larger_X_dimensions(register_account):
     """ test_user_profiles_uploadphoto_larger_X_dimensions """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '2865', '0', '2867', '1861')
+        user_profiles_uploadphoto(token=token, img_url='https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', x_start='2865', y_start='0', x_end='2867', y_end='1861')
 
 # This function passes y coordinates that are larger than the photo
 def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
     """ test_user_profiles_uploadphoto_larger_Y_dimensions """
     token = register_account['token']
     with pytest.raises(ValueError):
-        user_profiles_uploadphoto(token, 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', '0', '1862', '2864', '1865')
+        user_profiles_uploadphoto(token=token, img_url='https://upload.wikimedia.org/wikipedia/commons/a/ab/Patates.jpg', x_start='0', y_start='1862', x_end='2864', y_end='1865')
 
 #################################################################################
 ##                            TESTING users_all                                ##
@@ -281,13 +276,13 @@ def test_user_profiles_uploadphoto_larger_Y_dimensions(register_account):
 def test_users_all_correct_return(register_account):
     """ test_users_all_correct_return """
     token = register_account['token']
-    assert users_all(token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'u_id': 1, 'name_first': 'Epic', 'name_last': 'Style', 'profile_img_url': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'u_id': 2, 'name_first': 'dan', 'name_last': 'man', 'profile_img_url': None}]}
+    assert users_all(token=token) == {'users': [{'handle_str': 'EpicStyle', 'email': 'example2@gmail.com', 'u_id': 1, 'name_first': 'Epic', 'name_last': 'Style', 'profile_img_url': None}, {'handle_str': 'danman', 'email': 'example@gmail.com', 'u_id': 2, 'name_first': 'dan', 'name_last': 'man', 'profile_img_url': None}]}
 
 #This should cause the function to raise an error as the token is invalid
 def test_users_all_invalid_token():
     """ test_users_all_invalid_token """
     token = 'wrong token'
     with pytest.raises(AccessError):
-        users_all(token)
+        users_all(token=token)
 
 reset_data()
