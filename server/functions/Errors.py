@@ -1,15 +1,12 @@
 '''
 Definitions of AccessError and ValueError, and collection of error checking decorators
 '''
+from werkzeug.exceptions import HTTPException
 from functions.helper_functions import valid_email, email_matches_password, valid_password
 from functions.helper_functions import email_registered, password_hash, check_valid_channel_id
-from functions.helper_functions import check_token_in_channel, add_to_standup_queue
-from functions.helper_functions import all_channels_messages, check_valid_u_id, check_valid_token
+from functions.helper_functions import check_token_in_channel, check_valid_u_id, check_valid_token
 from functions.helper_functions import get_user_app_permission, find_message_info
 from functions.helper_functions import get_user_from_token, VALID_REACTS
-from werkzeug.exceptions import HTTPException
-from functools import wraps
-
 
 #===============================================================================#
 #=============================== ERRORS DEF ====================================#
@@ -43,6 +40,7 @@ def authorise_token(function):
 #===============================================================================#
 
 def check_name_validity(function):
+    '''Checks wheteher the name  given is shorter than 50 characters'''
     def wrapper(*args, **kwargs):
         user_details = kwargs
         if (len(user_details['name_first']) < 1 or len(user_details['name_first']) > 50):
@@ -54,6 +52,7 @@ def check_name_validity(function):
 
 
 def check_valid_password(function):
+    '''Checks whether password conforms to password specifications'''
     def wrapper(*args, **kwargs):
         user_details = kwargs
         if valid_password(user_details['password']) is False:
@@ -62,32 +61,36 @@ def check_valid_password(function):
     return wrapper
 
 def check_email_registered_false(function):
+    '''Throws an error if the email hasn't been registered'''
     def wrapper(*args, **kwargs):
         user_details = kwargs
-        if email_registered(user_details['email']) == False:
+        if not email_registered(user_details['email']):
             raise ValueError("Email Not Registered")
         return function(*args, **kwargs)
     return wrapper
 
 def check_email_registered_true(function):
+    '''Throws an error if the email has been registered'''
     def wrapper(*args, **kwargs):
         user_details = kwargs
-        if email_registered(user_details['email']) == True:
+        if email_registered(user_details['email']):
             raise ValueError("Email Is Already Registered")
         return function(*args, **kwargs)
     return wrapper
 
 def check_valid_email(function):
+    '''Checks whether the email conforms to email specifications'''
     def wrapper(*args, **kwargs):
         user_details = kwargs
-        if valid_email(user_details['email']) == False:
+        if not valid_email(user_details['email']):
             raise ValueError("Invalid Email")
         return function(*args, **kwargs)
     return wrapper
 
 def check_password_email_match(function):
+    '''Checks whether the right password has been entered for the right email'''
     def wrapper(*args, **kwargs):
-        if email_matches_password(kwargs['email'], password_hash(kwargs['password'])) == False:
+        if not email_matches_password(kwargs['email'], password_hash(kwargs['password'])):
             raise ValueError("Incorrect Password Entered")
         return function(*args, **kwargs)
     return wrapper
@@ -128,7 +131,6 @@ def authorise_u_id(function):
 #===============================================================================#
 def valid_message(function):
     ''' Decorator for checking a message is the right length '''
-    @wraps(function)
     def wrapper(**kwargs):
         message = kwargs["message"]
         if len(message) > 1000:

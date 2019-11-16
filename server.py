@@ -326,7 +326,7 @@ def post_user_uploadphoto():
     x_end = request.form.get('x_end')
     y_end = request.form.get('y_end')
     user_profiles_uploadphoto(token=token, img_url=img_url, x_start=x_start, y_start=y_start, x_end=x_end, y_end=y_end, url_root=request.url_root)
-    returned_dict = get_user_details(token)
+    #returned_dict = get_user_details(token)
     #send_js(returned_dict['profile_img_url'])
     #return send_from_directory('', returned_dict['profile_img_url'])
     return dumps({})

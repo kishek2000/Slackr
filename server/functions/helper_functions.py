@@ -2,8 +2,6 @@
 import re
 import random
 import hashlib
-import datetime
-import sys
 import atexit
 import pickle
 import os
@@ -19,7 +17,8 @@ import urllib.request
 #============================== PICKLING HELPERS ===============================#
 #===============================================================================#
 
-def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages, number_of_users):
+def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions,
+                list_of_users, number_of_channels, number_of_messages, number_of_users):
     '''Pickles data at end of runtime'''
     pickle.dump(all_channels_details, open('server/functions/data/all_channels_details.p', 'wb'))
     pickle.dump(all_channels_messages, open('server/functions/data/all_channels_messages.p', 'wb'))
@@ -37,7 +36,26 @@ list_of_users = pickle.load(open("server/functions/data/list_of_users.p", "rb"))
 number_of_channels = pickle.load(open("server/functions/data/number_of_channels.p", "rb"))
 number_of_messages = pickle.load(open("server/functions/data/number_of_messages.p", "rb"))
 number_of_users = pickle.load(open("server/functions/data/number_of_users.p", "rb"))
-atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages, number_of_users)
+atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions,
+                list_of_users, number_of_channels, number_of_messages, number_of_users)
+
+def reset_data():
+    ''' Resets all existing stored data '''
+    global number_of_users
+    global number_of_channels
+    global number_of_messages
+    all_channels_details.clear()
+    all_channels_messages.clear()
+    list_of_users.clear()
+    all_channels_permissions.clear()
+    number_of_users = 0
+    number_of_channels = 0
+    number_of_messages = 0
+    if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
+        images = [i for i in os.listdir('./static/') if i.endswith(".jpg")]
+        for i in images:
+            os.remove(os.path.join('./static/', i))
+    make_default_photo()
 
 #===============================================================================#
 #=============================== GENERAL HELPERS ===============================#
@@ -100,7 +118,7 @@ def check_token_matches_user(u_id, token):
     ''' Checks if token and u_id is from same user '''
     for user in list_of_users:
         if u_id == user['u_id'] and token == user['token']:
-                return True
+            return True
     return False
 
 def check_valid_handle(handle_str):
@@ -138,8 +156,7 @@ def valid_email(email):
 
     if re.search(regex, email) is None:
         return False
-    else:
-        return True
+    return True
 
 def valid_password(password):
     ''' Checks if password meets is strong enough '''
@@ -176,21 +193,19 @@ def valid_password(password):
 
         return True
 
-    else:
-        return False
+    return False
 
 def generate_handle(name_first, name_last):
     '''Generates handle based on first and last names'''
     if len(name_first + name_last) > 20:
+        if len(name_first) > 20 and len(name_last) < 20:
+            handle = name_first[0] + name_last
 
-            if len(name_first) > 20 and len(name_last) < 20:
-                handle = name_first[0] + name_last
+        elif len(name_last) > 20 and len(name_first) < 20:
+            handle = name_first + name_last[0]
 
-            elif len(name_last) > 20 and len(name_first) < 20:
-                handle = name_first + name_last[0]
-
-            else:
-                handle = name_first[0:2] + name_last[0:2]
+        else:
+            handle = name_first[0:2] + name_last[0:2]
 
     else:
         handle = name_first + name_last
@@ -230,7 +245,7 @@ def check_token_in_channel(token, channel_id):
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             for users in channels['all_members']:
-                if check_token_matches_user(users['u_id'], token) == True:
+                if check_token_matches_user(users['u_id'], token):
                     return True
             break
     return False
@@ -265,6 +280,7 @@ def get_user_channel_permission(channel_id, u_id):
         if users['channel_id'] == channel_id:
             if users['u_id'] == u_id:
                 return users['channel_permission_id']
+    return None
 
 def message_reacts_helper(message_list, uid):
     ''' This helper handles the reactions code in channel/messages '''
@@ -276,7 +292,7 @@ def message_reacts_helper(message_list, uid):
                 react["is_this_user_reacted"] = False
 
 def update_channels_details():
-    print (all_channels_details)
+    '''Update all_channels_details whever a change is made'''
     for channels in all_channels_details:
         for users in channels['owner_members']:
             returned_dict = get_user_details(users['u_id'])
@@ -328,7 +344,6 @@ def fix_img_url(url_root):
             data = user['profile_img_url'].split('static/')
             identifier = data[1].split('.')
             img_type = str(identifier[0])
-            print (img_type)
             if img_type == 'default':
                 new_url = url_root + 'static/default.jpg'
                 user['profile_img_url'] = new_url
@@ -369,27 +384,8 @@ def change_user_channel_permission(u_id, permission_id, channel_id):
                 user['channel_permission_id'] = permission_id
                 added_person = True
                 return {'added_id': u_id, 'changed_permission': permission_id}
-    if added_person == False or user_found == False:
+    if not added_person or not user_found:
         all_channels_permissions.append({'channel_id': channel_id, 'u_id': u_id, 'channel_permission_id': 1})
-
-
-def reset_data():
-    ''' Resets all existing stored data '''
-    global number_of_users
-    global number_of_channels
-    global number_of_messages
-    all_channels_details.clear()
-    all_channels_messages.clear()
-    list_of_users.clear()
-    all_channels_permissions.clear()
-    number_of_users = 0
-    number_of_channels = 0
-    number_of_messages = 0
-    if not [f for f in os.listdir('./static/') if not f.startswith('.')] == []:
-        images = [ i for i in os.listdir('./static/') if i.endswith(".jpg") ]
-        for i in images:
-           os.remove(os.path.join('./static/', i))
-    make_default_photo()
 
 
 #===============================================================================#
