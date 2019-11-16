@@ -5,7 +5,7 @@ from functions.channel_functions import channel_addowner, channel_details, chann
 from functions.helper_functions import reset_data, all_channels_details, list_of_users, change_user_app_permission, get_user_from_token, get_total_channel_messages, get_channel_id_from_name, all_channels_permissions, check_token_in_channel, check_user_in_channel, change_user_channel_permission, get_user_details
 from functions.auth_functions import auth_register
 from functions.message_functions import message_send
-from functions.Errors import AccessError
+from functions.Errors import AccessError, ValueError
 import datetime
 
 @pytest.fixture()

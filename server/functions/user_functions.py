@@ -83,8 +83,11 @@ def user_profiles_uploadphoto(token=None, img_url=None, x_start=None, y_start=No
         raise ValueError("Invalid dimensions")
 
     #need to handle if image doesnt exist
-    returned_status = requests.head(str(img_url))
-    if returned_status.status_code != 200:
+    try:
+        returned_status = requests.head(str(img_url))
+        if returned_status.status_code != 200:
+            raise ValueError("Invalid img_url")
+    except:
         raise ValueError("Invalid img_url")
 
     returned_dict = get_user_details(token)
