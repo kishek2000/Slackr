@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, update_channels_details
+from functions.helper_functions import check_valid_u_id, get_user_details, check_valid_handle, list_of_users, update_channels_details
 from functions.Errors import AccessError, ValueError, authorise_token, check_name_validity, check_valid_email
 
 @authorise_token
