@@ -32,19 +32,19 @@ Various meetings were held during during iteration three, over a range of platfo
 
 Akin to previous iterations, we primarily worked on the code that we had written for the previous iterations. These function divisions were as follows:
 
-* Auth-\&gt; Shoan
+* Auth; Shoan
 
-* Channel-\&gt; Adi
+* Channel; Adi
 
-* Message-\&gt; Liam
+* Message; Liam
 
-* User Profiles-\&gt; Harry
+* User Profiles; Harry
 
-* Standup-\&gt; Shoan
+* Standup; Shoan
 
-* Search-\&gt; Harry
+* Search; Harry
 
-* Admin-\&gt; Harry
+* Admin; Harry
 
 As this iteration revolved around finalising the implementation into the front-end, we experienced many errors. Some of these errors were as a result of miscommunication, improper code implementation or so on. In the case of miscommunication, we would often solve try to solve the issue ourselves. If we were unable to solve the issue, then we would contact the person who is most familiar with the code to try to get them to look at the issue. With these situations, there was more overlap with writing code, and cross checking that code is working as intended. We also had overlap when writing decorators.
 
