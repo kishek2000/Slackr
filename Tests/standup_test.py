@@ -11,7 +11,7 @@ from functions.helper_functions import (add_to_standup_queue,
                                         reset_data)
 from functions.channel_functions import channels_create, channel_join
 from functions.auth_functions import auth_register
-from functions.Errors import AccessError
+from functions.Errors import AccessError, ValueError
 
 #################################################################################
 ##                              STANDUP TESTS                                  ##

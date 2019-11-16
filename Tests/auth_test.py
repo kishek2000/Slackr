@@ -9,6 +9,8 @@ from functions.auth_functions import (auth_register, auth_login, auth_logout,
 from functions.helper_functions import (reset_data, generate_token, get_user_details,
                                         check_valid_u_id, check_valid_handle,
                                         get_user_app_permission, check_valid_token)
+from functions.Errors import ValueError
+
 
 #################################################################################
 ##                              AUTH TESTS                                     ##

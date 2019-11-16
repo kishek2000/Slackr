@@ -45,7 +45,7 @@ def test_search_returned_value(register_account):
     message_send(token=token, channel_id=register_account[1], message="hello")
     returned_search = search(token, 'hello')
     assert len(returned_search['messages']) == 1
-    assert returned_search['messages'][0] == 'hello'
+    assert returned_search['messages'][0]['message'] == 'hello'
 
 #The function should return a dictionary with one message in it
 def test_search_two_messages_in_channel(register_account):
@@ -55,7 +55,7 @@ def test_search_two_messages_in_channel(register_account):
     message_send(token=token, channel_id=register_account[1], message="epic")
     returned_search = search(token, 'hello')
     assert len(returned_search['messages']) == 1
-    assert returned_search['messages'][0] == 'hello'
+    assert returned_search['messages'][0]['message'] == 'hello'
 
 #This tests the function after sending then removing a message
 def test_search_returned_value_after_remove(register_account):
@@ -64,7 +64,7 @@ def test_search_returned_value_after_remove(register_account):
     message_id = message_send(token=token, channel_id=register_account[1], message="hello")
     returned_search = search(token, 'hello')
     assert len(returned_search['messages']) == 1
-    assert returned_search['messages'][0] == 'hello'
+    assert returned_search['messages'][0]['message'] == 'hello'
     message_remove(token=token, message_id=message_id)
     returned_search = search(token, 'hello')
     assert len(returned_search['messages']) == 0

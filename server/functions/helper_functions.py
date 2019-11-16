@@ -51,7 +51,6 @@ def get_user_details(token_or_u_id):
             return {'u_id': user['u_id'], 'token': user['token'], 'name_first': user['name_first'], 'name_last': user['name_last'], 'handle_str': user['handle_str'], 'email': user['email'], 'reset_code': user['reset_code'], 'app_permission_id': user['app_permission_id'], 'profile_img_url': user['profile_img_url']}
     return {}
 
-# This is obsolete #####################################################
 def get_user_from_token(token):
     ''' function description '''
     return_dict = get_user_details(token)
@@ -66,7 +65,6 @@ def get_user_app_permission(u_id):
     ''' function description '''
     return_dict = get_user_details(u_id)
     return return_dict['app_permission_id']
-#########################################################################
 
 ## GENERATE FUNCTIONS
 def generate_token(email):
