@@ -1,6 +1,13 @@
 '''
-File contains auth related functions
+auth_functions written by Shoan
+-auth_login
+-auth_logout
+-auth_register
+-auth_passwordreset_request
+-auth_passwordreset_reset
 '''
+
+
 import smtplib
 import hashlib
 from functions.helper_functions import  (valid_password, generate_reset_code, list_of_users,
@@ -40,8 +47,8 @@ def auth_logout(token):
 
 @check_name_validity
 @check_email_registered_true
-@check_valid_password
 @check_valid_email
+@check_valid_password
 def auth_register(email=None, password=None, name_first=None, name_last=None):
     '''Funtion registers a user onto slackr'''
 

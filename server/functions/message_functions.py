@@ -29,7 +29,7 @@ from functions.Errors import check_user_is_admin, valid_message, check_user_can_
 @token_in_channel
 @valid_message
 def message_send(token=None, channel_id=None, message=None):
-    '''Add message to the list of messages in a channel'''
+    '''Add message to the list of messages in a channel'''        
     message_id = generate_message_id()
     uid = get_user_from_token(token)
     for channel in all_channels_messages:

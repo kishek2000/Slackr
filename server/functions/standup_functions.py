@@ -1,6 +1,11 @@
 '''
-File contains standup related functions
+standup_functions written by Shoan
+-standup_start
+-standup_active
+-standup_send
+-end_standup
 '''
+
 
 import datetime
 import threading
@@ -62,12 +67,14 @@ def standup_send(token=None, channel_id=None, message=None):
     if len(message) > 1000:
         raise ValueError("Message too long")
 
-    message_send(token=token, channel_id=channel_id, message=("Standup: " + message))
+    #message_send(token=token, channel_id=channel_id, message=("Standup: " + message))
 
-    add_to_standup_queue(channel_id, message)
+    add_to_standup_queue(channel_id, message, token)
 
 
-def end_standup(channel_id, token):
+def end_standup(channel_id, token):channel['standup_buffer'] = '' 
+
+ 
     '''Function ends a standup after its time has elapsed'''
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
@@ -76,6 +83,4 @@ def end_standup(channel_id, token):
             standup_summary = channel['standup_buffer']
             channel['standup_buffer'] = ''
 
-    message_send(token=token, channel_id=channel_id, message=("Standup Summary" + standup_summary))
-
-    return {}
+    message_send(token=token, channel_id=channel_id, message=(standup_summary))

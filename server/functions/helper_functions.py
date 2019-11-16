@@ -397,9 +397,11 @@ def change_user_channel_permission(u_id, permission_id, channel_id):
 #=============================== STANDUP HELPERS ===============================#
 #===============================================================================#
 
-def add_to_standup_queue(channel_id, message):
+def add_to_standup_queue(channel_id, message, token):
     ''' Adds a message to the queue of messages from a standup '''
+    user_details = get_user_details(token)
+    handle = user_details["handle_str"]
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
-            channel['standup_buffer'] = channel['standup_buffer'] + ": " + message
+            channel['standup_buffer'] = channel['standup_buffer'] + handle + ": " + message + '\n'
     return {}
