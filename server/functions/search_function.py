@@ -17,7 +17,6 @@ def search(token, query_str):
             if users['u_id'] == get_user_from_token(token):
                 current_channel_id = channel['channel_id']
                 for message_channel_id in all_channels_messages:
-                    print (all_channels_messages)
                     if current_channel_id == message_channel_id['channel_id']:
                         message_list = message_channel_id['messages']
                         for message in message_list:

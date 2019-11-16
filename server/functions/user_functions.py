@@ -6,8 +6,8 @@ import requests
 from PIL import Image
 
 sys.path.append("/Server/functions/")
-from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, update_channels_details
-from functions.Errors import AccessError, ValueError, authorise_token
+from functions.helper_functions import check_valid_u_id, get_user_details, check_valid_handle, list_of_users, update_channels_details
+from functions.Errors import AccessError, ValueError, authorise_token, check_name_validity, check_valid_email
 
 @authorise_token
 def user_profile(token=None, u_id=None):
@@ -21,32 +21,20 @@ def user_profile(token=None, u_id=None):
     user_dict = {'email': returned_dict['email'], 'name_first': returned_dict['name_first'], 'name_last': returned_dict['name_last'], 'handle_str': returned_dict['handle_str'], 'profile_img_url': returned_dict['profile_img_url']}
     return user_dict
 
+@check_name_validity
 @authorise_token
 def user_profile_setname(token=None, name_first=None, name_last=None):
     """ user_profile_setname function """
-
-    #Checking for valid name_first
-    if len(name_first) > 50 or len(name_first) < 1:
-        raise ValueError("Invalid name_first")
-
-   #Checking for valid name_first
-    if len(name_last) > 50 or len(name_last) < 1:
-        raise ValueError("Invalid name_last")
-
     for user in list_of_users:
         if user['token'] == token:
             user['name_first'] = name_first
             user['name_last'] = name_last
     update_channels_details()
 
+@check_valid_email
 @authorise_token
 def user_profile_setemail(token=None, email=None):
     """ user_profile_setemail function """
-
-    #Checking for valid email
-    if not valid_email(email):
-        raise ValueError("Invalid email")
-
     for user in list_of_users:
         if user['token'] == token:
             user['email'] = email

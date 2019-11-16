@@ -294,7 +294,7 @@ def message_reacts_helper(message_list, uid):
                 react["is_this_user_reacted"] = False
 
 def update_channels_details():
-    '''Update all_channels_details whever a change is made'''
+    ''' Update user information in channels '''
     for channels in all_channels_details:
         for users in channels['owner_members']:
             returned_dict = get_user_details(users['u_id'])
@@ -341,6 +341,7 @@ def generate_message_id():
 #===============================================================================#
 
 def fix_img_url(url_root):
+    ''' Update to most recent host in user dict ''' 
     for user in list_of_users:
         if user['profile_img_url'] is not None:
             data = user['profile_img_url'].split('static/')
@@ -354,13 +355,15 @@ def fix_img_url(url_root):
                 user['profile_img_url'] = new_url
 
 def default_photo(url_root):
+    ''' Set the default photo '''
     for user in list_of_users:
         if user['profile_img_url'] is None:
             new_url = url_root + 'static/default.jpg'
             user['profile_img_url'] = new_url
 
 def make_default_photo():
-    image_dir = './static/default.jpg'
+    ''' Make a default photo '''
+    image_dir = './static/default.jpg'    
     urllib.request.urlretrieve('https://images-na.ssl-images-amazon.com/images/I/41mUvRO4kXL.jpg', image_dir)
 
 #===============================================================================#
