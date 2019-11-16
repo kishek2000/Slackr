@@ -1,9 +1,8 @@
 """Flask server"""
 import sys
 from json import dumps
-from datetime import timezone
 from flask_cors import CORS
-from flask import Flask, request, send_from_directory, jsonify
+from flask import Flask, request, send_from_directory
 from werkzeug.exceptions import HTTPException
 
 ## Function Imports
@@ -19,6 +18,7 @@ from functions.message_functions import *
 from functions.helper_functions import fix_img_url, update_channels_details, default_photo, list_of_users, make_default_photo
 
 def defaultHandler(err):
+    '''Catches errors when thrown and formats them appropriately'''
     response = err.get_response()
     response.data = dumps({
         "code": err.code,
@@ -34,15 +34,18 @@ APP.register_error_handler(Exception, defaultHandler)
 CORS(APP)
 
 class ValueError(HTTPException):
+    '''Error thrown when user enters the wrong value'''
     code = 400
     message = "no message specified"
 
 class AccessError(HTTPException):
+    '''Error thrown when user does not have permission to do something'''
     code = 400
     message = "no message specified"
 
 @APP.before_first_request
 def activate_task():
+    '''Updates certain things'''
     if list_of_users == []:
         make_default_photo()
     fix_img_url(request.url_root)
@@ -201,6 +204,10 @@ def create_channel():
     token = request.form.get('token')
     name = request.form.get('name')
     is_public = request.form.get('is_public')
+    if is_public == "false":
+        is_public = False
+    else:
+        is_public = True
 
     new_channel_id = channels_create(token=token, name=name, is_public=is_public)
     return dumps({'channel_id': new_channel_id})
@@ -210,7 +217,7 @@ def create_channel():
 #===============================================================================#
 @APP.route('/message/send', methods=['POST'])
 def post_message_send():
-    """ Description of function """
+    """ Puts the message in the channel, returns message_id """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
@@ -219,18 +226,17 @@ def post_message_send():
 
 @APP.route('/message/sendlater', methods=['POST'])
 def post_message_sendlater():
-    """ Description of function """
+    """ As message_send, but waits until the specified time """
     token = request.form.get('token')
     channel_id = int(request.form.get('channel_id'))
     message = request.form.get('message')
-    #time_sent = datetime.datetime.strptime(request.form.get('time_sent'), "%Y-%m-%dT%H:%M:%S.%f%z")
     time_sent = int(request.form.get('time_sent'))
     message_id = message_sendlater(token=token, channel_id=channel_id, message=message, time_sent=time_sent)
     return dumps({'message_id': message_id})
 
 @APP.route('/message/remove', methods=['DELETE'])
 def post_message_remove():
-    """ Description of function """
+    """ Removes a message from a channel """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     message_remove(token=token, message_id=message_id)
@@ -238,7 +244,7 @@ def post_message_remove():
 
 @APP.route('/message/edit', methods=['PUT'])
 def put_message_edit():
-    """ Description of function """
+    """ Changes the message in a channel, or deletes it if message is empty """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     message = request.form.get('message')
@@ -247,7 +253,7 @@ def put_message_edit():
 
 @APP.route('/message/react', methods=['POST'])
 def post_message_react():
-    """ Description of function """
+    """ Adds a react to a message """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
@@ -256,7 +262,7 @@ def post_message_react():
 
 @APP.route('/message/unreact', methods=['POST'])
 def post_message_unreact():
-    """ Description of function """
+    """ Removes a react from a message """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     react_id = int(request.form.get('react_id'))
@@ -265,7 +271,7 @@ def post_message_unreact():
 
 @APP.route('/message/pin', methods=['POST'])
 def post_message_pin():
-    """ Description of function """
+    """ Pins a message """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     message_pin(token=token, message_id=message_id)
@@ -273,7 +279,7 @@ def post_message_pin():
 
 @APP.route('/message/unpin', methods=['POST'])
 def post_message_unpin():
-    """ Description of function """
+    """ Unpins a message """
     token = request.form.get('token')
     message_id = int(request.form.get('message_id'))
     message_unpin(token=token, message_id=message_id)
@@ -326,7 +332,7 @@ def post_user_uploadphoto():
     x_end = request.form.get('x_end')
     y_end = request.form.get('y_end')
     user_profiles_uploadphoto(token=token, img_url=img_url, x_start=x_start, y_start=y_start, x_end=x_end, y_end=y_end, url_root=request.url_root)
-    returned_dict = get_user_details(token)
+    #returned_dict = get_user_details(token)
     #send_js(returned_dict['profile_img_url'])
     #return send_from_directory('', returned_dict['profile_img_url'])
     return dumps({})
@@ -340,6 +346,7 @@ def get_users_all():
 
 @APP.route('/static/<path:path>')
 def send_js(path):
+    '''Description of function'''
     return send_from_directory('', path)
 
 #===============================================================================#
@@ -367,11 +374,11 @@ def standup_active_check():
 
     standup_details = standup_active(token=token, channel_id=channel_id)
     timestamp = None
-    if standup_details['time_finish'] != None:
+    if standup_details['time_finish'] is not None:
         timestamp = standup_details['time_finish'].strftime('%s')
 
     return dumps({'standup_active' : standup_details['standup_active'],
-                    'time_finish': str(timestamp)})
+                  'time_finish': str(timestamp)})
 
 @APP.route('/standup/send', methods=['POST'])
 def start_send():
