@@ -4,7 +4,7 @@
 
 Various meetings were held during during iteration three, over a range of platforms including **Google Hangouts** , **Facebook Messenger,** and **face-to-face meetings**. At the beginning of the iteration, we set up a _gantt chart_ to schedule our timeline for iteration 3, these milestones were:
 
-*  - (4/11 - 17 /11)
+* (4/11 - 17 /11)
 
 * Pylint and Testing  - (4/11 - 17 /11)
 
