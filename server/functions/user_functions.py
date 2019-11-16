@@ -1,4 +1,5 @@
 """ user_functions """
+# Written by Harry Wilson
 import sys
 import urllib.request
 import requests
@@ -7,16 +8,7 @@ from PIL import Image
 sys.path.append("/Server/functions/")
 from functions.helper_functions import check_valid_token, check_valid_u_id, get_user_details, valid_email, check_valid_handle, list_of_users, update_channels_details
 from functions.Errors import AccessError, ValueError, authorise_token
-'''
-def authorise_token(function):
-    """ Check that the token is legitimate """
-    def wrapper(*args, **kwargs):
-        args_list = list(args)
-        if not check_valid_token(args_list[0]):
-            raise AccessError("Token is Invalid")
-        return function(*args, **kwargs)
-    return wrapper
-'''
+
 @authorise_token
 def user_profile(token=None, u_id=None):
     """ user_profile function """
