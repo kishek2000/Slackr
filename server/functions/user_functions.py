@@ -53,11 +53,11 @@ def user_profile_sethandle(token=None, handle_str=None):
 
     #Checking for valid handle_str
     if len(handle_str) > 20 or len(handle_str) < 3:
-        raise ValueError("Invalid handle_str")
+        raise ValueError("Must be between 3 and 20 characters")
 
     #Checking for valid handle_str
     if check_valid_handle(handle_str):
-        raise ValueError("Invalid handle_str")
+        raise ValueError("Handle already in use")
 
     for user in list_of_users:
         if user['token'] == token:

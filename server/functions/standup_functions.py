@@ -72,9 +72,7 @@ def standup_send(token=None, channel_id=None, message=None):
     add_to_standup_queue(channel_id, message, token)
 
 
-def end_standup(channel_id, token):channel['standup_buffer'] = '' 
-
- 
+def end_standup(channel_id, token):
     '''Function ends a standup after its time has elapsed'''
     for channel in all_channels_messages:
         if channel_id == channel['channel_id']:
