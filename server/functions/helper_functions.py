@@ -19,7 +19,7 @@ import urllib.request
 #============================== PICKLING HELPERS ===============================#
 #===============================================================================#
 
-def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages):
+def pickle_data(all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages, number_of_users):
     '''Pickles data at end of runtime'''
     pickle.dump(all_channels_details, open('server/functions/data/all_channels_details.p', 'wb'))
     pickle.dump(all_channels_messages, open('server/functions/data/all_channels_messages.p', 'wb'))
@@ -37,7 +37,7 @@ list_of_users = pickle.load(open("server/functions/data/list_of_users.p", "rb"))
 number_of_channels = pickle.load(open("server/functions/data/number_of_channels.p", "rb"))
 number_of_messages = pickle.load(open("server/functions/data/number_of_messages.p", "rb"))
 number_of_users = pickle.load(open("server/functions/data/number_of_users.p", "rb"))
-atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages)
+atexit.register(pickle_data, all_channels_details, all_channels_messages, all_channels_permissions, list_of_users, number_of_channels, number_of_messages, number_of_users)
 
 #===============================================================================#
 #=============================== GENERAL HELPERS ===============================#

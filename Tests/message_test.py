@@ -12,6 +12,7 @@ from functions.message_functions import *
 from functions.auth_functions import auth_register
 from functions.channel_functions import channel_messages, channels_create, channel_invite, channel_join, channel_leave
 from functions.helper_functions import get_total_channel_messages, reset_data, all_channels_details
+from functions.Errors import AccessError, ValueError
 
 @pytest.fixture()
 def setup():
@@ -340,7 +341,7 @@ def test_message_remove_already_deleted(setup):
 def test_message_remove_nonexistant(setup):
     # Testing removal of a nonexistant message
     with pytest.raises(ValueError):
-        message_remove(token=setup["token_a"], channel_id=-1)
+        message_remove(token=setup["token_a"], message_id=-1)
     assert(channel_is_empty(setup["channel_a"]))
     assert(channel_is_empty(setup["channel_dead"]))
 
