@@ -5,7 +5,7 @@ sys.path.append('server/')
 from functions.user_functions import user_profile, user_profile_setname, user_profile_setemail, user_profile_sethandle, user_profiles_uploadphoto, users_all
 from functions.auth_functions import auth_register
 from functions.helper_functions import reset_data, get_user_details, list_of_users
-from functions.Errors import AccessError
+from functions.Errors import AccessError, ValueError
 
 @pytest.fixture
 def register_account():
