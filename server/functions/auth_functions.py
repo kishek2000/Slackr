@@ -1,6 +1,13 @@
 '''
-File contains auth related functions
+auth_functions written by Shoan
+-auth_login
+-auth_logout
+-auth_register
+-auth_passwordreset_request
+-auth_passwordreset_reset
 '''
+
+
 import smtplib
 import hashlib
 from functions.helper_functions import  (valid_password, generate_reset_code, list_of_users,
