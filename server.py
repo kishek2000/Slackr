@@ -204,6 +204,10 @@ def create_channel():
     token = request.form.get('token')
     name = request.form.get('name')
     is_public = request.form.get('is_public')
+    if is_public == "false":
+        is_public = False
+    else:
+        is_public = True
 
     new_channel_id = channels_create(token=token, name=name, is_public=is_public)
     return dumps({'channel_id': new_channel_id})

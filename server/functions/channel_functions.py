@@ -111,14 +111,14 @@ def channel_join(token=None, channel_id=None):
     ''' This function allows a token user to join a channel based on some constraints '''
     ## If the user is already in the channel, then we should have a valueerror:
     if check_token_in_channel(token, channel_id):
-            raise ValueError("Accessing user is not in this channel")
+            raise ValueError("Accessing user is already in channel")
     ## This function specifically lets all members to join publics, but only admins to join private
     ## channel ids that are given as a destination
     for channels in all_channels_details:
         if channel_id == channels['channel_id']:
             if not channels['is_public']:
                 if get_user_app_permission(get_user_from_token(token)) > 2:
-                    raise AccessError ## because token user is not an admin or owner
+                    raise AccessError("You are not authorised to join this channel") ## because token user is not an admin or owner
                 new_user_dict = get_user_details(token)
                 channels['owner_members'].append(new_user_dict)
                 u_id = get_user_from_token(token)

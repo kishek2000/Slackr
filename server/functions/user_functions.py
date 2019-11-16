@@ -16,7 +16,7 @@ def user_profile(token=None, u_id=None):
     #Checking for valid u_id
     if not check_valid_u_id(u_id):
         raise ValueError("Invalid u_id")
-    returned_dict = get_user_details(token)
+    returned_dict = get_user_details(u_id)
 
     user_dict = {'email': returned_dict['email'], 'name_first': returned_dict['name_first'], 'name_last': returned_dict['name_last'], 'handle_str': returned_dict['handle_str'], 'profile_img_url': returned_dict['profile_img_url']}
     return user_dict

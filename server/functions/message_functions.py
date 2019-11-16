@@ -83,9 +83,6 @@ def message_remove(token=None, message_id=None):
     info = find_message_info(message_id)
     message = info['message']
     channel = info['channel']
-    uid = get_user_from_token(token)
-    if message["u_id"] != uid and get_user_app_permission(uid) == 3:
-        raise AccessError("Do not have permission")
     channel["messages"].remove(message)
     channel["total_messages"] -= 1
 
@@ -156,9 +153,6 @@ def message_pin(token=None, message_id=None):
     info = find_message_info(message_id)
     message = info['message']
     channel = info['channel']
-    uid = get_user_from_token(token)
-    if get_user_app_permission(uid) == 3:
-        raise AccessError("Do not have permission")
     if message["is_pinned"]:
         raise ValueError("Message already pinned")
     message["is_pinned"] = True
