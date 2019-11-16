@@ -40,8 +40,8 @@ def auth_logout(token):
 
 @check_name_validity
 @check_email_registered_true
-@check_valid_password
 @check_valid_email
+@check_valid_password
 def auth_register(email=None, password=None, name_first=None, name_last=None):
     '''Funtion registers a user onto slackr'''
 
