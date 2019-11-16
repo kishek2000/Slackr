@@ -62,7 +62,7 @@ def test_standup_start_correct_details(_setup):
 def test_standup_invalid_helpers(_setup):
     '''Test for standup helpers with incorrect details provided'''
 
-    assert add_to_standup_queue(-1, "hi") == {}
+    assert add_to_standup_queue(-1, "hi", _setup['user_1_token']) == {}
 
 def test_standup_attempt_to_start_already_active_standup(_setup):
     '''Test for standup_start when another standup already active in channel'''
