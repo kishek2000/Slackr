@@ -1,6 +1,11 @@
 '''
-File contains standup related functions
+standup_functions written by Shoan
+-standup_start
+-standup_active
+-standup_send
+-end_standup
 '''
+
 
 import datetime
 import threading
