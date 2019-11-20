@@ -37,7 +37,11 @@ def channel_invite(token=None, channel_id=None, u_id=None):
                 if users['u_id'] == get_user_from_token(token):
                     new_user_dict = get_user_details(get_token_from_user(u_id))
                     channels['all_members'].append(new_user_dict)
-                    change_user_channel_permission(u_id, 3, channel_id)
+                    if get_user_app_permission(u_id) <= 2:
+                        channels['owner_members'].append(new_user_dict)
+                        change_user_channel_permission(u_id, get_user_app_permission(u_id), channel_id)
+                    else:
+                        change_user_channel_permission(u_id, 3, channel_id)
                     break
 #======================================= channel/details [GET] ====================================#
 @authorise_token
@@ -121,13 +125,18 @@ def channel_join(token=None, channel_id=None):
                     raise AccessError("You are not authorised to join this channel") ## because token user is not an admin or owner
                 new_user_dict = get_user_details(token)
                 channels['owner_members'].append(new_user_dict)
+                channels['all_members'].append(new_user_dict)
                 u_id = get_user_from_token(token)
                 change_user_channel_permission(u_id, 1, channel_id)
             else:
                 new_user_dict = get_user_details(token)
                 channels['all_members'].append(new_user_dict)
                 u_id = get_user_from_token(token)
-                change_user_channel_permission(u_id, 3, channel_id)
+                if get_user_app_permission(u_id) <= 2:
+                    channels['owner_members'].append(new_user_dict)
+                    change_user_channel_permission(u_id, get_user_app_permission(u_id), channel_id)
+                else:
+                    change_user_channel_permission(u_id, 3, channel_id)
                 break
 
 #===================================== channel/addowner [POST] ===================================#
